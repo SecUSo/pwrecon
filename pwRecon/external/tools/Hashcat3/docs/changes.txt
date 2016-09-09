@@ -1,0 +1,187 @@
+* changes v3.00 -> v3.10:
+
+##
+## Improvements
+##
+
+- Added mask display to modes 3, 6, and 7. Allows the user to see the custom character set used during the run
+- Make Linux build POSIX compatible; Also allow it to actually compile on musl-libc systems
+- Add support to compile on FreeBSD
+- Make use of cl_context_properties[] to clCreateContext(), even if OpenCL specification allow the use of NULL, some runtimes fail without
+- The Time.Estimated attribute in status display should also show --runtime limit if user set it
+- Fix some strict aliasing rule violation on older compilers
+- Fix some variable initializers on older compilers
+- Replace DARWIN macro with compiler predefined macro __APPLE__
+- Replace LINUX macro with compiler predefined macro __linux__
+- Allow the use of enc_id == 0 in hash-mode 10600 and 10700 as it takes no part in the actual computation
+- Get rid of exit() calls in OpenCL wrapper library with the goal to have a better control which error can be ignored under special circumstances
+- Do not error and exit if an OpenCL platform has no devices, just print a warning and continue with the next platform
+- Workaround for OpenCL runtimes which do not accept -I parameter in the OpenCL kernel build options even if this is an OpenCL standard option
+- Workaround for OpenCL runtimes which do accept -I parameter in the OpenCL kernel build options, but do not allow quotes
+- Output cracked hashes on Windows using \r\n and not \n
+- Replace RegGetValue() with RegQueryValueEx() to enable Windows XP 32 bit compatibility
+- Slightly increased NVidias rule-processing performance by using generic instructions instead of byte_perm()
+- Add support for @ rule (RULE_OP_MANGLE_PURGECHAR) to use on GPU
+- Add support for --outfile (short -o) to be used together with --stdout
+- Skip periodic status output whenever --stdout is used together with stdin mode, but no outfile was specified
+- Show error message if --show is used together with --outfile-autohex-disable (this is currently not supported)
+- Show error message if --skip/--limit is used together with mask files or --increment
+- Workaround for NVidia OpenCL runtime bug causing -m 6223 to not crack any hashes even with the correct password candidate
+
+##
+## Bugs
+##
+
+- Fixed a bug where CRAM MD5 checked salt length instead of hash length
+- Fixed a bug where hashcat is suppressing --machine-readable output in the final status update
+- Fixed a bug where hashcat did not check the return of realpath() and crashes uncontrolled if the path does not exist
+- Fixed a bug where hashcat crashes for accessing deallocated buffer if user spams "s" shortly before hashcat shuts down
+- Fixed a bug where hashcat crashes in case of a scrypt P setting > 1
+- Fixed a bug where hashcat did not correctly use the newly cracked plains whenever --loopback or the induction folder was used
+- Fixed a bug where hashcat did not correctly remove hashes of type WPA/WPA2 even if present in potfile
+- Fixed a bug where hashcat reported an invalid password for a zero-length password in LM
+- Fixed a bug where hashcat did not take into account how long it takes to prepare a session when auto-aborting with --runtime is in use
+- Fixed a bug where some kernels used COMPARE_M_SIMD instead of COMPARE_S_SIMD in singlehash mode
+
+##
+## Algorithms
+##
+
+- Added new hash-mode 13900 = OpenCart
+
+* changes v2.01 -> v3.00:
+
+This release markes the fusion of "hashcat" and "oclHashcat" into "hashcat".
+It combines all features of all hashcat projects in one project.
+
+##
+## Features
+##
+
+- Support for Apple OpenCL runtime
+- Support for NVidia OpenCL runtime (replaces CUDA)
+- Support for Mesa (Gallium) OpenCL runtime
+- Support for pocl OpenCL runtime
+- Support for Khronos' OSS OpenCL reference implementation for building
+- Support to utilize OpenCL devices-types other than GPU, ex: CPU and FPGA
+- Support to utilize multiple different OpenCL platforms in parallel, ex: AMD + NV
+- Support to utilize multiple different OpenCL device-types in parallel, ex: GPU + CPU
+- Added option --opencl-platform to select a specific OpenCL platform
+- Added option --opencl-device-types select specific OpenCL device types
+- Added option --opencl-vector-width to override automatically selected vector-width size
+- Added makefile native compilation target
+- Added makefile install and uninstall targets
+- Added autotuning engine and user-configurable tuning database
+- Added current engine clock, current memory clock and pci-e lanes to the status display
+- Added support for --gpu-temp-retain for NVidia GPU, both Linux and Windows
+- Added execution timer of the running kernel to the status display
+- Added command prompt to quit at next restore checkpoint
+- Added human-readable error message for the OpenCL error codes
+- Added option --potfile-path to override potfile path
+- Added option --veracrypt-keyfile to set Keyfiles used, can be multiple
+- Added option --veracrypt-pim to set the VeraCrypt personal iterations multiplier
+- Added option --machine-readable for easier parsing of output
+- Added option --powertune-enable to work with NVidia devices as well, not just AMD
+- Added option --stdout to print candidates instead of trying to crack a hash
+
+##
+## Algorithms
+##
+
+- Added new hash-mode   125 = ArubaOS
+- Added new hash-mode 12900 = Android FDE (Samsung DEK)
+- Added new hash-mode 13000 = RAR5
+- Added new hash-mode 13100 = Kerberos 5 TGS-REP etype 23
+- Added new hash-mode 13200 = AxCrypt
+- Added new hash-mode 13300 = AxCrypt in memory SHA1
+- Added new hash-mode 13400 = Keepass 1 (AES/Twofish) and Keepass 2 (AES)
+- Added new hash-mode 13500 = PeopleSoft PS_TOKEN
+- Added new hash-mode 13600 = WinZip
+- Added new hash-mode 137** = VeraCrypt
+- Added new hash-mode 13800 = Windows 8+ phone PIN/Password
+
+##
+## Performance
+##
+
+- Full Table: https://docs.google.com/spreadsheets/d/1B1S_t1Z0KsqByH3pNkYUM-RCFMu860nlfSsYEqOoqco/edit#gid=0
+
+##
+## Improvements
+##
+
+- Reordering of files to help integration into linux distributions ~/.hashcat etc
+- Use a profile directory to write temporary files (session, potfile etc.)
+- Workaround depencies on AMD APP-SDK AMD ADL, NV CUDA-SDK, NV ForceWare, NVML and NVAPI; they are no longer required
+- Load external libraries dynamic at runtime instead of link them static at compile-time
+- Benchmark accuracy improved; Is now on par to: singlehash -a 3 -w 3 ?b?b?b?b?b?b?b
+- Benchmark no longer depends on a fixed time
+- Removed option --benchmark-mode, therefore support --workload-profile in benchmark-mode
+- Enabled support of --machine-readable in combination with --benchmark for automated benchmark processing
+- Replaced --status-automat entirely with --machine-readable to make it more consistent among benchmark and non-benchmark mode
+- Extended support from 14 to 255 functions calls per rule
+- Extended password length up to 32 for 7zip
+- Extended salt length up to 55 for raw hash types, eg: md5($pass.$salt)
+- Extended version information
+- Removed some duplicate rules in T0XlCv1, d3ad0ne and dive
+- Redesigned changes.txt layout
+- Redesigned --help menu layout
+
+##
+## Bugs
+##
+
+- Fixed a bug in speed display: In some situation, especially with slow hashes or lots of salts, it showed a speed of 0H/s
+- Fixed a bug in restore handling: user immediately aborting after restart broke the restore file
+- Fixed a bug in line counter: conditional jump or move depends on an uninitialised value
+- Fixed a bug in rule-engine for NVidia devices: code for left- and right-shift were switched
+- Fixed a bug in dive.rule: rules were not updated after the function 'x' was renamed to 'O'
+- Fixed a bug in memory allocation "OpenCL -4 error": used unitialized value in a special situation
+- Fixed a bug in memory handling: heap buffer overflow
+- Fixed a bug in memory handling: out of bounds access
+- Fixed a bug in implementation of DCC2: forced default iteration count for hashes to 10240
+- Fixed a bug in implementation of WPA/WPA2: MAC and nonce stay one their original position as in the hccap file
+- Fixed a bug in implementation of GOST R 34.11-94: zero length passwords were not cracked
+
+##
+## Technical
+##
+
+- Removed deprecated GCC version check requirement
+- Removed NPROCS from Makefile, let make automatically detect the optimal number of parallel threads
+- Dropped all C++ overloading functions to normal function which helps support more OpenCL platforms
+- Renamed functions in common.h to emphasize their purpose
+- Refactorized fast-hash kernels to enable SIMD on all OpenCL platforms
+- Refactorized SIMD handling: SIMD the inner-loop not the outer-loop to save registers
+- Workaround missing clEnqueueFillBuffer() support in certain OpenCL runtimes
+- Added amd_bytealign() support in non-AMD OpenCL runtimes
+- Added amd_bfe() support in non-AMD OpenCL runtimes
+- Added several macros to allow writing optimized code for the different OpenCL platforms
+- Replaced typedef for bool with stdbool.h
+- Added special DEBUG environment variables to the makefile
+- Hashcat now acquires an exclusive lock before writing to any file
+- Changed buffers to not use same buffer for both input and output at the same time with snprintf()
+- Check for allocatable device-memory depending on kernel_accel amplifier before trying to allocate
+- Added additional check for max. ESSID length to prevent possible crashes
+- Use a GCC equivalent for __stdcall where applicable
+- Synchronize maximum output line size with input line size
+- Increased maximum hash line size to 0x50000
+- Run weak-hash checks only in straight-attack mode, this greatly reduces code complexity
+- Restrict loopback option to straight attack-mode
+- Moved rules_optimize to hashcat-utils
+- Stick to older libOpenCL in binary package to avoid errors like this: version `OPENCL_2.0' not found
+- Tightened hash parser for several algorithms
+- Updated old RC4 code in Kerberos 5
+- Limited the salt length of Juniper Netscreen/SSG (ScreenOS) hashes to 10
+- Updated algorithm used to automatically select an ideal --scrypt-tmto value
+- Renamed option --gpu-accel to --kernel-accel
+- Renamed option --gpu-loops to --kernel-loops
+- Renamed option --gpu-devices to --opencl-devices
+- Added inline declaration to functions from simd.c, common.c, rp.c and types_ocl.c to increase performance
+- Dropped static declaration from functions in all kernel to achieve OpenCL 1.1 compatibility
+- Added -cl-std=CL1.1 to all kernel build options
+- Created environment variable to inform NVidia OpenCL runtime to not create its own kernel cache
+- Created environment variable to inform pocl OpenCL runtime to not create its own kernel cache
+- Dropped special 64-bit rotate() handling for NV, it seems that they've added it to their OpenCL runtime
+- Completely get rid of HAVE_ADL, HAVE_NVML and HAVE_NVAPI in sources
+- Replaced NVAPI with NVML on windows
