@@ -1,6 +1,7 @@
 /*
- * Copyright (c) 2016 Mustafa Kargi
- * All rights reserved.
+ * Copyright (c) 2016 Mustafa Kargi <mustafa.kargi@arcor.de>
+ *
+ * See LICENSE dist-file for details.
  */
 
 #ifndef RECOVERYWORKER_H
