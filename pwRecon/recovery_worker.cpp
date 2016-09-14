@@ -97,11 +97,20 @@ bool RecoveryWorker::importHashfile()
     QTextStream in(&hashfile);
     while (!in.atEnd()) {
 
-        QStringList splitted = in.readLine().split(":");
-        QString username(splitted[0]);
-        QString hash(splitted[1]);
+        QString line = in.readLine();
+        QString username;
+        QString hash;
+        QStringList splitted;
+
+        if (!line.isNull()) {
+            splitted = line.split(":");
+        }
 
         if (splitted.size() == 2) {
+
+            username = splitted[0];
+            hash = splitted[1];
+
             tempfilestring.append(QString(username + ":" + hash.toLower()));
             pwd_amount++;
 
@@ -112,7 +121,7 @@ bool RecoveryWorker::importHashfile()
     }
     hashfile.close();
 
-    if (breakup)
+    if (breakup || tempfilestring.size() == 0)
         return false;
 
     QFile tempfile(tempfilepath);

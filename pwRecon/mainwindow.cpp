@@ -270,6 +270,7 @@ void MainWindow::disableButtons(bool bol)
     ui->startButton->setDisabled(bol);
     ui->selectFileButton->setDisabled(bol);
     ui->testPasswordButton->setDisabled(bol);
+    ui->SAM_Button->setDisabled(bol);
     ui->hashSelectBox->setDisabled(bol);
 
     ui->stopProcessButton->setEnabled(bol);
