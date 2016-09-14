@@ -10,6 +10,8 @@
 #include <QThread>
 #include <QFile>
 #include <QSet>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
 
 RecoveryWorker::RecoveryWorker(const bool& fallback,
                                const QString& newbinarydir,
@@ -103,26 +105,30 @@ bool RecoveryWorker::importHashfile()
         QString hash;
         QStringList splitted;
 
-        if (!line.isNull()) {
+        if (!line.isEmpty()) {
             splitted = line.split(":");
         }
 
-        if (splitted.size() == 2) {
+        if (splitted.size() == 1) {
+            hash = splitted[0];
+        }
 
+        if (splitted.size() == 2) {
             username = splitted[0];
             hash = splitted[1];
+        }
 
-            tempfilestring.append(QString(username + ":" + hash.toLower()));
-            pwd_amount++;
-
-        } else {
+        if(splitted.size() < 1 || splitted.size() > 2 || !isHex(hash) || hash.isEmpty()) {
             breakup = true;
             break;
         }
+
+        tempfilestring.append(QString(username + ":" + hash.toLower())); // Hashcat works with lower case
+        pwd_amount++;
     }
     hashfile.close();
 
-    if (breakup || tempfilestring.size() == 0)
+    if (breakup || tempfilestring.isEmpty())
         return false;
 
     QFile tempfile(tempfilepath);
@@ -186,9 +192,9 @@ void RecoveryWorker::setupBinaryArguments()
     args_brute_attack << tempfilepath << QString("?a?a?a?a?a?a?a?a?a?a?a?a?a?a?a?a");
 }
 
-/**
- * Hashcat will be started 4 times in a row.
- */
+/*
+* Hashcat will be started 4 times in a row.
+*/
 void RecoveryWorker::startNextRound()
 {
     QThread::msleep(10);
@@ -326,9 +332,9 @@ void RecoveryWorker::endProcess()
     finish = false;
 }
 
-/**
- * Check if all hashes are already cracked, so that Hashcat is not needed to run again.
- */
+/*
+* Check if all hashes are already cracked, so that Hashcat is not needed to run again.
+*/
 void RecoveryWorker::checkEmptyHashfile()
 {
     QFile tempfile(tempfilepath);
@@ -339,6 +345,16 @@ void RecoveryWorker::checkEmptyHashfile()
             finish = true;
     }
     tempfile.close();
+}
+
+bool RecoveryWorker::isHex(QString str)
+{
+    QRegularExpression re("[0-9a-fA-F]+");
+    QRegularExpressionValidator v(re);
+
+    int pos = 0;
+
+    return (v.validate(str, pos) == QValidator::Acceptable);
 }
 
 void RecoveryWorker::onProcessStarted()

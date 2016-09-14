@@ -67,6 +67,7 @@ private:
     void showResults();
     void endProcess();
     void checkEmptyHashfile();
+    bool isHex(QString str);
 
 public slots:
 
