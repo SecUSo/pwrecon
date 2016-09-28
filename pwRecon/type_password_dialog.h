@@ -20,13 +20,14 @@ class TypePasswordDialog : public QDialog
 
 public:
 
-    explicit TypePasswordDialog(QString filepath, QWidget *parent = 0);
+    explicit TypePasswordDialog(bool plainpw, QString filepath, QWidget *parent = 0);
     ~TypePasswordDialog();
 
 private:
 
     Ui::TypePasswordDialog *ui;
 
+    bool plain;
     QString testpwdfilepath;
 
 private slots:

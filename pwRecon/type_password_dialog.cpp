@@ -11,14 +11,18 @@
 #include <QTextStream>
 #include <QCryptographicHash>
 
-TypePasswordDialog::TypePasswordDialog(QString filepath, QWidget *parent) :
+TypePasswordDialog::TypePasswordDialog(bool plainpw, QString filepath, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TypePasswordDialog)
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() ^ Qt::WindowContextHelpButtonHint);
 
+    plain = plainpw;
     testpwdfilepath = filepath;
+
+    if (!plain)
+        ui->lineEdit->setEchoMode(QLineEdit::Password);
     ui->lineEdit->setFocus();
 }
 

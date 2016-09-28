@@ -157,7 +157,10 @@ void MainWindow::onSetPassword(const QString& pwd)
         str = pwd;
     }
 
-    ui->hashfilepathLine->setText(QString("PASSWORD: [" + str + "]"));
+    QString shownstr(str);
+    if (!show_plain_pwds)
+        shownstr.fill(QChar('*'));
+    ui->hashfilepathLine->setText(QString("PASSWORD: [" + shownstr + "]"));
 
     hashfilepath = testpwdfilepath;
 
@@ -221,7 +224,7 @@ void MainWindow::on_selectFileButton_clicked()
 
 void MainWindow::on_testPasswordButton_clicked()
 {
-    TypePasswordDialog tpdialog(testpwdfilepath);
+    TypePasswordDialog tpdialog(show_plain_pwds, testpwdfilepath);
 
     connect(&tpdialog, &TypePasswordDialog::setPassword, this, &MainWindow::onSetPassword);
 
