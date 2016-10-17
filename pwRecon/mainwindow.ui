@@ -19,9 +19,6 @@
   <property name="windowTitle">
    <string>pwRecon</string>
   </property>
-  <property name="locale">
-   <locale language="English" country="UnitedKingdom"/>
-  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -29,7 +26,7 @@
       <item>
        <widget class="QPushButton" name="selectFileButton">
         <property name="text">
-         <string>Select Hash File</string>
+         <string>Hash-Datei wählen</string>
         </property>
        </widget>
       </item>
@@ -42,7 +39,7 @@
          </font>
         </property>
         <property name="text">
-         <string>or</string>
+         <string>oder</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -52,7 +49,7 @@
       <item>
        <widget class="QPushButton" name="testPasswordButton">
         <property name="text">
-         <string>Test Password</string>
+         <string>Passwort testen</string>
         </property>
        </widget>
       </item>
@@ -68,7 +65,7 @@
          </font>
         </property>
         <property name="text">
-         <string>or</string>
+         <string>oder</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -81,7 +78,7 @@
          <bool>true</bool>
         </property>
         <property name="text">
-         <string>Scan SAM file</string>
+         <string>SAM-Datei auslesen</string>
         </property>
        </widget>
       </item>
@@ -116,7 +113,7 @@
         <item>
          <widget class="QLabel" name="hashLabel">
           <property name="text">
-           <string>Hash Type:</string>
+           <string>Hashfunktion:</string>
           </property>
          </widget>
         </item>
@@ -163,7 +160,7 @@
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Start Password Recovery</string>
+         <string>Start</string>
         </property>
        </widget>
       </item>

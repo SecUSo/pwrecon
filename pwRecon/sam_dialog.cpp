@@ -22,6 +22,10 @@ SAMDialog::SAMDialog(QString filepath, QWidget *parent) :
     setWindowFlags(windowFlags() ^ Qt::WindowContextHelpButtonHint);
 
     samdumpfilepath = filepath;
+
+    QString en("This function will scan the SAM file of your Windows system and extract all password hashes.\n\nWARNING:\nNeeds administrator rights to work.\nIt may be detected as malware by your system.\nUse at your own risk.");
+    QString de("Diese Funktion wird die SAM-Datei des Windows-Systems auslesen und alle Passwort-Hashes extrahieren.\n\nWARNUNG:\nEs werden Administratorrechte benötigt.\nDie Funktion wird womöglich als Schadsoftware erkannt.\nNutzung auf eigene Gefahr.");
+    ui->infoLabel->setText(de);
 }
 
 SAMDialog::~SAMDialog()
@@ -90,7 +94,9 @@ void SAMDialog::on_startButton_clicked()
     if (breakup) {
         qDebug() << endl << "PWDUMP NO SUCCESS" << endl;
 
-        ui->errorLabel->setText("Error:\nProcess not possible.");
+        QString en("Error:\nProcess not possible.");
+        QString de("Fehler:\nVorgang nicht möglich.");
+        ui->errorLabel->setText(de);
         ui->buttonBox->setEnabled(true);
     }
     else {

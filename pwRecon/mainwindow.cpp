@@ -42,7 +42,9 @@ MainWindow::MainWindow(QWidget *parent) :
     cl::Platform::get(&all_platforms);
     if (all_platforms.size() == 0) {
         hc2_fallback = true;
-        ui->textBrowser->append(QString("(OpenCL is not installed on this system.\nUsing older Hashcat version.)\n"));
+        QString msg_en("(OpenCL is not installed on this system.\nUsing older Hashcat version.)\n");
+        QString msg_de("(OpenCL ist auf diesem System nicht installiert.\nÄltere Version von Hashcat wird verwendet.)\n");
+        ui->textBrowser->append(msg_de);
     }
 
 
@@ -95,7 +97,9 @@ MainWindow::MainWindow(QWidget *parent) :
     // Check if Hashcat files exist
     QFile file(binaryfile);
     if (!file.exists()) {
-        ui->textBrowser->setText(QString("No Hashcat binary found!"));
+        QString msg_en("No Hashcat files found!\n");
+        QString msg_de("Keine Hashcat Dateien gefunden!\n");
+        ui->textBrowser->setText(msg_de);
         ui->startButton->setDisabled(true);
         ui->selectFileButton->setDisabled(true);
         ui->testPasswordButton->setDisabled(true);
@@ -152,7 +156,9 @@ void MainWindow::onSetPassword(const QString& pwd)
 {
     QString str;
     if (pwd.isEmpty()) {
-        str = QString("(empty)");
+        QString en("(empty)");
+        QString de("(leer)");
+        str = de;
     } else {
         str = pwd;
     }
@@ -160,7 +166,9 @@ void MainWindow::onSetPassword(const QString& pwd)
     QString shownstr(str);
     if (!show_plain_pwds)
         shownstr.fill(QChar('*'));
-    ui->hashfilepathLine->setText(QString("PASSWORD: [" + shownstr + "]"));
+    QString en("PASSWORD");
+    QString de("PASSWORT");
+    ui->hashfilepathLine->setText(QString(de + ": [" + shownstr + "]"));
 
     hashfilepath = testpwdfilepath;
 
@@ -171,7 +179,9 @@ void MainWindow::onSetPassword(const QString& pwd)
 
 void MainWindow::onSAMImport()
 {
-    ui->hashfilepathLine->setText(QString("--- SAM FILE ---"));
+    QString en("SAM FILE");
+    QString de("SAM-DATEI");
+    ui->hashfilepathLine->setText(QString("--- " + de + " ---"));
 
     hashfilepath = samdumpfilepath;
 
@@ -189,7 +199,9 @@ void MainWindow::onRecoveryFinished()
 
     disableButtons(false);
 
-    ui->textBrowser->append(QString(" - RECOVERY FINISHED -\n------------------------------------------\n\n"));
+    QString en("RECOVERY FINISHED");
+    QString de("WIEDERHERSTELLUNG ABGESCHLOSSEN");
+    ui->textBrowser->append(QString(" - " + de + " -\n------------------------------------------\n\n"));
 }
 
 void MainWindow::onAskQuestion()
@@ -203,11 +215,15 @@ void MainWindow::onAskQuestion()
 
 void MainWindow::on_selectFileButton_clicked()
 {
+    QString en1("Select Hash File");
+    QString de1("Hash-Datei auswählen");
+    QString en2("Text Files (*.txt)");
+    QString de2("Textdateien (*.txt)");
     hashfilepath = QFileDialog::getOpenFileName(
                 this,
-                tr("Select Hash File"),
+                de1,
                 QDir::currentPath(),
-                tr("Text Files (*.txt)")
+                de2
                 );
 
     ui->hashfilepathLine->setText(QDir::toNativeSeparators(hashfilepath));

@@ -40,7 +40,9 @@ void RecoveryWorker::onRecoveryStarted(const bool& showplain, const QString& new
     resetData();
 
     if (!importHashfile()) {
-        emit txtBrowserAppend(QString("- ERROR: Invalid hash file selected.\n"));
+        QString msg_en("- ERROR: Invalid hash file selected.\n");
+        QString msg_de("- FEHLER: Ungültige Hash-Datei ausgewählt.\n");
+        emit txtBrowserAppend(msg_de);
         emit finishRecovery();
         return;
     }
@@ -55,7 +57,9 @@ void RecoveryWorker::onRecoveryStarted(const bool& showplain, const QString& new
     binaryProcess->setProgram(binaryfile);
     binaryProcess->setWorkingDirectory(binarydir);
 
-    emit txtBrowserAppend(QString(" - RECOVERY STARTED -\n\nPlease wait...\n\n"));
+    QString en(" - RECOVERY STARTED -\n\nPlease wait...\n\n");
+    QString de(" - WIEDERHERSTELLUNG GESTARTET -\n\nBitte warten...\n\n");
+    emit txtBrowserAppend(de);
 
     // Setup timer clock
     timerClock = new QTimer(this);
@@ -145,8 +149,11 @@ bool RecoveryWorker::importHashfile()
             if(!usernames_table.contains(hash))
                 stream << hash << endl;
 
-            if (username.isEmpty())
-                username = QString("(empty)");
+            if (username.isEmpty()) {
+                QString en("(empty)");
+                QString de("(leer)");
+                username = de;
+            }
 
             if (!usernames_table.contains(hash, username))
                 usernames_table.insert(hash, username);
@@ -255,15 +262,19 @@ void RecoveryWorker::startBruteAttack()
 void RecoveryWorker::showResults()
 {
     QString res_str;
-    res_str.append(" - RECOVERY STATUS -\n");
-    res_str.append(" Duration:\n ");
+    // res_str.append(" - RECOVERY STATUS -\n");
+    // res_str.append(" Duration:\n ");
+    res_str.append(" - WIEDERHERSTELLUNG STATUS -\n");
+    res_str.append(" Dauer:\n ");
     res_str.append(QString::number(minutes));
     res_str.append(":");
     if (seconds < 10) res_str.append("0");
     res_str.append(QString::number(seconds));
-    res_str.append(" minutes\n\n");
+    // res_str.append(" minutes\n\n");
+    res_str.append(" Minuten\n\n");
 
-    res_str.append(" - RECOVERED PASSWORDS:\n");
+    // res_str.append(" - RECOVERED PASSWORDS:\n");
+    res_str.append(" - WIEDERHERGESTELLTE PASSWÖRTER:\n");
     res_str.append("\n");
 
     QSet<QString> line_set;
@@ -285,17 +296,22 @@ void RecoveryWorker::showResults()
         QStringList splitted = value.split(":");
         QString hash = splitted[0];
         QString plaintext = splitted[1];
-        if (plaintext.isEmpty())
-            plaintext = QString("(empty)");
+        if (plaintext.isEmpty()) {
+            QString en("(empty)");
+            QString de("(leer)");
+            plaintext = de;
+        }
 
         QList<QString> users = usernames_table.values(hash);
 
-        pw_line.append("Password: " + hash);
+        // pw_line.append("Password: " + hash);
+        pw_line.append("Passwort: " + hash);
         if (show_plain_pwds)
             pw_line.append("  -->  [" + plaintext + "]");
         pw_line.append("\n");
 
-        pw_line.append("- Username(s): { ");
+        // pw_line.append("- Username(s): { ");
+        pw_line.append("- Benutzername(n): { ");
 
         for (int i = 0; i < users.size(); ++i) {
             pw_line.append(users[i]);
@@ -317,7 +333,11 @@ void RecoveryWorker::showResults()
         percent = 0;
     }
 
-    res_str.append("----- " + QString::number(pwd_count) + " of " + QString::number(pwd_amount) + " passwords recovered. (" + QString::number(percent, 'f', 1) + "%)\n\n");
+    QString en1("of");
+    QString de1("von");
+    QString en2("passwords recovered");
+    QString de2("Passwörtern wiederhergestellt");
+    res_str.append("----- " + QString::number(pwd_count) + ' ' + de1 + ' ' + QString::number(pwd_amount) + ' ' + de2 + ". (" + QString::number(percent, 'f', 1) + "%)\n\n");
 
     emit txtBrowserAppend(res_str);
 }

@@ -23,10 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Scan SAM file</string>
-  </property>
-  <property name="locale">
-   <locale language="English" country="Germany"/>
+   <string>SAM-Datei auslesen</string>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -35,12 +32,7 @@
    <item>
     <widget class="QLabel" name="infoLabel">
      <property name="text">
-      <string>This function will scan the SAM file of your Windows system and extract all password hashes.
-
-WARNING:
-Needs administrator rights to work.
-It may be detected as malware by your system.
-Use at your own risk.</string>
+      <string/>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
