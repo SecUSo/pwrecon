@@ -37,8 +37,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     // Check if OpenCL is installed, fallback to older Hashcat version if not
+
+
     hc2_fallback = false;
+
+    if (!hc2_fallback)
+    {
     std::vector<cl::Platform> all_platforms;
+
+    try {
     cl::Platform::get(&all_platforms);
     if (all_platforms.size() == 0) {
         hc2_fallback = true;
@@ -46,7 +53,12 @@ MainWindow::MainWindow(QWidget *parent) :
         QString msg_de("(OpenCL ist auf diesem System nicht installiert.\nÄltere Version von Hashcat wird verwendet.)\n");
         ui->textBrowser->append(msg_de);
     }
-
+    }
+    catch (...)
+    {
+        hc2_fallback=true;
+    }
+    }
 
     // Define environment variables
     if (hc2_fallback) {
