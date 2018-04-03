@@ -4,7 +4,7 @@
  * See LICENSE dist-file for details.
  */
 
-#include "sam_dialog.h"
+#include "auxiliary/sam_dialog.h"
 #include "ui_sam_dialog.h"
 
 #include <QDebug>
@@ -20,7 +20,7 @@ SAMDialog::SAMDialog(QString filepath, QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() ^ Qt::WindowContextHelpButtonHint);
-
+    //connect(wizard(), &QWizard::back, this, &SAMDialog::reject);
     samdumpfilepath = filepath;
 
     QString en("This function will scan the SAM file of your Windows system and extract all password hashes.\n\nWARNING:\nNeeds administrator rights to work.\nIt may be detected as malware by your system.\nUse at your own risk.");
@@ -32,11 +32,11 @@ SAMDialog::~SAMDialog()
 {
     delete ui;
 }
-
+/*
 void SAMDialog::on_startButton_clicked()
 {
     ui->startButton->setDisabled(true);
-    ui->buttonBox->setDisabled(true);
+    ui->abortButton->setDisabled(true);
 
     QProcess pwdumpProcess;
     pwdumpProcess.setProgram(QString(QDir::currentPath() + "/tools/pwdump7/PwDump7.exe"));
@@ -97,7 +97,7 @@ void SAMDialog::on_startButton_clicked()
         QString en("Error:\nProcess not possible.");
         QString de("Fehler:\nVorgang nicht möglich.");
         ui->errorLabel->setText(de);
-        ui->buttonBox->setEnabled(true);
+        ui->abortButton->setEnabled(true);
     }
     else {
         qDebug() << endl << "PWDUMP SUCCESS" << endl;
@@ -116,4 +116,4 @@ void SAMDialog::on_startButton_clicked()
         emit sendImport();
         close();
     }
-}
+}*/

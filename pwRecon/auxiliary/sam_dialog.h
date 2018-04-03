@@ -31,7 +31,7 @@ private:
 
 private slots:
 
-    void on_startButton_clicked();
+    //void on_startButton_clicked();
 
 signals:
 
