@@ -63,6 +63,10 @@ EnterHashPage::EnterHashPage(QWidget *parent)
     QObject::connect(selectEnterHashRadioButton, SIGNAL(clicked()),this, SLOT(setMode()));
     QObject::connect(selectLoadHashRadioButton, SIGNAL(clicked()),this, SLOT(setMode()));
     QObject::connect(loadPushButton, SIGNAL(clicked()),this, SLOT(load()));
+
+    QWizardPage::registerField("hashString", hashLineEdit);
+    registerField("hashList", pathLabel);
+
 }
 int EnterHashPage::nextId() const
 {
@@ -97,3 +101,6 @@ void EnterHashPage::setMode()
         hashLineEdit->setEnabled(false);
     }
 }
+
+
+

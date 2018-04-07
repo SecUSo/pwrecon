@@ -20,6 +20,10 @@ private:
     QRadioButton *checkPasswordRadioButton;
     QRadioButton *checkHashRadioButton;
     QRadioButton *checkLocalPwFileRadioButton;
+    QLineEdit *WORKAROUNDLineEdit;
+
+public slots:
+    void workAroundSlot();
 };
 
 #endif // SELECTMODEPAGE_H

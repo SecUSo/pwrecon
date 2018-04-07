@@ -13,7 +13,8 @@ HEADERS       = \
     WizardPages\selectmodepage.h \
     pwrecon_global.h \
     pwRecon.h \
-    WizardPages/attacksettingspage.h
+    WizardPages/attacksettingspage.h \
+    auxiliary/recovery_worker.h
 SOURCES       = \
                 main.cpp \
     testpage.cpp \
@@ -27,7 +28,8 @@ SOURCES       = \
     auxiliary\sam_dialog.cpp \
     WizardPages\selectmodepage.cpp \
     pwRecon.cpp \
-    WizardPages/attacksettingspage.cpp
+    WizardPages/attacksettingspage.cpp \
+    auxiliary/recovery_worker.cpp
 
 # install
 target.path = $$[QT_INSTALL_EXAMPLES]/widgets/dialogs/licensewizard

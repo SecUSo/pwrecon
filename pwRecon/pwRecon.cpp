@@ -69,6 +69,17 @@ IntroPage::IntroPage(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(topLabel);
     setLayout(layout);
+
+
+//    WORKAROUNDLineEdit = new QLabel();
+//    WORKAROUNDLineEdit->setVisible(false);
+//    registerField("PathHash",WORKAROUNDLineEdit);
+//    WORKAROUNDLineEdit = new QLabel();
+//    WORKAROUNDLineEdit->setVisible(false);
+//    registerField("PathPassword",WORKAROUNDLineEdit);
+//    WORKAROUNDLineEdit = new QLabel();
+//    WORKAROUNDLineEdit->setVisible(false);
+//    registerField("PathSam",WORKAROUNDLineEdit);
 }
 
 int IntroPage::nextId() const

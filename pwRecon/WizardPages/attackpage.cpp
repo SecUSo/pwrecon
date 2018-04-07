@@ -45,6 +45,7 @@ int AttackPage::nextId() const
 void AttackPage::start()
 {
     qDebug() << "Start button has been pressed!" << endl;
+    qDebug() << field("WORKAROUND") << endl;
 }
 
 void AttackPage::stop()

@@ -19,7 +19,7 @@ private:
     QPushButton *startPushButton;
     QPushButton *stopPushButton;
     QTextBrowser *attackResultTextBrowser;
-
+    QWizard     *pwReconWizard;
 public slots:
     void start();
     void stop();
