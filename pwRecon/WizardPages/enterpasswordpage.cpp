@@ -65,6 +65,9 @@ EnterPasswordPage::EnterPasswordPage(QWidget *parent)
     QObject::connect(selectEnterPasswordRadioButton, SIGNAL(clicked()),this, SLOT(setMode()));
     QObject::connect(selectLoadPasswordRadioButton, SIGNAL(clicked()),this, SLOT(setMode()));
     QObject::connect(loadPushButton, SIGNAL(clicked()),this, SLOT(load()));
+
+    registerField("PATHLABEL",pathLabel,"text", "changeEvent");
+    registerField("PASSWORDLINEEDIT",passwordLineEdit);
 }
 int EnterPasswordPage::nextId() const
 {
@@ -86,6 +89,7 @@ void EnterPasswordPage::load()
     }
     qInfo(qPrintable(currentFile));
     pathLabel->setText(currentFile);
+    qDebug() << pathLabel->text() << endl;
 }
 
 void EnterPasswordPage::setHide()

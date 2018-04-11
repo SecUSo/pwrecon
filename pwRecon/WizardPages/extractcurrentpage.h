@@ -26,11 +26,12 @@ private:
     QTextBrowser *extractResultTextBrowser;
 
     QString currentFile;
+    QString samdumpfilepath;
 signals:
 
 public slots:
-     void change();
-     void startExtraction();
+    void change();
+    void startExtraction();
 };
 
 #endif // EXTRACTCURRENTPAGE_H

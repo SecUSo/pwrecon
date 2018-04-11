@@ -6,6 +6,7 @@
 #include "pwrecon_global.h"
 #include "auxiliary/recovery_worker.h"
 #include <QThread>
+#include <QCryptographicHash>
 // OpenCL
 #include "opencl\include\CL\cl.hpp"
 
@@ -15,6 +16,7 @@ class AttackPage : public QWizardPage
 
 public:
     AttackPage(QWidget *parent = 0);
+    ~AttackPage();
 
     int nextId() const override;
 
@@ -39,9 +41,19 @@ private:
     QString testpwdfilepath;
     QString samdumpfilepath;
 
+    QString getHashFilePath();
+    bool checkFieldByName(QString fieldName);
+    QString passwordListToTmpFile(QStringList passwordList);
+    QStringList passwordListFromFile(QString passwordListFilePath);
+    QString getHashType();
+
 public slots:
     void start();
     void stop();
+    void onTxtBrowserSet(const QString& str);
+    void onTxtBrowserAppend(const QString& str);
+    void onRecoveryFinished();
+    void deleteTemporaryFiles();
 
 signals:
 

@@ -25,7 +25,7 @@ AttackSettingsPage::AttackSettingsPage(QWidget *parent)
     hideGroupBox->setLayout(hideLayout);
     layout->addWidget(hideGroupBox);
     showPasswordRadioButton->setChecked(true);
-
+    setField("WORKAROUND", QString("true"));
 
     selectDictAttackRadioButton = new QRadioButton(tr("&Use a dictionary Attack"));
     actionLayout->addWidget(selectDictAttackRadioButton);
@@ -81,9 +81,10 @@ void AttackSettingsPage::setHide()
 {
     if(showPasswordRadioButton->isChecked())
     {
-       qDebug() << "show password" << endl;
+        setField("WORKAROUND", "true");
     }else if(hidePasswordRadioButton->isChecked()){
         qDebug() << "hide password" << endl;
+        setField("WORKAROUND", "false");
     }
 }
 
