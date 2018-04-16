@@ -129,7 +129,6 @@ int AttackPage::nextId() const
 void AttackPage::start()
 {
     qDebug() << "Start button has been pressed!" << endl;
-    //emit startRecovery(show_plain_pwds, hashfilepath, hashtype);
     bool showPlain;
     if(field("WORKAROUND").toString() == "true")
     {
@@ -141,9 +140,9 @@ void AttackPage::start()
     qDebug() << "Show plain: " << showPlain << endl;
     qDebug() << "FilePath: " << getHashFilePath() << endl;
     qDebug() << "hash type" << hashtype << endl;
-    //disableButtons(true);
+    disableButtons(true);
 
-    //emit startRecovery(showPlain, getHashFilePath(), hashtype);
+    emit startRecovery(showPlain, getHashFilePath(), hashtype);
 }
 
 void AttackPage::stop()
