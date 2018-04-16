@@ -102,5 +102,32 @@ void EnterHashPage::setMode()
     }
 }
 
+bool EnterHashPage::validatePage()
+{
+    if(selectEnterHashRadioButton->isChecked())
+    {
+        if(hashLineEdit->text() == "")
+        {
+            QMessageBox::warning(this, tr("pwRecon"),
+                                 tr("Please enter a password hash."),
+                                 QMessageBox::Ok,
+                                 QMessageBox::Ok);
+            return false;
+        }
+        pathLabel->setText("");
+    } else if(selectLoadHashRadioButton->isChecked()){
+        if(pathLabel->text() == "")
+        {
+            QMessageBox::warning(this, tr("pwRecon"),
+                                 tr("Please select a password hash file."),
+                                 QMessageBox::Ok,
+                                 QMessageBox::Ok);
+            return false;
+        }
+        hashLineEdit->setText("");
+    }
+    return true;
+}
+
 
 

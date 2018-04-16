@@ -113,3 +113,30 @@ void EnterPasswordPage::setMode()
         passwordLineEdit->setEnabled(false);
     }
 }
+
+bool EnterPasswordPage::validatePage()
+{
+    if(selectEnterPasswordRadioButton->isChecked())
+    {
+        if(passwordLineEdit->text() == "")
+        {
+            QMessageBox::warning(this, tr("pwRecon"),
+                                 tr("Please enter a Password."),
+                                 QMessageBox::Ok,
+                                 QMessageBox::Ok);
+            return false;
+        }
+        pathLabel->setText("");
+    } else if(selectLoadPasswordRadioButton->isChecked()){
+        if(pathLabel->text() == "")
+        {
+            QMessageBox::warning(this, tr("pwRecon"),
+                                 tr("Please select a password file."),
+                                 QMessageBox::Ok,
+                                 QMessageBox::Ok);
+            return false;
+        }
+        passwordLineEdit->setText("");
+    }
+    return true;
+}

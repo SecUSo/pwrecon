@@ -13,6 +13,7 @@ public:
     EnterPasswordPage(QWidget *parent = 0);
 
     int nextId() const override;
+    bool validatePage() override;
 private:
     QRadioButton *showPasswordRadioButton;
     QRadioButton *hidePasswordRadioButton;

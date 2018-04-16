@@ -13,6 +13,7 @@ public:
     explicit EnterHashPage(QWidget *parent = 0);
 
     int nextId() const override;
+    bool validatePage() override;
 private:
     QComboBox *selectHashModeCombo;
     QLabel *selectHashModeLabel;

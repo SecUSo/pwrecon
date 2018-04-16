@@ -28,7 +28,7 @@ ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
     QHBoxLayout *displayLayout = new QHBoxLayout();
     displayLayout->addWidget(extractResultTextBrowser);
 
-     registerField("EXTRACTPATHLABEL",extractPathLabel,"text", "changeEvent");
+    registerField("EXTRACTPATHLABEL",extractPathLabel,"text", "changeEvent");
 
 
     // This is the ceck which will run on that field
@@ -41,7 +41,9 @@ ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
     extractLayout->addLayout(displayLayout);
 
     setLayout(extractLayout);
+    valid = false;
 }
+
 int ExtractCurrentPage::nextId() const
 {
     return Page_AttackSettings;
@@ -53,14 +55,13 @@ void ExtractCurrentPage::initializePage()
     QString samdumpfilepath= QString(QDir::currentPath() + "/tools/samdumpfile.txt");
     SAMDialog *samDialog = new SAMDialog(samdumpfilepath);
     samDialog->exec();
-
 }
 
 void ExtractCurrentPage::change()
 {
     QString tmpFile = "";
     tmpFile = QFileDialog::getOpenFileName(this,
-    tr("Choose a file to store the results"), "", "*");
+                                           tr("Choose a file to store the results"), "", "*");
     //tr("Image Files (*.png *.jpg *.bmp)")
     // if equal return 0
     if(QString::compare(tmpFile, "", Qt::CaseInsensitive))
@@ -76,6 +77,7 @@ void ExtractCurrentPage::change()
 void ExtractCurrentPage::startExtraction()
 {
     // Maybe do the dialog here
+    disableButtons(true);
     extractPushButton->setEnabled(false);
     changePushButton->setEnabled(false);
     QProcess pwdumpProcess;
@@ -137,8 +139,8 @@ void ExtractCurrentPage::startExtraction()
         QString en("Error:\nProcess not possible.");
         QString de("Fehler:\nVorgang nicht möglich.");
         extractResultTextBrowser->setText(de);
-        extractPushButton->setEnabled(true);
-        changePushButton->setEnabled(true);
+        disableButtons(false);
+        valid = false;
     }
     else {
         qDebug() << endl << "PWDUMP SUCCESS" << endl;
@@ -154,5 +156,33 @@ void ExtractCurrentPage::startExtraction()
             }
         }
         tempfile.close();
+        valid = true;
     }
+
+    if(valid == false)
+    {
+        wizard()->button(QWizard::NextButton)->setDisabled(true);
+    } else {
+        disableButtons(false);
+    }
+}
+
+void ExtractCurrentPage::disableButtons(bool bol)
+{
+    wizard()->button(QWizard::BackButton)->setDisabled(bol);
+    wizard()->button(QWizard::NextButton)->setDisabled(bol);
+    changePushButton->setDisabled(bol);
+    extractPushButton->setDisabled(bol);
+}
+
+bool ExtractCurrentPage::validatePage()
+{
+    if(valid == false)
+    {
+        QMessageBox::warning(this, tr("pwRecon"),
+                             tr("You can't proceed without an extracted Sam file."),
+                             QMessageBox::Ok,
+                             QMessageBox::Ok);
+    }
+    return valid;
 }
