@@ -113,7 +113,7 @@ AttackPage::AttackPage(QWidget *parent)
     QObject::connect(stopPushButton, SIGNAL(clicked()),this, SLOT(stop()));
     QObject::connect(this, &AttackPage::startRecovery, rWorker, &RecoveryWorker::onRecoveryStarted);
     QObject::connect(this, &AttackPage::stopProcess, rWorker, &RecoveryWorker::onProcessStopped);
-    //connect(rWorker, &RecoveryWorker::finishRecovery, this, &MainWindow::onRecoveryFinished);
+    connect(rWorker, &RecoveryWorker::finishRecovery, this, &AttackPage::onRecoveryFinished);
     connect(rWorker, &RecoveryWorker::txtBrowserSet, this, &AttackPage::onTxtBrowserSet);
     connect(rWorker, &RecoveryWorker::txtBrowserAppend, this, &AttackPage::onTxtBrowserAppend);
 
@@ -141,8 +141,9 @@ void AttackPage::start()
     qDebug() << "Show plain: " << showPlain << endl;
     qDebug() << "FilePath: " << getHashFilePath() << endl;
     qDebug() << "hash type" << hashtype << endl;
+    //disableButtons(true);
 
-    emit startRecovery(showPlain, getHashFilePath(), hashtype);
+    //emit startRecovery(showPlain, getHashFilePath(), hashtype);
 }
 
 void AttackPage::stop()
@@ -155,51 +156,64 @@ AttackPage::~AttackPage()
 {
     workerThread.quit();
     workerThread.wait();
-   deleteTemporaryFiles();
+    deleteTemporaryFiles();
 }
 
 QString AttackPage::getHashFilePath()
 {
     testpwdfilepath= QString(QDir::currentPath() + "/tools/testpwdfile.txt");
     samdumpfilepath= QString(QDir::currentPath() + "/tools/samdumpfile.txt");
-    qDebug() << "Workaround: \t" << field("WORKAROUND") << endl;
-    if(checkFieldByName("PATHLABEL"))
+   /* qDebug() << "Workaround: \t" << field("WORKAROUND") << endl;
+    int len = wizard()->visitedPages().length();
+    qDebug() << "Length of visitedPages: " << len << endl;
+    for(int i = 0; i < len; i++)
+        qDebug() << "Value of visitedPages at " << i << ": " << wizard()->visitedPages().at(i) << endl;
+    */
+
+    if(wizard()->visitedPages().at(2) == Page_EnterPassword)
     {
-        qDebug() << "Field PATHLABEL" << endl;
-        QStringList passwordList;
-        passwordList = passwordListFromFile(field("PATHLABEL").toString());
-        QString path = passwordListToTmpFile(passwordList);
-        hashtype = QString("--hash-type=0");
-        return path;
-    }else if(checkFieldByName("PASSWORDLINEEDIT"))
-    {
-        qDebug() << "Field PASSWORDLINEEDIT " << endl;
-        QStringList password;
-        password << field("PASSWORDLINEEDIT").toString();
-        QString passwordFile = passwordListToTmpFile(password);
-        hashtype = QString("--hash-type=0");
-        return passwordFile;
-    }else if(checkFieldByName("HASHLINEEDIT"))
-    {
-        qDebug() << "Field HASHLINEEDIT" << endl;
-        QFile file(testpwdfilepath);
-        if (file.exists())
+        if(checkFieldByName("PATHLABEL"))
         {
-            file.remove();
+            qDebug() << "Field PATHLABEL" << endl;
+            QStringList passwordList;
+            passwordList = passwordListFromFile(field("PATHLABEL").toString());
+            QString path = passwordListToTmpFile(passwordList);
+            hashtype = QString("--hash-type=0");
+            return path;
+
+        }else if(checkFieldByName("PASSWORDLINEEDIT"))
+        {
+            qDebug() << "Field PASSWORDLINEEDIT " << endl;
+            QStringList password;
+            password << field("PASSWORDLINEEDIT").toString();
+            QString passwordFile = passwordListToTmpFile(password);
+            hashtype = QString("--hash-type=0");
+            return passwordFile;
         }
-        if (file.open(QIODevice::ReadWrite)) {
-            QTextStream stream(&file);
-            stream << "pwRecon:" << field("HASHLINEEDIT").toString() << endl;
-        }
-        file.close();
-        hashtype = getHashType();
-        return testpwdfilepath;
-    }else if(checkFieldByName("HASHPATHLABEL"))
+    }else if(wizard()->visitedPages().at(2) == Page_EnterHash)
     {
-        hashtype = getHashType();
-        qDebug() << "Field HASHPATHLABEL" << endl;
-        return field("HASHPATHLABEL").toString();
-    }else if(checkFieldByName("EXTRACTPATHLABEL"))
+        if(checkFieldByName("HASHLINEEDIT"))
+        {
+            qDebug() << "Field HASHLINEEDIT" << endl;
+            QFile file(testpwdfilepath);
+            if (file.exists())
+            {
+                file.remove();
+            }
+            if (file.open(QIODevice::ReadWrite)) {
+                QTextStream stream(&file);
+                stream << "pwRecon:" << field("HASHLINEEDIT").toString() << endl;
+            }
+            file.close();
+            hashtype = getHashType();
+            return testpwdfilepath;
+        }else if(checkFieldByName("HASHPATHLABEL"))
+        {
+            hashtype = getHashType();
+            qDebug() << "Field HASHPATHLABEL" << endl;
+            return field("HASHPATHLABEL").toString();
+        }
+    }else if(wizard()->visitedPages().at(2) == Page_ExtractCurrent)
     {
         qDebug() << "Field EXTRACTPATHLABEL" << endl;
         hashtype = QString("--hash-type=1000");
@@ -300,6 +314,7 @@ void AttackPage::onTxtBrowserAppend(const QString& str)
 
 void AttackPage::onRecoveryFinished()
 {
+    qDebug() << "Recovery Finished" << endl;
     // Delete pot-file immediately after finish.
     QFile file(potfile);
     if (file.exists())
@@ -308,6 +323,7 @@ void AttackPage::onRecoveryFinished()
     QString en("RECOVERY FINISHED");
     QString de("WIEDERHERSTELLUNG ABGESCHLOSSEN");
     attackResultTextBrowser->append(QString(" - " + de + " -\n------------------------------------------\n\n"));
+    disableButtons(false);
 }
 
 void AttackPage::deleteTemporaryFiles()
@@ -316,19 +332,32 @@ void AttackPage::deleteTemporaryFiles()
     if (file1.exists())
         file1.remove();
 
-//    QFile file2(tempfilepath);
-//    if (file2.exists())
-//        file2.remove();
+    //    QFile file2(tempfilepath);
+    //    if (file2.exists())
+    //        file2.remove();
 
-//    QFile file3(testpwdfilepath);
-//    if (file3.exists())
-//        file3.remove();
+    //    QFile file3(testpwdfilepath);
+    //    if (file3.exists())
+    //        file3.remove();
 
-//    QFile file4(samdumpfilepath);
-//    if (file4.exists())
-//        file4.remove();
+    //    QFile file4(samdumpfilepath);
+    //    if (file4.exists())
+    //        file4.remove();
 
     QFile file5(QString(binarydir + "/hashcat.log"));
     if (file5.exists())
         file5.remove();
+}
+
+void AttackPage::disableButtons(bool bol)
+{
+    startPushButton->setDisabled(bol);
+    wizard()->button(QWizard::BackButton)->setEnabled(!bol);
+    wizard()->button(QWizard::NextButton)->setEnabled(!bol);
+    stopPushButton->setEnabled(bol);
+
+    if (bol)
+        attackProgressBar->setMaximum(0);
+    else
+        attackProgressBar->setMaximum(23);
 }

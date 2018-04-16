@@ -46,6 +46,7 @@ private:
     QString passwordListToTmpFile(QStringList passwordList);
     QStringList passwordListFromFile(QString passwordListFilePath);
     QString getHashType();
+    void disableButtons(bool bol);
 
 public slots:
     void start();

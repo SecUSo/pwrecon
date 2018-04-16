@@ -55,7 +55,7 @@ EnterHashPage::EnterHashPage(QWidget *parent)
     loadOuterLayout->addWidget(pathLabel);
     actionLayout->addLayout(loadOuterLayout);
     actionGroupBox->setLayout(actionLayout);
-    selectEnterHashRadioButton->setChecked(true);
+    selectLoadHashRadioButton->setChecked(true);
 
     layout->addWidget(actionGroupBox);
     setLayout(layout);

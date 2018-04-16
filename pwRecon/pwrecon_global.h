@@ -19,8 +19,7 @@
 
 #include "auxiliary/sam_dialog.h"
 
-enum {Page_Intro, Page_AttackSettings, Page_SelectMode, Page_EnterPassword, Page_EnterHash, Page_LoadPasswords, Page_LoadHashes,
-      Page_ExtractCurrent, Page_Attack, Page_Results};
+enum {Page_Intro, Page_SelectMode, Page_EnterPassword, Page_EnterHash, Page_ExtractCurrent, Page_AttackSettings, Page_Attack, Page_Results};
 enum {Path_Hash, Path_Password, Path_Sam};
 //QString dictfile = QString(QDir::currentPath() + "/tools/pwrecon_dict.lst");
 //QString potfile = QString(binarydir + "/hashcat.pot");
