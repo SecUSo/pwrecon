@@ -26,11 +26,12 @@ class pwRecon : public QWizard
 
 public:
     pwRecon(QWidget *parent = 0);
+    QTranslator *m_translatorQt;
+    QTranslator *translator2;
 
 private slots:
     void showHelp();
 };
-
 
 
 class IntroPage : public QWizardPage
@@ -41,6 +42,7 @@ public:
     IntroPage(QWidget *parent = 0);
 
     int nextId() const override;
+    void changeEvent(QEvent *event) override;
 
 private:
     QLabel *topLabel;

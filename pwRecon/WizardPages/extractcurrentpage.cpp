@@ -3,13 +3,13 @@
 ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Extract the password files of the current system"));
-    setSubTitle(tr("This function will scan the SAM file of your Windows system and extract all password hashes."));
+    setTitle(trUtf8("Passwörter von diesem Computer wiederherstellen"));
+    setSubTitle(trUtf8("Die Passwort Datenbank dieses Computers wird extrahiert um sie zu testen."));
 
     samdumpfilepath = QString(QDir::currentPath() + "/tools/samdumpfile.txt");
     extractPathLabel = new QLabel(samdumpfilepath);
-    changePushButton = new QPushButton(tr("Change save file"));
-    extractPushButton = new QPushButton(tr("Extract SAM file"));
+    changePushButton = new QPushButton(trUtf8("Speicherort ändern"));
+    extractPushButton = new QPushButton(trUtf8("Datenbank extrahieren\n und weiter"));
     extractPushButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     changePushButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     //extractLabel->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
@@ -20,9 +20,9 @@ ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
     QObject::connect(extractPushButton, SIGNAL(clicked()),this, SLOT(startExtraction()));
 
     QHBoxLayout *entryLayout = new QHBoxLayout();
-    entryLayout->addWidget(changePushButton);
-    entryLayout->addWidget(extractPathLabel);
     entryLayout->addWidget(extractPushButton);
+    entryLayout->addWidget(extractPathLabel);
+    entryLayout->addWidget(changePushButton);
 
     extractResultTextBrowser = new QTextBrowser();
     QHBoxLayout *displayLayout = new QHBoxLayout();
@@ -55,6 +55,7 @@ void ExtractCurrentPage::initializePage()
     QString samdumpfilepath= QString(QDir::currentPath() + "/tools/samdumpfile.txt");
     SAMDialog *samDialog = new SAMDialog(samdumpfilepath);
     samDialog->exec();
+    disableButtons(false);
 }
 
 void ExtractCurrentPage::change()
@@ -77,9 +78,10 @@ void ExtractCurrentPage::change()
 void ExtractCurrentPage::startExtraction()
 {
     // Maybe do the dialog here
-    disableButtons(true);
+    //disableButtons(true);
     extractPushButton->setEnabled(false);
     changePushButton->setEnabled(false);
+    //QThread::msleep(5000);
     QProcess pwdumpProcess;
     pwdumpProcess.setProgram(QString(QDir::currentPath() + "/tools/pwdump7/PwDump7.exe"));
     pwdumpProcess.setWorkingDirectory(QString(QDir::currentPath() + "/tools/pwdump7"));
@@ -139,7 +141,7 @@ void ExtractCurrentPage::startExtraction()
         QString en("Error:\nProcess not possible.");
         QString de("Fehler:\nVorgang nicht möglich.");
         extractResultTextBrowser->setText(de);
-        disableButtons(false);
+       // disableButtons(false);
         valid = false;
     }
     else {
@@ -164,23 +166,25 @@ void ExtractCurrentPage::startExtraction()
         wizard()->button(QWizard::NextButton)->setDisabled(true);
     } else {
         disableButtons(false);
+        wizard()->next();
     }
 }
 
 void ExtractCurrentPage::disableButtons(bool bol)
 {
+    qDebug() << "Print the disable bool: " << bol << endl;
     wizard()->button(QWizard::BackButton)->setDisabled(bol);
     wizard()->button(QWizard::NextButton)->setDisabled(bol);
-    changePushButton->setDisabled(bol);
-    extractPushButton->setDisabled(bol);
+    this->changePushButton->setDisabled(bol);
+    this->extractPushButton->setDisabled(bol);
 }
 
 bool ExtractCurrentPage::validatePage()
 {
     if(valid == false)
     {
-        QMessageBox::warning(this, tr("pwRecon"),
-                             tr("You can't proceed without an extracted Sam file."),
+        QMessageBox::warning(this, trUtf8("pwRecon"),
+                             trUtf8("Sie können ohne Passwörter nicht vortfahren."),
                              QMessageBox::Ok,
                              QMessageBox::Ok);
     }

@@ -3,8 +3,8 @@
 ResultsPage::ResultsPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Results"));
-    setSubTitle(tr("These are your testresults"));
+    setTitle(trUtf8("Ergebnisse"));
+    setSubTitle(trUtf8("Das sind Ihre Ergebnisse"));
 
     ResultTextBrowser = new QTextBrowser();
     ResultTextBrowser->setText("Hier könnte Ihre Werbung stehen!");

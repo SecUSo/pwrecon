@@ -3,11 +3,11 @@
 EnterPasswordPage::EnterPasswordPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Test a password"));
-    setSubTitle(tr("Please enter a password or a password list to test."));
+    setTitle(trUtf8("Passwörter prüfen"));
+    setSubTitle(trUtf8("Bitte geben Sie ein Passwort oder eine Passwortliste zum testen an."));
 
-    QGroupBox *hideGroupBox = new QGroupBox(tr("&Do you want to hide your Password?"));
-    QGroupBox *actionGroupBox = new QGroupBox(tr("&What do you want to do?"));
+    QGroupBox *hideGroupBox = new QGroupBox(trUtf8("&Möchten Sie die Passwörter verbergen?"));
+    QGroupBox *actionGroupBox = new QGroupBox(trUtf8("&Was möchten Sie tun?"));
 
     QVBoxLayout *layout = new QVBoxLayout;
     QHBoxLayout *hideLayout = new QHBoxLayout;
@@ -19,20 +19,21 @@ EnterPasswordPage::EnterPasswordPage(QWidget *parent)
     //layout->addLayout(loadOuterLayout);
 
     // The hide Radio buttons
-    showPasswordRadioButton = new QRadioButton(tr("&Show Password"));
-    hidePasswordRadioButton = new QRadioButton(tr("&Hide Password"));
+    showPasswordRadioButton = new QRadioButton(trUtf8("&Passwörter zeigen"));
+    hidePasswordRadioButton = new QRadioButton(trUtf8("&Passwörter verbergen"));
     hideLayout->addWidget(showPasswordRadioButton);
     hideLayout->addWidget(hidePasswordRadioButton);
     hideGroupBox->setLayout(hideLayout);
     layout->addWidget(hideGroupBox);
-    showPasswordRadioButton->setChecked(true);
+    hidePasswordRadioButton->setChecked(true);
 
-    selectEnterPasswordRadioButton = new QRadioButton(tr("&Enter a single Password"));
+    selectEnterPasswordRadioButton = new QRadioButton(trUtf8("&Ein einzelnes Passwort angeben."));
     actionLayout->addWidget(selectEnterPasswordRadioButton);
 
-    passwordLabel = new QLabel(tr("Password:"));
+    passwordLabel = new QLabel(trUtf8("Passwort:"));
     passwordLineEdit = new QLineEdit;
     passwordLineEdit->setInputMethodHints(Qt::ImhHiddenText| Qt::ImhNoPredictiveText|Qt::ImhNoAutoUppercase);
+    passwordLineEdit->setEchoMode(QLineEdit::Password);
     // Connenct the label with the text field
     passwordLabel->setBuddy(passwordLineEdit);
 
@@ -40,12 +41,12 @@ EnterPasswordPage::EnterPasswordPage(QWidget *parent)
     enterOuterLayout->addWidget(passwordLineEdit);
     actionLayout->addLayout(enterOuterLayout);
 
-    selectLoadPasswordRadioButton = new QRadioButton(tr("&Load a list of Passwords"));
+    selectLoadPasswordRadioButton = new QRadioButton(trUtf8("&Eine Passwortliste laden."));
     actionLayout->addWidget(selectLoadPasswordRadioButton);
 
     pathLabel = new QLabel();
     pathLabel->setWordWrap(true);
-    loadPushButton = new QPushButton(tr("Select Password File"));
+    loadPushButton = new QPushButton(trUtf8("Passwortliste auswählen"));
     // To prevent the button to get the wrong size
     loadPushButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     loadPushButton->setEnabled(false);
@@ -78,7 +79,7 @@ void EnterPasswordPage::load()
 {
     QString tmpFile = "";
     tmpFile = QFileDialog::getOpenFileName(this,
-                                           tr("Choose a file containing a password list"), "", "*");
+                                           trUtf8("Wählen Sie eine Passwoetliste aus."), "", "*");
     //tr("Image Files (*.png *.jpg *.bmp)")
     // if equal return 0
     if(QString::compare(tmpFile, "", Qt::CaseInsensitive))
@@ -120,8 +121,8 @@ bool EnterPasswordPage::validatePage()
     {
         if(passwordLineEdit->text() == "")
         {
-            QMessageBox::warning(this, tr("pwRecon"),
-                                 tr("Please enter a Password."),
+            QMessageBox::warning(this, trUtf8("pwRecon"),
+                                 trUtf8("Bitte geben Sie ein Passwort ein."),
                                  QMessageBox::Ok,
                                  QMessageBox::Ok);
             return false;
@@ -130,8 +131,8 @@ bool EnterPasswordPage::validatePage()
     } else if(selectLoadPasswordRadioButton->isChecked()){
         if(pathLabel->text() == "")
         {
-            QMessageBox::warning(this, tr("pwRecon"),
-                                 tr("Please select a password file."),
+            QMessageBox::warning(this, trUtf8("pwRecon"),
+                                 trUtf8("Bitte wählen Sie eine Passwortliste aus."),
                                  QMessageBox::Ok,
                                  QMessageBox::Ok);
             return false;

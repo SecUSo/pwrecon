@@ -39,6 +39,8 @@ FORMS += \
     testpage.ui \
     auxiliary\sam_dialog.ui
 
+TRANSLATIONS += pwRecon_en_US.ts
+
 # OpenCL libs only for Windows included yet
 win32: contains(QMAKE_HOST.arch, x86_64) {
 LIBS += -L$$PWD/opencl/lib/x86_64/ -lOpenCL

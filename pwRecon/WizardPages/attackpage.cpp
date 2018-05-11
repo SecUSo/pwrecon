@@ -3,11 +3,13 @@
 AttackPage::AttackPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Select the attack mode for this test."));
-    setSubTitle(tr("Please chose between Dictionary Arrack and Brute Force attack"));
+    setTitle(trUtf8("Angriff"));
+    setSubTitle(trUtf8("Sie könne den Angriff starten."));
+//    setTitle(trUtf8"Select the attack mode for this test."));
+//    setSubTitle(tr("Please chose between Dictionary Arrack and Brute Force attack"));
 
-    startPushButton = new QPushButton(tr("Start"));
-    stopPushButton = new QPushButton(tr("Stop"));
+    startPushButton = new QPushButton(trUtf8("Start"));
+    stopPushButton = new QPushButton(trUtf8("Stop"));
     startPushButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     stopPushButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     attackProgressBar = new QProgressBar();

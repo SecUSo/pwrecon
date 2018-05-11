@@ -3,15 +3,15 @@
 SelectModePage::SelectModePage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Select a mode"));
+    setTitle(trUtf8("Art der Wiederherstellung auswählen."));
     //setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/watermark.png"));
 
-    topLabel = new QLabel(tr("You can choose which kind of password shall be recovered"));
+    topLabel = new QLabel(trUtf8("Sie können auswählen welche Art von Passwort wiedergestellt werden soll."));
     topLabel->setWordWrap(true);
 
-    checkPasswordRadioButton = new QRadioButton(tr("&Test a Password"));
-    checkHashRadioButton = new QRadioButton(tr("&Test a Hash"));
-    checkLocalPwFileRadioButton = new QRadioButton(tr("&Test/Extract local Password File"));
+    checkPasswordRadioButton = new QRadioButton(trUtf8("&Ein Passwort prüfen"));
+    checkHashRadioButton = new QRadioButton(trUtf8("&Ein Passwort von einem Hash wiederherstellen"));
+    checkLocalPwFileRadioButton = new QRadioButton(trUtf8("&Die Passwörter der Benutzerkonten dieses Computers wiederherstellen."));
     checkPasswordRadioButton->setChecked(true);
 
     QVBoxLayout *layout = new QVBoxLayout;

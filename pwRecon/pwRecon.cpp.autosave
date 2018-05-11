@@ -10,14 +10,11 @@ QString emailRegExp = QStringLiteral(".+@.+");
 pwRecon::pwRecon(QWidget *parent)
     : QWizard(parent)
 {
-    translator2 = new QTranslator(qApp);
     setOption(HaveHelpButton, true);
     setPage(Page_Intro, new IntroPage);
     setPage(Page_SelectMode, new SelectModePage);
     setPage(Page_EnterPassword, new EnterPasswordPage);
     setPage(Page_EnterHash, new EnterHashPage);
-   // setPage(Page_LoadPasswords, new LoadPasswordsPage);
-   // setPage(Page_LoadHashes, new LoadHashesPage);
     setPage(Page_ExtractCurrent, new ExtractCurrentPage);
     setPage(Page_AttackSettings, new AttackSettingsPage);
     setPage(Page_Attack, new AttackPage);
@@ -29,6 +26,7 @@ pwRecon::pwRecon(QWidget *parent)
     setWizardStyle(ModernStyle);
 #endif
 
+    translator2 = new QTranslator(qApp);
     QTranslator *translator2 = new QTranslator(qApp);
     qDebug() << QLibraryInfo::location(QLibraryInfo::TranslationsPath) << endl;
     if(translator2->load("pwRecon_en_US.qm", "C:/Users/Christoph/Documents/TU/Thesis/pwReconGIT/pwRecon"))

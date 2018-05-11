@@ -3,11 +3,11 @@
 EnterHashPage::EnterHashPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Test a Hash"));
-    setSubTitle(tr("Please enter a hash or a hash list to test."));
+    setTitle(trUtf8("Hash wiederherstellen"));
+    setSubTitle(trUtf8("Bitte geben Sie einen Hash oder eine Hashliste zur Wiederherstellung an."));
 
-    QGroupBox *hideGroupBox = new QGroupBox(tr("&Do you want to hide your Password?"));
-    QGroupBox *actionGroupBox = new QGroupBox(tr("&What do you want to do?"));
+    QGroupBox *hideGroupBox = new QGroupBox(trUtf8("&Wählen Sie den verwendeten Hash Algorithmus."));
+    QGroupBox *actionGroupBox = new QGroupBox(trUtf8("&Was möchten Sie tun?"));
 
     QVBoxLayout *layout = new QVBoxLayout;
     QHBoxLayout *selectHashLayout = new QHBoxLayout;
@@ -22,17 +22,18 @@ EnterHashPage::EnterHashPage(QWidget *parent)
     selectHashModeCombo->addItem("SHA-1",Qt::DisplayRole);
     selectHashModeCombo->addItem("SHA-256",Qt::DisplayRole);
     selectHashModeCombo->addItem("SHA-512",Qt::DisplayRole);
-    selectHashModeLabel = new QLabel(tr("Select the Hash Algorithm"));
+    selectHashModeLabel = new QLabel(trUtf8("Hashmode: "));
     selectHashLayout->addWidget(selectHashModeLabel);
     selectHashLayout->addWidget(selectHashModeCombo);
     hideGroupBox->setLayout(selectHashLayout);
     layout->addWidget(hideGroupBox);
 
-    selectEnterHashRadioButton = new QRadioButton(tr("&Enter a single Hash"));
+    selectEnterHashRadioButton = new QRadioButton(trUtf8("&Einen einzelnen Hash Wiederherstellen"));
     actionLayout->addWidget(selectEnterHashRadioButton);
 
-    hashLabel = new QLabel(tr("Hash:"));
+    hashLabel = new QLabel(trUtf8("Hash:"));
     hashLineEdit = new QLineEdit;
+    hashLineEdit->setEnabled(false);
     // Connenct the label with the text field
     hashLabel->setBuddy(hashLineEdit);
 
@@ -40,15 +41,15 @@ EnterHashPage::EnterHashPage(QWidget *parent)
     enterOuterLayout->addWidget(hashLineEdit);
     actionLayout->addLayout(enterOuterLayout);
 
-    selectLoadHashRadioButton = new QRadioButton(tr("&Load a list of Passwords"));
+    selectLoadHashRadioButton = new QRadioButton(trUtf8("&Eine Hashliste wiederherstellen"));
     actionLayout->addWidget(selectLoadHashRadioButton);
 
     pathLabel = new QLabel();
     pathLabel->setWordWrap(true);
-    loadPushButton = new QPushButton(tr("Select Password File"));
+    loadPushButton = new QPushButton(trUtf8("Hashliste auswählen"));
     // To prevent the button to get the wrong size
     loadPushButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    loadPushButton->setEnabled(false);
+    loadPushButton->setEnabled(true);
     pathLabel->setBuddy(loadPushButton);
 
     loadOuterLayout->addWidget(loadPushButton);
@@ -77,7 +78,7 @@ void EnterHashPage::load()
 {
     QString tmpFile = "";
     tmpFile = QFileDialog::getOpenFileName(this,
-                                           tr("Choose a file containing a Hash list"), "", "*");
+                                           trUtf8("Hashliste auswählen"), "", "*");
     //tr("Image Files (*.png *.jpg *.bmp)")
     // if equal return 0
     if(QString::compare(tmpFile, "", Qt::CaseInsensitive))
@@ -108,8 +109,8 @@ bool EnterHashPage::validatePage()
     {
         if(hashLineEdit->text() == "")
         {
-            QMessageBox::warning(this, tr("pwRecon"),
-                                 tr("Please enter a password hash."),
+            QMessageBox::warning(this, trUtf8("pwRecon"),
+                                 trUtf8("Bitte geben Sie einen Hash ein."),
                                  QMessageBox::Ok,
                                  QMessageBox::Ok);
             return false;
@@ -118,8 +119,8 @@ bool EnterHashPage::validatePage()
     } else if(selectLoadHashRadioButton->isChecked()){
         if(pathLabel->text() == "")
         {
-            QMessageBox::warning(this, tr("pwRecon"),
-                                 tr("Please select a password hash file."),
+            QMessageBox::warning(this, trUtf8("pwRecon"),
+                                 trUtf8("Bitte geben Sie eine Hashliste an."),
                                  QMessageBox::Ok,
                                  QMessageBox::Ok);
             return false;

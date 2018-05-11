@@ -3,13 +3,13 @@
 AttackSettingsPage::AttackSettingsPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(tr("Attack Settings"));
-    setSubTitle(tr(" "));
+    setTitle(trUtf8("Angriffseinstellungen"));
+    setSubTitle(trUtf8(" "));
 
     currentDictFile =  QString(QDir::currentPath() + "/tools/pwrecon_dict.lst");
 
-    QGroupBox *hideGroupBox = new QGroupBox(tr("&Do you want to hide your Password?"));
-    QGroupBox *actionGroupBox = new QGroupBox(tr("&What do you want to do?"));
+    QGroupBox *hideGroupBox = new QGroupBox(trUtf8("&Möchten Sie die Passwörter verbergen?"));
+    QGroupBox *actionGroupBox = new QGroupBox(trUtf8("&Was möchten Sie tun?"));
 
     QVBoxLayout *layout = new QVBoxLayout;
     QHBoxLayout *hideLayout = new QHBoxLayout;
@@ -18,19 +18,19 @@ AttackSettingsPage::AttackSettingsPage(QWidget *parent)
     QHBoxLayout *bruteOuterLayout = new QHBoxLayout;
 
     // The hide Radio buttons
-    showPasswordRadioButton = new QRadioButton(tr("&Show Password"));
-    hidePasswordRadioButton = new QRadioButton(tr("&Hide Password"));
+    showPasswordRadioButton = new QRadioButton(trUtf8("&Passwörter zeigen"));
+    hidePasswordRadioButton = new QRadioButton(trUtf8("&Passwörter verbergen"));
     hideLayout->addWidget(showPasswordRadioButton);
     hideLayout->addWidget(hidePasswordRadioButton);
     hideGroupBox->setLayout(hideLayout);
     layout->addWidget(hideGroupBox);
-    showPasswordRadioButton->setChecked(true);
-    setField("WORKAROUND", QString("true"));
+    hidePasswordRadioButton->setChecked(true);
+    setField("WORKAROUND", QString("false"));
 
-    selectDictAttackRadioButton = new QRadioButton(tr("&Use a dictionary Attack"));
+    selectDictAttackRadioButton = new QRadioButton(trUtf8("&Wörterbuch Angriff verwenden"));
     actionLayout->addWidget(selectDictAttackRadioButton);
 
-    selectDictionaryButton = new QPushButton(tr("Change Dictionary File"));
+    selectDictionaryButton = new QPushButton(trUtf8("Wörterbuch wechseln"));
     selectDictionaryButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     selectDictionaryLabel = new QLabel(currentDictFile);
     selectDictionaryLabel->setWordWrap(true);
@@ -38,7 +38,7 @@ AttackSettingsPage::AttackSettingsPage(QWidget *parent)
     dictionaryOuterLayout->addWidget(selectDictionaryLabel);
     actionLayout->addLayout(dictionaryOuterLayout);
 
-    selectBruteAttackRadioButton = new QRadioButton(tr("&Use a brute-force Attack"));
+    selectBruteAttackRadioButton = new QRadioButton(trUtf8("&Brute-Force Angriff verwenden"));
     actionLayout->addWidget(selectBruteAttackRadioButton);
     actionLayout->addLayout(bruteOuterLayout);
     actionGroupBox->setLayout(actionLayout);
@@ -64,7 +64,7 @@ void AttackSettingsPage::selectDictionary()
 {
     QString tmpFile = "";
     tmpFile = QFileDialog::getOpenFileName(this,
-                                           tr("Choose a dictionary file"), "", "*");
+                                           trUtf8("Wörterbuch auswählen"), "", "*");
     //tr("Image Files (*.png *.jpg *.bmp)")
     // if equal return 0
     if(QString::compare(tmpFile, "", Qt::CaseInsensitive))

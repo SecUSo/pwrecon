@@ -17,6 +17,7 @@
 #include <QComboBox>
 #include <QGroupBox>
 #include <QMessageBox>
+#include <QTranslator>
 
 #include "auxiliary/sam_dialog.h"
 
