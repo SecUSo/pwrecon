@@ -1,4 +1,4 @@
-#include "WizardPages\enterpasswordpage.h"
+#include "WizardPages/enterpasswordpage.h"
 
 EnterPasswordPage::EnterPasswordPage(QWidget *parent)
     : QWizardPage(parent)

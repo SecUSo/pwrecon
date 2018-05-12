@@ -1,4 +1,4 @@
-#include "WizardPages\loadhashespage.h"
+#include "WizardPages/loadhashespage.h"
 
 LoadHashesPage::LoadHashesPage(QWidget *parent)
     : QWizardPage(parent)

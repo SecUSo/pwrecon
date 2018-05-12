@@ -1,4 +1,4 @@
-#include "WizardPages\extractcurrentpage.h"
+#include "WizardPages/extractcurrentpage.h"
 
 ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
     : QWizardPage(parent)

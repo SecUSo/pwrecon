@@ -1,4 +1,4 @@
-#include "WizardPages\loadpasswordspage.h"
+#include "WizardPages/loadpasswordspage.h"
 
 LoadPasswordsPage::LoadPasswordsPage(QWidget *parent)
     : QWizardPage(parent)

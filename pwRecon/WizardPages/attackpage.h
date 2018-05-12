@@ -8,7 +8,8 @@
 #include <QThread>
 #include <QCryptographicHash>
 // OpenCL
-#include "opencl\include\CL\cl.hpp"
+
+    #include "opencl/include/CL/cl.hpp"
 
 class AttackPage : public QWizardPage
 {
@@ -40,6 +41,7 @@ private:
     QString tempfilepath;
     QString testpwdfilepath;
     QString samdumpfilepath;
+    QString basePath;
 
     QString getHashFilePath();
     bool checkFieldByName(QString fieldName);

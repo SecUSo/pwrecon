@@ -25,7 +25,7 @@ pwRecon::pwRecon(QWidget *parent)
 
     setStartId(Page_Intro);
 
-#ifndef Q_OS_MAC
+#ifdef Q_OS_MAC
     setWizardStyle(ModernStyle);
 #endif
 

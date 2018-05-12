@@ -1,4 +1,4 @@
-#include "WizardPages\resultspage.h"
+#include "WizardPages/resultspage.h"
 
 ResultsPage::ResultsPage(QWidget *parent)
     : QWizardPage(parent)

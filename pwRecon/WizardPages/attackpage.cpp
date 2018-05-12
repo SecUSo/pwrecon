@@ -1,4 +1,4 @@
-#include "WizardPages\attackpage.h"
+#include "WizardPages/attackpage.h"
 
 AttackPage::AttackPage(QWidget *parent)
     : QWizardPage(parent)
@@ -31,7 +31,7 @@ AttackPage::AttackPage(QWidget *parent)
     setLayout(extractLayout);
 
     // Set up Hashcat
-
+#ifndef Q_OS_MACX
     hc2_fallback = false;
 
     if (!hc2_fallback)
@@ -53,6 +53,7 @@ AttackPage::AttackPage(QWidget *parent)
         }
     }
 
+
     // Define environment variables
     if (hc2_fallback) {
         // Current Hashcat version: 2.00
@@ -71,19 +72,24 @@ AttackPage::AttackPage(QWidget *parent)
         binaryfile = QString(binarydir + "/hashcat");
 
 #ifdef Q_PROCESSOR_X86_64
+
         binaryfile.append("64");
 #endif
+
 #ifdef Q_PROCESSOR_X86_32
         binaryfile.append("32");
 #endif
     }
+#endif // ifndef Q_OS_MACX
 
 #ifdef Q_OS_WIN
     binaryfile.append(".exe");
-    // Scan SAM file function only possible in Window
 #endif
-#ifdef Q_OS_OSX // No support yet
-    binaryfile.append(".app");
+#ifdef Q_OS_MACX // No support yet
+    binarydir = QString(QDir::currentPath() + "/tools/HashcatMAC");
+    binaryfile = QString(binarydir + "/hashcat");
+    binaryfile.append(".ppa");
+
 #endif
 #ifdef Q_OS_LINUX // No support yet
     binaryfile.append(".bin");

@@ -1,4 +1,4 @@
-#include "WizardPages\enterhashpage.h"
+#include "WizardPages/enterhashpage.h"
 
 EnterHashPage::EnterHashPage(QWidget *parent)
     : QWizardPage(parent)
