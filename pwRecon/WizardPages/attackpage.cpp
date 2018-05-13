@@ -223,7 +223,12 @@ QString AttackPage::getHashFilePath()
     }else if(wizard()->visitedPages().at(2) == Page_ExtractCurrent)
     {
         qDebug() << "Field EXTRACTPATHLABEL" << endl;
+#ifdef Q_OS_WIN
         hashtype = QString("--hash-type=1000");
+#endif
+#ifdef Q_OS_MACX
+        hashtype = QString("--hash-type=7100");
+#endif
         return field("EXTRACTPATHLABEL").toString();
     }
 

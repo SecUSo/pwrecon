@@ -12,21 +12,22 @@ pwRecon::pwRecon(QWidget *parent)
 {
     translator2 = new QTranslator(qApp);
     setOption(HaveHelpButton, true);
-    setPage(Page_Intro, new IntroPage);
+    setPage(Page_Intro, new ExtractCurrentPage);
+//    setPage(Page_Intro, new IntroPage);
     setPage(Page_SelectMode, new SelectModePage);
     setPage(Page_EnterPassword, new EnterPasswordPage);
     setPage(Page_EnterHash, new EnterHashPage);
-   // setPage(Page_LoadPasswords, new LoadPasswordsPage);
-   // setPage(Page_LoadHashes, new LoadHashesPage);
-    setPage(Page_ExtractCurrent, new ExtractCurrentPage);
+//    setPage(Page_ExtractCurrent, new ExtractCurrentPage);
     setPage(Page_AttackSettings, new AttackSettingsPage);
     setPage(Page_Attack, new AttackPage);
     setPage(Page_Results, new ResultsPage);
 
     setStartId(Page_Intro);
 
-#ifdef Q_OS_MAC
+#ifndef Q_OS_MAC
     setWizardStyle(ModernStyle);
+#else
+    setWizardStyle(MacStyle);
 #endif
 
     QTranslator *translator2 = new QTranslator(qApp);

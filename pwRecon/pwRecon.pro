@@ -1,4 +1,4 @@
-QT += widgets printsupport
+QT += widgets xml
 
 HEADERS       = \
     testpage.h \

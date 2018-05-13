@@ -5,6 +5,9 @@
 #include <QWidget>
 #include "pwrecon_global.h"
 #include "pwRecon.h"
+#include <QtXml>
+#include <QDomDocument>
+
 
 class ExtractCurrentPage : public QWizardPage
 {
