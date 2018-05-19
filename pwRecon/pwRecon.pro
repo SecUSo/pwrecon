@@ -4,8 +4,6 @@ HEADERS       = \
     testpage.h \
     WizardPages/enterpasswordpage.h \
     WizardPages/enterhashpage.h \
-    WizardPages/loadpasswordspage.h \
-    WizardPages/loadhashespage.h \
     WizardPages/extractcurrentpage.h \
     WizardPages/attackpage.h \
     WizardPages/resultspage.h \
@@ -23,8 +21,6 @@ SOURCES       = \
     testpage.cpp \
     WizardPages/enterpasswordpage.cpp \
     WizardPages/enterhashpage.cpp \
-    WizardPages/loadpasswordspage.cpp \
-    WizardPages/loadhashespage.cpp \
     WizardPages/extractcurrentpage.cpp \
     WizardPages/attackpage.cpp \
     WizardPages/resultspage.cpp \
@@ -43,7 +39,7 @@ FORMS += \
     testpage.ui \
     auxiliary/sam_dialog.ui
 
-TRANSLATIONS += pwRecon_en_US.ts
+TRANSLATIONS += translate/pwRecon_en_US.ts
 
 # OpenCL libs only for Windows included yet
 win32: contains(QMAKE_HOST.arch, x86_64) {

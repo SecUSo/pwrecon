@@ -3,15 +3,15 @@
 SelectModePage::SelectModePage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(trUtf8("Art der Wiederherstellung auswählen."));
+    setTitle("");
     //setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/watermark.png"));
 
-    topLabel = new QLabel(trUtf8("Sie können auswählen welche Art von Passwort wiedergestellt werden soll."));
+    topLabel = new QLabel();
     topLabel->setWordWrap(true);
 
-    checkPasswordRadioButton = new QRadioButton(trUtf8("&Ein Passwort prüfen"));
-    checkHashRadioButton = new QRadioButton(trUtf8("&Ein Passwort von einem Hash wiederherstellen"));
-    checkLocalPwFileRadioButton = new QRadioButton(trUtf8("&Die Passwörter der Benutzerkonten dieses Computers wiederherstellen."));
+    checkPasswordRadioButton = new QRadioButton();
+    checkHashRadioButton = new QRadioButton();
+    checkLocalPwFileRadioButton = new QRadioButton();
     checkPasswordRadioButton->setChecked(true);
 
     QVBoxLayout *layout = new QVBoxLayout;
@@ -26,6 +26,10 @@ SelectModePage::SelectModePage(QWidget *parent)
     WORKAROUNDLineEdit = new QLineEdit("true");
     WORKAROUNDLineEdit->setVisible(false);
     registerField("WORKAROUND",WORKAROUNDLineEdit);
+
+    // Set the Texts
+    QEvent languageChangeEvent(QEvent::LanguageChange);
+    QCoreApplication::sendEvent(this, &languageChangeEvent);
 
 }
 
@@ -55,3 +59,16 @@ void SelectModePage::workAroundSlot()
        // setField("WORKAROUND", QString(Path_Sam));
     }
 }
+
+void SelectModePage::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        setTitle(trUtf8("Art der Wiederherstellung auswählen."));
+        topLabel->setText(trUtf8("Sie können auswählen welche Art von Passwort wiedergestellt werden soll."));
+        checkPasswordRadioButton->setText(trUtf8("&Ein Passwort prüfen"));
+        checkHashRadioButton->setText(trUtf8("&Ein Passwort von einem Hash wiederherstellen"));
+        checkLocalPwFileRadioButton->setText(trUtf8("&Die Passwörter der Benutzerkonten dieses Computers wiederherstellen."));
+    } else
+        QWidget::changeEvent(event);
+}
+

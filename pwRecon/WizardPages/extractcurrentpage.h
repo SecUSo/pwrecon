@@ -5,9 +5,10 @@
 #include <QWidget>
 #include "pwrecon_global.h"
 #include "pwRecon.h"
+#ifdef Q_OS_MACX
 #include <QtXml>
 #include <QDomDocument>
-
+#endif
 
 class ExtractCurrentPage : public QWizardPage
 {
@@ -18,6 +19,7 @@ public:
 
     int nextId() const override;
     bool validatePage() override;
+    void changeEvent(QEvent *event) override;
 
 protected:
     void initializePage() override;

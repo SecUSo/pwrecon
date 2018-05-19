@@ -14,6 +14,7 @@ public:
     SelectModePage(QWidget *parent = 0);
 
     int nextId() const override;
+    void changeEvent(QEvent *event) override;
 
 private:
     QLabel *topLabel;

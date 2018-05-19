@@ -18,6 +18,7 @@
 #include <QGroupBox>
 #include <QMessageBox>
 #include <QTranslator>
+#include <QCoreApplication>
 
 #include "auxiliary/sam_dialog.h"
 

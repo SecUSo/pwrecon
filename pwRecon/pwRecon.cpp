@@ -25,36 +25,10 @@ pwRecon::pwRecon(QWidget *parent)
 
 #ifndef Q_OS_MAC
     setWizardStyle(ModernStyle);
+
 #else
     setWizardStyle(MacStyle);
 #endif
-
-    QTranslator *translator2 = new QTranslator(qApp);
-    qDebug() << QLibraryInfo::location(QLibraryInfo::TranslationsPath) << endl;
-    if(translator2->load("pwRecon_en_US.qm", "C:/Users/Christoph/Documents/TU/Thesis/pwReconGIT/pwRecon"))
-        qApp->installTranslator(translator2);
-
-     // remove the old translator
-     //qApp->removeTranslator(&m_translatorQt);
-
-    m_translatorQt = new QTranslator(qApp);
-   /* if (translator->load(translatorFileName, QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
-        app.installTranslator(translator);*/
-
-     // load the new translator
-//     QFileInfo check_file("C:/Users/Christoph/Documents/TU/Thesis/pwReconGIT/pwRecon/pwRecon_en_US.qm");
-//     qDebug() << "File check: " << check_file.exists() << endl;
-//     if(m_translatorQt->load("pwRecon_en_US.qm", "C:/Users/Christoph/Documents/TU/Thesis/pwReconGIT/pwRecon"))
-//     {
-//        qDebug() << "It works!" << endl;
-//        qApp->installTranslator(m_translatorQt);
-
-//     }else
-//     {
-
-//         qDebug() << "Something went Wrong!\n" << m_translatorQt->isEmpty() << endl;
-//     }
-
    //setPixmap(QWizard::LogoPixmap, QPixmap(":/images/logo.png"));
 
     connect(this, &QWizard::helpRequested, this, &pwRecon::showHelp);
@@ -88,33 +62,29 @@ void pwRecon::showHelp()
 IntroPage::IntroPage(QWidget *parent)
     : QWizardPage(parent)
 {
-//    setTitle(trUtf8("Introduction"));
     setTitle(trUtf8("Einleitung"));
-    //setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/watermark.png"));
-
-    /*topLabel = new QLabel(trUtf8("This wizard will guide you through the process of recovering your lost password.\n"
-                             "You can choose between different kinds of Passwords to recover or test.\n"
-                             "It is also possible to test the security of existing passwords."));*/
-    topLabel = new QLabel(trUtf8("Dieser Assistent wird Sie durch den Prozess der Wiederherstellung verlorener Passwörter führen.\n"
-                             "Sie können sich zwischen zwei verschiedenen Wiederherstellungsarten entscheiden.\n"
-                             "Es besteht auch die Möglichkeit die Sicherheit bereits bestehender Passwörter zu testen."));
+    topLabel = new QLabel();
 
     topLabel->setWordWrap(true);
     QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(topLabel);
+    QHBoxLayout *innerLayout = new QHBoxLayout;
+    layout->addWidget(topLabel, 0, Qt::AlignTop);
+
+    languageComboBox = new QComboBox();
+    languageComboBox->addItem("Deutsch");
+    languageComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+    innerLayout->addWidget(languageComboBox, 0, Qt::AlignLeft);
+
+    setLanguagesComboBox();
+    layout->addLayout(innerLayout, 100);
     setLayout(layout);
 
-//    WORKAROUNDLineEdit = new QLabel();
-//    WORKAROUNDLineEdit->setVisible(false);
-//    registerField("PathHash",WORKAROUNDLineEdit);
-//    WORKAROUNDLineEdit = new QLabel();
-//    WORKAROUNDLineEdit->setVisible(false);
-//    registerField("PathPassword",WORKAROUNDLineEdit);
-//    WORKAROUNDLineEdit = new QLabel();
-//    WORKAROUNDLineEdit->setVisible(false);
-//    registerField("PathSam",WORKAROUNDLineEdit);
-}
+    QObject::connect(languageComboBox, SIGNAL(currentIndexChanged(int)),this, SLOT(setLanguage()));
 
+    // Set the Texts
+    QEvent languageChangeEvent(QEvent::LanguageChange);
+    QCoreApplication::sendEvent(this, &languageChangeEvent);
+}
 int IntroPage::nextId() const
 {
 
@@ -124,6 +94,7 @@ int IntroPage::nextId() const
 void IntroPage::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
+        setTitle(trUtf8("Einleitung"));
         topLabel->setText(trUtf8("Dieser Assistent wird Sie durch den Prozess der Wiederherstellung verlorener Passwörter führen.\n"
                                  "Sie können sich zwischen zwei verschiedenen Wiederherstellungsarten entscheiden.\n"
                                  "Es besteht auch die Möglichkeit die Sicherheit bereits bestehender Passwörter zu testen."));
@@ -131,4 +102,50 @@ void IntroPage::changeEvent(QEvent *event)
         //okPushButton->setText(tr("&OK"));
     } else
         QWidget::changeEvent(event);
+}
+
+void IntroPage::setLanguagesComboBox()
+{
+    QDirIterator it("./translate");
+    while (it.hasNext()) {
+        QString actFile = it.next();
+        QFileInfo fi(actFile);
+        QString ext = fi.suffix();
+        QString actFileName = fi.fileName();
+        QString prefix = "pwRecon_";
+        if(ext == "qm")
+        {
+            qDebug() << actFileName << " with ending: " << ext << endl;
+            if(actFile.contains(prefix))
+            {
+                actFileName.replace(prefix, "");
+                QString entry = actFileName.mid(0,actFileName.length()-3);
+                languageComboBox->addItem(entry, actFile);
+            }
+        }
+    }
+}
+
+void IntroPage::setLanguage()
+{
+//    QString test = languageComboBox->currentData(Qt::DisplayRole);
+    QString pwReconTranslateFile = languageComboBox->itemData(languageComboBox->currentIndex()).toString();
+    QString qtTranslateFile = pwReconTranslateFile;
+    qtTranslateFile.replace("pwRecon", "qt");
+    qDebug() << "###TEST###" << endl << pwReconTranslateFile << endl << qtTranslateFile << endl;
+
+    qApp->removeTranslator(pwReconTranslator);
+    qApp->removeTranslator(qtTranslator);
+
+    if( languageComboBox->currentText() != "Deutsch")
+    {
+    pwReconTranslator = new QTranslator(qApp);
+    qDebug() << QLibraryInfo::location(QLibraryInfo::TranslationsPath) << endl;
+    if(pwReconTranslator->load(pwReconTranslateFile))
+        qApp->installTranslator(pwReconTranslator);
+
+    qtTranslator = new QTranslator(qApp);
+    if (qtTranslator->load(qtTranslateFile))
+        qApp->installTranslator(qtTranslator);
+    }
 }

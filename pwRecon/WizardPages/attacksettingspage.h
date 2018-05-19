@@ -13,8 +13,11 @@ public:
     AttackSettingsPage(QWidget *parent = 0);
 
     int nextId() const override;
+    void changeEvent(QEvent *event) override;
 
 private:
+    QGroupBox *hideGroupBox;
+    QGroupBox *actionGroupBox;
     QRadioButton *showPasswordRadioButton;
     QRadioButton *hidePasswordRadioButton;
     QRadioButton *selectDictAttackRadioButton;

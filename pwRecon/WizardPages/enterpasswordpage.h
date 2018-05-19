@@ -11,10 +11,13 @@ class EnterPasswordPage  : public QWizardPage
 
 public:
     EnterPasswordPage(QWidget *parent = 0);
+    void changeEvent(QEvent *event) override;
 
     int nextId() const override;
     bool validatePage() override;
 private:
+    QGroupBox *hideGroupBox;
+    QGroupBox *actionGroupBox;
     QRadioButton *showPasswordRadioButton;
     QRadioButton *hidePasswordRadioButton;
     QRadioButton *selectEnterPasswordRadioButton;

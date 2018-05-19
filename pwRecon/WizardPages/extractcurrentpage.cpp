@@ -3,13 +3,13 @@
 ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(trUtf8("Passwörter von diesem Computer wiederherstellen"));
-    setSubTitle(trUtf8("Die Passwort Datenbank dieses Computers wird extrahiert um sie zu testen."));
+    setTitle("");
+    setSubTitle("");
 
     samdumpfilepath = QString(QDir::currentPath() + "/tools/samdumpfile.txt");
     extractPathLabel = new QLabel(samdumpfilepath);
-    changePushButton = new QPushButton(trUtf8("Speicherort ändern"));
-    extractPushButton = new QPushButton(trUtf8("Datenbank extrahieren\n und weiter"));
+    changePushButton = new QPushButton();
+    extractPushButton = new QPushButton();
     extractPushButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     changePushButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     //extractLabel->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
@@ -42,6 +42,10 @@ ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
 
     setLayout(extractLayout);
     valid = false;
+
+    // Set the Texts
+    QEvent languageChangeEvent(QEvent::LanguageChange);
+    QCoreApplication::sendEvent(this, &languageChangeEvent);
 }
 
 int ExtractCurrentPage::nextId() const
@@ -363,4 +367,15 @@ bool ExtractCurrentPage::validatePage()
                              QMessageBox::Ok);
     }
     return valid;
+}
+
+void ExtractCurrentPage::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        setTitle(trUtf8("Passwörter von diesem Computer wiederherstellen"));
+        setSubTitle(trUtf8("Die Passwort Datenbank dieses Computers wird extrahiert um sie zu testen."));
+        changePushButton->setText(trUtf8("Speicherort ändern"));
+        extractPushButton->setText(trUtf8("Datenbank extrahieren\n und weiter"));
+    } else
+        QWidget::changeEvent(event);
 }

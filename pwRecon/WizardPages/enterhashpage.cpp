@@ -3,11 +3,11 @@
 EnterHashPage::EnterHashPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(trUtf8("Hash wiederherstellen"));
-    setSubTitle(trUtf8("Bitte geben Sie einen Hash oder eine Hashliste zur Wiederherstellung an."));
+    setTitle("");
+    setSubTitle("");
 
-    QGroupBox *hideGroupBox = new QGroupBox(trUtf8("&Wählen Sie den verwendeten Hash Algorithmus."));
-    QGroupBox *actionGroupBox = new QGroupBox(trUtf8("&Was möchten Sie tun?"));
+    hideGroupBox = new QGroupBox();
+    actionGroupBox = new QGroupBox();
 
     QVBoxLayout *layout = new QVBoxLayout;
     QHBoxLayout *selectHashLayout = new QHBoxLayout;
@@ -28,10 +28,10 @@ EnterHashPage::EnterHashPage(QWidget *parent)
     hideGroupBox->setLayout(selectHashLayout);
     layout->addWidget(hideGroupBox);
 
-    selectEnterHashRadioButton = new QRadioButton(trUtf8("&Einen einzelnen Hash Wiederherstellen"));
+    selectEnterHashRadioButton = new QRadioButton();
     actionLayout->addWidget(selectEnterHashRadioButton);
 
-    hashLabel = new QLabel(trUtf8("Hash:"));
+    hashLabel = new QLabel();
     hashLineEdit = new QLineEdit;
     hashLineEdit->setEnabled(false);
     // Connenct the label with the text field
@@ -41,12 +41,12 @@ EnterHashPage::EnterHashPage(QWidget *parent)
     enterOuterLayout->addWidget(hashLineEdit);
     actionLayout->addLayout(enterOuterLayout);
 
-    selectLoadHashRadioButton = new QRadioButton(trUtf8("&Eine Hashliste wiederherstellen"));
+    selectLoadHashRadioButton = new QRadioButton();
     actionLayout->addWidget(selectLoadHashRadioButton);
 
     pathLabel = new QLabel();
     pathLabel->setWordWrap(true);
-    loadPushButton = new QPushButton(trUtf8("Hashliste auswählen"));
+    loadPushButton = new QPushButton();
     // To prevent the button to get the wrong size
     loadPushButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     loadPushButton->setEnabled(true);
@@ -68,6 +68,10 @@ EnterHashPage::EnterHashPage(QWidget *parent)
     registerField("HASHPATHLABEL",pathLabel,"text", "changeEvent");
     registerField("HASHLINEEDIT",hashLineEdit);
     registerField("HASHTYPE", selectHashModeCombo, "currentText", "currentIndexChanged");
+
+    // Set the Texts
+    QEvent languageChangeEvent(QEvent::LanguageChange);
+    QCoreApplication::sendEvent(this, &languageChangeEvent);
 }
 int EnterHashPage::nextId() const
 {
@@ -129,6 +133,22 @@ bool EnterHashPage::validatePage()
     }
     return true;
 }
+
+void EnterHashPage::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        setTitle(trUtf8("Hash wiederherstellen"));
+        setSubTitle(trUtf8("Bitte geben Sie einen Hash oder eine Hashliste zur Wiederherstellung an."));
+        hideGroupBox->setTitle(trUtf8("&Wählen Sie den verwendeten Hash Algorithmus."));
+        actionGroupBox->setTitle(trUtf8("&Was möchten Sie tun?"));
+        selectEnterHashRadioButton->setText(trUtf8("&Einen einzelnen Hash Wiederherstellen"));
+        hashLabel->setText(trUtf8("Hash:"));
+        selectLoadHashRadioButton->setText(trUtf8("&Eine Hashliste wiederherstellen"));
+        loadPushButton->setText(trUtf8("Hashliste auswählen"));
+    } else
+        QWidget::changeEvent(event);
+}
+
 
 
 

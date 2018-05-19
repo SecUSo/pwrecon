@@ -20,6 +20,7 @@ public:
     ~AttackPage();
 
     int nextId() const override;
+    void changeEvent(QEvent *event) override;
 
 private:
     QProgressBar *attackProgressBar;

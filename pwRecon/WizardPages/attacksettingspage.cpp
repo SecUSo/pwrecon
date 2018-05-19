@@ -3,13 +3,13 @@
 AttackSettingsPage::AttackSettingsPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(trUtf8("Angriffseinstellungen"));
-    setSubTitle(trUtf8(" "));
+    setTitle("");
+    setSubTitle(" ");
 
     currentDictFile =  QString(QDir::currentPath() + "/tools/pwrecon_dict.lst");
 
-    QGroupBox *hideGroupBox = new QGroupBox(trUtf8("&Möchten Sie die Passwörter verbergen?"));
-    QGroupBox *actionGroupBox = new QGroupBox(trUtf8("&Was möchten Sie tun?"));
+    hideGroupBox = new QGroupBox();
+    actionGroupBox = new QGroupBox();
 
     QVBoxLayout *layout = new QVBoxLayout;
     QHBoxLayout *hideLayout = new QHBoxLayout;
@@ -18,8 +18,8 @@ AttackSettingsPage::AttackSettingsPage(QWidget *parent)
     QHBoxLayout *bruteOuterLayout = new QHBoxLayout;
 
     // The hide Radio buttons
-    showPasswordRadioButton = new QRadioButton(trUtf8("&Passwörter zeigen"));
-    hidePasswordRadioButton = new QRadioButton(trUtf8("&Passwörter verbergen"));
+    showPasswordRadioButton = new QRadioButton();
+    hidePasswordRadioButton = new QRadioButton();
     hideLayout->addWidget(showPasswordRadioButton);
     hideLayout->addWidget(hidePasswordRadioButton);
     hideGroupBox->setLayout(hideLayout);
@@ -27,10 +27,10 @@ AttackSettingsPage::AttackSettingsPage(QWidget *parent)
     hidePasswordRadioButton->setChecked(true);
     setField("WORKAROUND", QString("false"));
 
-    selectDictAttackRadioButton = new QRadioButton(trUtf8("&Wörterbuch Angriff verwenden"));
+    selectDictAttackRadioButton = new QRadioButton();
     actionLayout->addWidget(selectDictAttackRadioButton);
 
-    selectDictionaryButton = new QPushButton(trUtf8("Wörterbuch wechseln"));
+    selectDictionaryButton = new QPushButton();
     selectDictionaryButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     selectDictionaryLabel = new QLabel(currentDictFile);
     selectDictionaryLabel->setWordWrap(true);
@@ -38,7 +38,7 @@ AttackSettingsPage::AttackSettingsPage(QWidget *parent)
     dictionaryOuterLayout->addWidget(selectDictionaryLabel);
     actionLayout->addLayout(dictionaryOuterLayout);
 
-    selectBruteAttackRadioButton = new QRadioButton(trUtf8("&Brute-Force Angriff verwenden"));
+    selectBruteAttackRadioButton = new QRadioButton();
     actionLayout->addWidget(selectBruteAttackRadioButton);
     actionLayout->addLayout(bruteOuterLayout);
     actionGroupBox->setLayout(actionLayout);
@@ -52,6 +52,10 @@ AttackSettingsPage::AttackSettingsPage(QWidget *parent)
     QObject::connect(selectDictAttackRadioButton, SIGNAL(clicked()),this, SLOT(setMode()));
 
     setLayout(layout);
+
+    // Set the Texts
+    QEvent languageChangeEvent(QEvent::LanguageChange);
+    QCoreApplication::sendEvent(this, &languageChangeEvent);
 
 }
 
@@ -97,3 +101,19 @@ void AttackSettingsPage::setMode()
         selectDictionaryButton->setEnabled(false);
     }
 }
+
+void AttackSettingsPage::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        setTitle(trUtf8("Angriffseinstellungen"));
+        hideGroupBox->setTitle(trUtf8("&Möchten Sie die Passwörter verbergen?"));
+        actionGroupBox->setTitle(trUtf8("&Was möchten Sie tun?"));
+        showPasswordRadioButton->setText(trUtf8("&Passwörter zeigen"));
+        hidePasswordRadioButton->setText(trUtf8("&Passwörter verbergen"));
+        selectDictAttackRadioButton->setText(trUtf8("&Wörterbuch Angriff verwenden"));
+        selectDictionaryButton->setText(trUtf8("Wörterbuch wechseln"));
+        selectBruteAttackRadioButton->setText(trUtf8("&Brute-Force Angriff verwenden"));
+    } else
+        QWidget::changeEvent(event);
+}
+

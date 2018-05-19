@@ -14,7 +14,10 @@ public:
 
     int nextId() const override;
     bool validatePage() override;
+    void changeEvent(QEvent *event) override;
 private:
+    QGroupBox *hideGroupBox;
+    QGroupBox *actionGroupBox;
     QComboBox *selectHashModeCombo;
     QLabel *selectHashModeLabel;
     QRadioButton *selectEnterHashRadioButton;

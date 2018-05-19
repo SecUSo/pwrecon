@@ -3,13 +3,13 @@
 AttackPage::AttackPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(trUtf8("Angriff"));
-    setSubTitle(trUtf8("Sie könne den Angriff starten."));
+    setTitle("");
+    setSubTitle("");
 //    setTitle(trUtf8"Select the attack mode for this test."));
 //    setSubTitle(tr("Please chose between Dictionary Arrack and Brute Force attack"));
 
-    startPushButton = new QPushButton(trUtf8("Start"));
-    stopPushButton = new QPushButton(trUtf8("Stop"));
+    startPushButton = new QPushButton("");
+    stopPushButton = new QPushButton("");
     startPushButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     stopPushButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     attackProgressBar = new QProgressBar();
@@ -45,6 +45,9 @@ AttackPage::AttackPage(QWidget *parent)
                 QString msg_en("(OpenCL is not installed on this system.\nUsing older Hashcat version.)\n");
                 QString msg_de("(OpenCL ist auf diesem System nicht installiert.\nÄltere Version von Hashcat wird verwendet.)\n");
                 attackResultTextBrowser->append(msg_de);
+            }else
+            {
+                qDebug() << "OpenCl is installed" << endl;
             }
         }
         catch (...)
@@ -106,9 +109,7 @@ AttackPage::AttackPage(QWidget *parent)
     QFile file(binaryfile);
     qDebug() << binarydir << endl << binaryfile << endl;
     if (!file.exists()) {
-        QString msg_en("No Hashcat files found!\n");
-        QString msg_de("Keine Hashcat Dateien gefunden!\n");
-        attackResultTextBrowser->setText(msg_de);
+        attackResultTextBrowser->setText(trUtf8("Keine Hashcat Dateien gefunden!\n"));
         startPushButton->setDisabled(true);
         stopPushButton->setDisabled(true);
     }
@@ -127,6 +128,10 @@ AttackPage::AttackPage(QWidget *parent)
 
 
     workerThread.start();
+    // Set the Texts
+    QEvent languageChangeEvent(QEvent::LanguageChange);
+    QCoreApplication::sendEvent(this, &languageChangeEvent);
+
 }
 
 int AttackPage::nextId() const
@@ -332,9 +337,7 @@ void AttackPage::onRecoveryFinished()
     if (file.exists())
         file.remove();
 
-    QString en("RECOVERY FINISHED");
-    QString de("WIEDERHERSTELLUNG ABGESCHLOSSEN");
-    attackResultTextBrowser->append(QString(" - " + de + " -\n------------------------------------------\n\n"));
+    attackResultTextBrowser->append(QString(" - " + trUtf8("WIEDERHERSTELLUNG ABGESCHLOSSEN") + " -\n------------------------------------------\n\n"));
     disableButtons(false);
 }
 
@@ -372,4 +375,15 @@ void AttackPage::disableButtons(bool bol)
         attackProgressBar->setMaximum(0);
     else
         attackProgressBar->setMaximum(23);
+}
+
+void AttackPage::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        setTitle(trUtf8("Angriff"));
+        setSubTitle(trUtf8("Sie könne den Angriff starten."));
+        startPushButton->setText(trUtf8("Start"));
+        stopPushButton->setText(trUtf8("Stop"));
+    } else
+        QWidget::changeEvent(event);
 }

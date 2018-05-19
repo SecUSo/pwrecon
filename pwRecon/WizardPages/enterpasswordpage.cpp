@@ -3,11 +3,11 @@
 EnterPasswordPage::EnterPasswordPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    setTitle(trUtf8("Passwörter prüfen"));
-    setSubTitle(trUtf8("Bitte geben Sie ein Passwort oder eine Passwortliste zum testen an."));
+    setTitle("");
+    setSubTitle("");
 
-    QGroupBox *hideGroupBox = new QGroupBox(trUtf8("&Möchten Sie die Passwörter verbergen?"));
-    QGroupBox *actionGroupBox = new QGroupBox(trUtf8("&Was möchten Sie tun?"));
+    hideGroupBox = new QGroupBox();
+    actionGroupBox = new QGroupBox();
 
     QVBoxLayout *layout = new QVBoxLayout;
     QHBoxLayout *hideLayout = new QHBoxLayout;
@@ -19,18 +19,18 @@ EnterPasswordPage::EnterPasswordPage(QWidget *parent)
     //layout->addLayout(loadOuterLayout);
 
     // The hide Radio buttons
-    showPasswordRadioButton = new QRadioButton(trUtf8("&Passwörter zeigen"));
-    hidePasswordRadioButton = new QRadioButton(trUtf8("&Passwörter verbergen"));
+    showPasswordRadioButton = new QRadioButton();
+    hidePasswordRadioButton = new QRadioButton();
     hideLayout->addWidget(showPasswordRadioButton);
     hideLayout->addWidget(hidePasswordRadioButton);
     hideGroupBox->setLayout(hideLayout);
     layout->addWidget(hideGroupBox);
     hidePasswordRadioButton->setChecked(true);
 
-    selectEnterPasswordRadioButton = new QRadioButton(trUtf8("&Ein einzelnes Passwort angeben."));
+    selectEnterPasswordRadioButton = new QRadioButton();
     actionLayout->addWidget(selectEnterPasswordRadioButton);
 
-    passwordLabel = new QLabel(trUtf8("Passwort:"));
+    passwordLabel = new QLabel();
     passwordLineEdit = new QLineEdit;
     passwordLineEdit->setInputMethodHints(Qt::ImhHiddenText| Qt::ImhNoPredictiveText|Qt::ImhNoAutoUppercase);
     passwordLineEdit->setEchoMode(QLineEdit::Password);
@@ -41,12 +41,12 @@ EnterPasswordPage::EnterPasswordPage(QWidget *parent)
     enterOuterLayout->addWidget(passwordLineEdit);
     actionLayout->addLayout(enterOuterLayout);
 
-    selectLoadPasswordRadioButton = new QRadioButton(trUtf8("&Eine Passwortliste laden."));
+    selectLoadPasswordRadioButton = new QRadioButton();
     actionLayout->addWidget(selectLoadPasswordRadioButton);
 
     pathLabel = new QLabel();
     pathLabel->setWordWrap(true);
-    loadPushButton = new QPushButton(trUtf8("Passwortliste auswählen"));
+    loadPushButton = new QPushButton();
     // To prevent the button to get the wrong size
     loadPushButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     loadPushButton->setEnabled(false);
@@ -69,6 +69,10 @@ EnterPasswordPage::EnterPasswordPage(QWidget *parent)
 
     registerField("PATHLABEL",pathLabel,"text", "changeEvent");
     registerField("PASSWORDLINEEDIT",passwordLineEdit);
+
+    // Set the Texts
+    QEvent languageChangeEvent(QEvent::LanguageChange);
+    QCoreApplication::sendEvent(this, &languageChangeEvent);
 }
 int EnterPasswordPage::nextId() const
 {
@@ -140,4 +144,22 @@ bool EnterPasswordPage::validatePage()
         passwordLineEdit->setText("");
     }
     return true;
+}
+
+void EnterPasswordPage::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        setTitle(trUtf8("Passwörter prüfen"));
+        setSubTitle(trUtf8("Bitte geben Sie ein Passwort oder eine Passwortliste zum testen an."));
+        hideGroupBox->setTitle(trUtf8("&Möchten Sie die Passwörter verbergen?"));
+        actionGroupBox->setTitle(trUtf8("&Was möchten Sie tun?"));
+        showPasswordRadioButton->setText(trUtf8("&Passwörter zeigen"));
+        hidePasswordRadioButton->setText(trUtf8("&Passwörter verbergen"));
+        selectEnterPasswordRadioButton->setText(trUtf8("&Ein einzelnes Passwort angeben."));
+        passwordLabel->setText(trUtf8("Passwort:"));
+        selectLoadPasswordRadioButton->setText(trUtf8("&Eine Passwortliste laden."));
+        loadPushButton->setText(trUtf8("Passwortliste auswählen"));
+
+    } else
+        QWidget::changeEvent(event);
 }

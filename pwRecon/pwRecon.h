@@ -9,8 +9,6 @@
 #include "WizardPages/enterhashpage.h"
 #include "WizardPages/enterpasswordpage.h"
 #include "WizardPages/extractcurrentpage.h"
-#include "WizardPages/loadhashespage.h"
-#include "WizardPages/loadpasswordspage.h"
 #include "WizardPages/resultspage.h"
 #include "WizardPages/selectmodepage.h"
 #include "WizardPages/attacksettingspage.h"
@@ -43,8 +41,15 @@ public:
 
     int nextId() const override;
     void changeEvent(QEvent *event) override;
+    void setLanguagesComboBox();
 
 private:
     QLabel *topLabel;
+    QComboBox *languageComboBox;
+    QTranslator *qtTranslator;
+    QTranslator *pwReconTranslator;
+
+public slots:
+    void setLanguage();
 };
 #endif
