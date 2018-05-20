@@ -22,6 +22,8 @@ private:
     QRadioButton *recoverPasswordRadioButton;
     QLineEdit *WORKAROUNDLineEdit;
 
+protected:
+
 public slots:
 };
 

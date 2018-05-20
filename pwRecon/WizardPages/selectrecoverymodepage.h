@@ -21,6 +21,9 @@ private:
     QRadioButton *recoverHashRadioButton;
     QRadioButton *recoverLocalPwFileRadioButton;
 
+protected:
+    void initializePage() override;
+
 public slots:
 };
 

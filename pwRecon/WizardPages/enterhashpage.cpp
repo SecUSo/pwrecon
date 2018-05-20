@@ -73,6 +73,7 @@ EnterHashPage::EnterHashPage(QWidget *parent)
     QEvent languageChangeEvent(QEvent::LanguageChange);
     QCoreApplication::sendEvent(this, &languageChangeEvent);
 }
+
 int EnterHashPage::nextId() const
 {
     return Page_AttackSettings;

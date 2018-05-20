@@ -34,7 +34,11 @@ int SelectModePage::nextId() const
     if (checkPasswordRadioButton->isChecked()) {
         return Page_EnterPassword;
     } else if (recoverPasswordRadioButton->isChecked()) {
-        return Page_SelectRecoveryMode;
+        if(field("EXPERTMODE").toBool()){
+            return Page_SelectRecoveryMode;
+        } else{
+            return Page_ExtractCurrent;
+        }
     }
     return Page_EnterPassword;
 
@@ -46,8 +50,12 @@ void SelectModePage::changeEvent(QEvent *event)
         setTitle(trUtf8("Vorgansweise Auswählen."));
         topLabel->setText(trUtf8("Sie können sich entscheiden, ob sie ein Passwort testen oder wiederherstellen möchten."));
         checkPasswordRadioButton->setText(trUtf8("&Ein Passwort prüfen"));
-        recoverPasswordRadioButton->setText(trUtf8("&Ein Passwörter wiederherstellen"));
+        if(field("EXPERTMODE").toBool()){
+            recoverPasswordRadioButton->setText(trUtf8("&Passwörter aus Hashes oder vom Lokalen System wiederherstellen"));
+        } else{
+            recoverPasswordRadioButton->setText(trUtf8("&Passwörter des Lokalen Systems wiederherstellen"));
+        }
+
     } else
         QWidget::changeEvent(event);
 }
-

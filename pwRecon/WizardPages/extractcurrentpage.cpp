@@ -50,7 +50,11 @@ ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
 
 int ExtractCurrentPage::nextId() const
 {
-    return Page_AttackSettings;
+    if(field("EXPERTMODE").toBool()){
+        return Page_AttackSettings;
+    } else{
+        return Page_Attack;
+    }
 
 }
 
@@ -146,7 +150,7 @@ void ExtractCurrentPage::startExtraction()
         QString en("Error:\nProcess not possible.");
         QString de("Fehler:\nVorgang nicht möglich.");
         extractResultTextBrowser->setText(de);
-       // disableButtons(false);
+        // disableButtons(false);
         valid = false;
     }
     else {
@@ -318,7 +322,7 @@ void ExtractCurrentPage::startExtraction()
         QString en("Error:\nProcess not possible.");
         QString de("Fehler:\nVorgang nicht möglich.");
         extractResultTextBrowser->setText(de);
-       // disableButtons(false);
+        // disableButtons(false);
         valid = false;
     }
     else {
@@ -376,6 +380,9 @@ void ExtractCurrentPage::changeEvent(QEvent *event)
         setSubTitle(trUtf8("Die Passwort Datenbank dieses Computers wird extrahiert um sie zu testen."));
         changePushButton->setText(trUtf8("Speicherort ändern"));
         extractPushButton->setText(trUtf8("Datenbank extrahieren\n und weiter"));
+        // Expert Mode CHanges
+        changePushButton->setVisible(field("EXPERTMODE").toBool());
+        extractPathLabel->setVisible(field("EXPERTMODE").toBool());
     } else
         QWidget::changeEvent(event);
 }

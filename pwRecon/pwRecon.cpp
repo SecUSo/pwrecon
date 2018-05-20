@@ -104,6 +104,7 @@ IntroPage::IntroPage(QWidget *parent)
     setLayout(layout);
 
     QObject::connect(languageComboBox, SIGNAL(currentIndexChanged(int)),this, SLOT(setLanguage()));
+    QObject::connect(expertModeCheckBox, SIGNAL(stateChanged(int)),this, SLOT(setExpertModeTexts()));
 
     // Set the Texts
     QEvent languageChangeEvent(QEvent::LanguageChange);
@@ -170,4 +171,10 @@ void IntroPage::setLanguage()
         if(pwReconTranslator->load(pwReconTranslateFile))
             qApp->installTranslator(pwReconTranslator);
     }
+}
+
+void IntroPage::setExpertModeTexts()
+{
+    QEvent languageChangeEvent(QEvent::LanguageChange);
+    QCoreApplication::sendEvent(wizard(), &languageChangeEvent);
 }

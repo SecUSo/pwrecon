@@ -53,5 +53,6 @@ private:
 
 public slots:
     void setLanguage();
+    void setExpertModeTexts();
 };
 #endif
