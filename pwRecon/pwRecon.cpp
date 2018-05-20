@@ -107,8 +107,10 @@ IntroPage::IntroPage(QWidget *parent)
     // Set the Texts
     QEvent languageChangeEvent(QEvent::LanguageChange);
     QCoreApplication::sendEvent(this, &languageChangeEvent);
-    //emit setLanguage();
+    registerField("EXPERTMODE", expertModeCheckBox);
+
 }
+
 int IntroPage::nextId() const
 {
 
@@ -123,8 +125,9 @@ void IntroPage::changeEvent(QEvent *event)
                                  "Sie können sich zwischen zwei verschiedenen Wiederherstellungsarten entscheiden.\n"
                                  "Es besteht auch die Möglichkeit die Sicherheit bereits bestehender Passwörter zu testen."));
         expertModeCheckBox->setText(trUtf8("Experten Modus verwenden"));
-        //...
-        //okPushButton->setText(tr("&OK"));
+
+        QString tmp = field("EXPERTMODE").toBool();
+        qDebug() << "TEST: \t" << tmp << endl;
     } else
         QWidget::changeEvent(event);
 }
