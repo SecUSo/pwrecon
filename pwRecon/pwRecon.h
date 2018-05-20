@@ -11,6 +11,7 @@
 #include "WizardPages/extractcurrentpage.h"
 #include "WizardPages/resultspage.h"
 #include "WizardPages/selectmodepage.h"
+#include "WizardPages/selectrecoverymodepage.h"
 #include "WizardPages/attacksettingspage.h"
 
 class QCheckBox;

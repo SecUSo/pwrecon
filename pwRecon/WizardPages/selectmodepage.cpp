@@ -10,19 +10,15 @@ SelectModePage::SelectModePage(QWidget *parent)
     topLabel->setWordWrap(true);
 
     checkPasswordRadioButton = new QRadioButton();
-    checkHashRadioButton = new QRadioButton();
-    checkLocalPwFileRadioButton = new QRadioButton();
+    recoverPasswordRadioButton = new QRadioButton();
     checkPasswordRadioButton->setChecked(true);
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(topLabel);
     layout->addWidget(checkPasswordRadioButton);
-    layout->addWidget(checkHashRadioButton);
-    layout->addWidget(checkLocalPwFileRadioButton);
+    layout->addWidget(recoverPasswordRadioButton);
+
     setLayout(layout);
-    QObject::connect(checkPasswordRadioButton, SIGNAL(clicked()),this, SLOT(workAroundSlot()));
-    QObject::connect(checkHashRadioButton, SIGNAL(clicked()),this, SLOT(workAroundSlot()));
-    QObject::connect(checkLocalPwFileRadioButton, SIGNAL(clicked()),this, SLOT(workAroundSlot()));
     WORKAROUNDLineEdit = new QLineEdit("true");
     WORKAROUNDLineEdit->setVisible(false);
     registerField("WORKAROUND",WORKAROUNDLineEdit);
@@ -37,37 +33,20 @@ int SelectModePage::nextId() const
 {
     if (checkPasswordRadioButton->isChecked()) {
         return Page_EnterPassword;
-    } else if (checkHashRadioButton->isChecked()) {
-        return Page_EnterHash;
-    } else if (checkLocalPwFileRadioButton->isChecked()) {
-        return Page_ExtractCurrent;
+    } else if (recoverPasswordRadioButton->isChecked()) {
+        return Page_SelectRecoveryMode;
     }
-    return Page_AttackSettings;
+    return Page_EnterPassword;
 
-}
-
-void SelectModePage::workAroundSlot()
-{
-    if(checkPasswordRadioButton->isChecked())
-    {
-      //  setField("WORKAROUND", QString(Path_Password));
-    }else if(checkHashRadioButton->isChecked())
-    {
-       // setField("WORKAROUND", QString(Path_Hash));
-    }else if(checkLocalPwFileRadioButton->isChecked())
-    {
-       // setField("WORKAROUND", QString(Path_Sam));
-    }
 }
 
 void SelectModePage::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
-        setTitle(trUtf8("Art der Wiederherstellung auswählen."));
-        topLabel->setText(trUtf8("Sie können auswählen welche Art von Passwort wiedergestellt werden soll."));
+        setTitle(trUtf8("Vorgansweise Auswählen."));
+        topLabel->setText(trUtf8("Sie können sich entscheiden, ob sie ein Passwort testen oder wiederherstellen möchten."));
         checkPasswordRadioButton->setText(trUtf8("&Ein Passwort prüfen"));
-        checkHashRadioButton->setText(trUtf8("&Ein Passwort von einem Hash wiederherstellen"));
-        checkLocalPwFileRadioButton->setText(trUtf8("&Die Passwörter der Benutzerkonten dieses Computers wiederherstellen."));
+        recoverPasswordRadioButton->setText(trUtf8("&Ein Passwörter wiederherstellen"));
     } else
         QWidget::changeEvent(event);
 }

@@ -181,7 +181,7 @@ QString AttackPage::getHashFilePath()
     for(int i = 0; i < len; i++)
         qDebug() << "Value of visitedPages at " << i << ": " << wizard()->visitedPages().at(i) << endl;
     */
-
+    qDebug() << "####################\n####################\n####################\n FIX THE WAY TO GET THE HASH FILE \n####################\n####################\n####################\n";
     if(wizard()->visitedPages().at(2) == Page_EnterPassword)
     {
         if(checkFieldByName("PATHLABEL"))

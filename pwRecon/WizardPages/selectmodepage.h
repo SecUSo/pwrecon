@@ -19,12 +19,10 @@ public:
 private:
     QLabel *topLabel;
     QRadioButton *checkPasswordRadioButton;
-    QRadioButton *checkHashRadioButton;
-    QRadioButton *checkLocalPwFileRadioButton;
+    QRadioButton *recoverPasswordRadioButton;
     QLineEdit *WORKAROUNDLineEdit;
 
 public slots:
-    void workAroundSlot();
 };
 
 #endif // SELECTMODEPAGE_H

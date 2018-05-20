@@ -14,6 +14,7 @@ pwRecon::pwRecon(QWidget *parent)
     setOption(HaveHelpButton, true);
     setPage(Page_Intro, new IntroPage);
     setPage(Page_SelectMode, new SelectModePage);
+    setPage(Page_SelectRecoveryMode, new SelectRecoveryModePage);
     setPage(Page_EnterPassword, new EnterPasswordPage);
     setPage(Page_EnterHash, new EnterHashPage);
     setPage(Page_ExtractCurrent, new ExtractCurrentPage);

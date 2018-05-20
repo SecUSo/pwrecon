@@ -14,7 +14,8 @@ HEADERS       = \
     WizardPages/attacksettingspage.h \
     auxiliary/recovery_worker.h \
     auxiliary/sam_dialog.h \
-    opencl/include/CL/cl.hpp
+    opencl/include/CL/cl.hpp \
+    WizardPages/selectrecoverymodepage.h
 
 SOURCES       = \
                 main.cpp \
@@ -28,7 +29,8 @@ SOURCES       = \
     WizardPages/selectmodepage.cpp \
     pwRecon.cpp \
     WizardPages/attacksettingspage.cpp \
-    auxiliary/recovery_worker.cpp
+    auxiliary/recovery_worker.cpp \
+    WizardPages/selectrecoverymodepage.cpp
 
 
 # install
