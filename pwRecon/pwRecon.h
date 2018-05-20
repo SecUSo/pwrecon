@@ -26,6 +26,7 @@ public:
     pwRecon(QWidget *parent = 0);
     QTranslator *m_translatorQt;
     QTranslator *translator2;
+    void changeEvent(QEvent *event) override;
 
 private slots:
     void showHelp();
@@ -46,8 +47,8 @@ public:
 private:
     QLabel *topLabel;
     QComboBox *languageComboBox;
-    QTranslator *qtTranslator;
     QTranslator *pwReconTranslator;
+    QCheckBox *expertModeCheckBox;
 
 public slots:
     void setLanguage();

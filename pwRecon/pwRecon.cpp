@@ -29,11 +29,14 @@ pwRecon::pwRecon(QWidget *parent)
 #else
     setWizardStyle(MacStyle);
 #endif
-   //setPixmap(QWizard::LogoPixmap, QPixmap(":/images/logo.png"));
+    //setPixmap(QWizard::LogoPixmap, QPixmap(":/images/logo.png"));
 
     connect(this, &QWizard::helpRequested, this, &pwRecon::showHelp);
 
-    setWindowTitle(trUtf8("pwRecon"));
+    setWindowTitle("pwRecon");
+    // Set the Texts
+    QEvent languageChangeEvent(QEvent::LanguageChange);
+    QCoreApplication::sendEvent(this, &languageChangeEvent);
 }
 
 void pwRecon::showHelp()
@@ -45,11 +48,11 @@ void pwRecon::showHelp()
     switch (currentId()) {
     case Page_Intro:
         message = trUtf8("Wählen eine Widerherstellungsoption aus.");
-//        message = trUtf8("Select the mode you want to use during the Wizard");
+        //        message = trUtf8("Select the mode you want to use during the Wizard");
         break;
 
     }
-/*
+    /*
     if (lastHelpMessage == message)
         message = trUtf8("Sorry, I already gave what help I could. "
                      "Maybe you should try asking a human?");*/
@@ -57,6 +60,21 @@ void pwRecon::showHelp()
     QMessageBox::information(this, trUtf8("pwRecon Hilfe"), message);
 
     lastHelpMessage = message;
+}
+
+void pwRecon::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        QString backText = trUtf8("Zurück");
+        QString nextText = trUtf8("Weiter");
+        this->setButtonText(WizardButton::BackButton, "< " + backText);
+        this->setButtonText(WizardButton::NextButton, nextText + " >");
+        this->setButtonText(WizardButton::CancelButton, trUtf8("Abbrechen"));
+        this->setButtonText(WizardButton::HelpButton, trUtf8("Hilfe"));
+        //...
+        //okPushButton->setText(tr("&OK"));
+    } else
+        QWidget::changeEvent(event);
 }
 
 IntroPage::IntroPage(QWidget *parent)
@@ -68,6 +86,7 @@ IntroPage::IntroPage(QWidget *parent)
     topLabel->setWordWrap(true);
     QVBoxLayout *layout = new QVBoxLayout;
     QHBoxLayout *innerLayout = new QHBoxLayout;
+    QVBoxLayout *optionsLayout = new QVBoxLayout;
     layout->addWidget(topLabel, 0, Qt::AlignTop);
 
     languageComboBox = new QComboBox();
@@ -75,8 +94,12 @@ IntroPage::IntroPage(QWidget *parent)
     languageComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     innerLayout->addWidget(languageComboBox, 0, Qt::AlignLeft);
 
+    expertModeCheckBox = new QCheckBox;
+
     setLanguagesComboBox();
-    layout->addLayout(innerLayout, 100);
+    optionsLayout->addLayout(innerLayout);
+    optionsLayout->addWidget(expertModeCheckBox);
+    layout->addLayout(optionsLayout, 100);
     setLayout(layout);
 
     QObject::connect(languageComboBox, SIGNAL(currentIndexChanged(int)),this, SLOT(setLanguage()));
@@ -84,11 +107,12 @@ IntroPage::IntroPage(QWidget *parent)
     // Set the Texts
     QEvent languageChangeEvent(QEvent::LanguageChange);
     QCoreApplication::sendEvent(this, &languageChangeEvent);
+    //emit setLanguage();
 }
 int IntroPage::nextId() const
 {
 
-        return Page_SelectMode;
+    return Page_SelectMode;
 }
 
 void IntroPage::changeEvent(QEvent *event)
@@ -98,6 +122,7 @@ void IntroPage::changeEvent(QEvent *event)
         topLabel->setText(trUtf8("Dieser Assistent wird Sie durch den Prozess der Wiederherstellung verlorener Passwörter führen.\n"
                                  "Sie können sich zwischen zwei verschiedenen Wiederherstellungsarten entscheiden.\n"
                                  "Es besteht auch die Möglichkeit die Sicherheit bereits bestehender Passwörter zu testen."));
+        expertModeCheckBox->setText(trUtf8("Experten Modus verwenden"));
         //...
         //okPushButton->setText(tr("&OK"));
     } else
@@ -128,24 +153,17 @@ void IntroPage::setLanguagesComboBox()
 
 void IntroPage::setLanguage()
 {
-//    QString test = languageComboBox->currentData(Qt::DisplayRole);
+    //    QString test = languageComboBox->currentData(Qt::DisplayRole);
     QString pwReconTranslateFile = languageComboBox->itemData(languageComboBox->currentIndex()).toString();
-    QString qtTranslateFile = pwReconTranslateFile;
-    qtTranslateFile.replace("pwRecon", "qt");
-    qDebug() << "###TEST###" << endl << pwReconTranslateFile << endl << qtTranslateFile << endl;
+    //qDebug() << "###TEST###" << endl << pwReconTranslateFile << endl << qtTranslateFile << endl;
 
     qApp->removeTranslator(pwReconTranslator);
-    qApp->removeTranslator(qtTranslator);
 
     if( languageComboBox->currentText() != "Deutsch")
     {
-    pwReconTranslator = new QTranslator(qApp);
-    qDebug() << QLibraryInfo::location(QLibraryInfo::TranslationsPath) << endl;
-    if(pwReconTranslator->load(pwReconTranslateFile))
-        qApp->installTranslator(pwReconTranslator);
-
-    qtTranslator = new QTranslator(qApp);
-    if (qtTranslator->load(qtTranslateFile))
-        qApp->installTranslator(qtTranslator);
+        pwReconTranslator = new QTranslator(qApp);
+        qDebug() << QLibraryInfo::location(QLibraryInfo::TranslationsPath) << endl;
+        if(pwReconTranslator->load(pwReconTranslateFile))
+            qApp->installTranslator(pwReconTranslator);
     }
 }
