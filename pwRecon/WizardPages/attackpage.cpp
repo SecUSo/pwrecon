@@ -155,7 +155,7 @@ void AttackPage::start()
     qDebug() << "hash type" << hashtype << endl;
     disableButtons(true);
 
-    emit startRecovery(showPlain, getHashFilePath(), hashtype);
+    //emit startRecovery(showPlain, getHashFilePath(), hashtype);
 }
 
 void AttackPage::stop()
@@ -181,8 +181,8 @@ QString AttackPage::getHashFilePath()
     for(int i = 0; i < len; i++)
         qDebug() << "Value of visitedPages at " << i << ": " << wizard()->visitedPages().at(i) << endl;
     */
-    qDebug() << "####################\n####################\n####################\n FIX THE WAY TO GET THE HASH FILE \n####################\n####################\n####################\n";
-    if(wizard()->visitedPages().at(2) == Page_EnterPassword)
+
+    if(wizard()->visitedPages().contains(Page_EnterPassword))
     {
         if(checkFieldByName("PATHLABEL"))
         {
@@ -202,7 +202,7 @@ QString AttackPage::getHashFilePath()
             hashtype = QString("--hash-type=0");
             return passwordFile;
         }
-    }else if(wizard()->visitedPages().at(2) == Page_EnterHash)
+    }else if(wizard()->visitedPages().contains(Page_EnterHash))
     {
         if(checkFieldByName("HASHLINEEDIT"))
         {
@@ -225,7 +225,7 @@ QString AttackPage::getHashFilePath()
             qDebug() << "Field HASHPATHLABEL" << endl;
             return field("HASHPATHLABEL").toString();
         }
-    }else if(wizard()->visitedPages().at(2) == Page_ExtractCurrent)
+    }else if(wizard()->visitedPages().contains(Page_ExtractCurrent))
     {
         qDebug() << "Field EXTRACTPATHLABEL" << endl;
 #ifdef Q_OS_WIN
