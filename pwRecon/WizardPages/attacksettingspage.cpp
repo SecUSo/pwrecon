@@ -56,6 +56,7 @@ AttackSettingsPage::AttackSettingsPage(QWidget *parent)
     // Set the Texts
     QEvent languageChangeEvent(QEvent::LanguageChange);
     QCoreApplication::sendEvent(this, &languageChangeEvent);
+    registerField(selectDictionaryLabel,"DICTIONARY");
 
 }
 

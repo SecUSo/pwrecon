@@ -97,8 +97,11 @@ AttackPage::AttackPage(QWidget *parent)
 #ifdef Q_OS_LINUX // No support yet
     binaryfile.append(".bin");
 #endif
-
-    dictfile = QString(QDir::currentPath() + "/tools/pwrecon_dict.lst");
+    if(field("EXPERTMODE").toBool()){
+        dictfile = field("DICTIONARY").toString();
+    } else{
+        dictfile = QString(QDir::currentPath() + "/tools/pwrecon_dict.lst");
+    }
     potfile = QString(binarydir + "/hashcat.pot");
     tempfilepath= QString(QDir::currentPath() + "/tools/tempfile.txt");
     testpwdfilepath= QString(QDir::currentPath() + "/tools/testpwdfile.txt");
@@ -155,7 +158,7 @@ void AttackPage::start()
     qDebug() << "hash type" << hashtype << endl;
     disableButtons(true);
 
-    //emit startRecovery(showPlain, getHashFilePath(), hashtype);
+    emit startRecovery(showPlain, getHashFilePath(), hashtype);
 }
 
 void AttackPage::stop()
