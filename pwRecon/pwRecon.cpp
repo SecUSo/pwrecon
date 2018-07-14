@@ -98,15 +98,11 @@ IntroPage::IntroPage(QWidget *parent)
     expertModeCheckBox = new QCheckBox;
     showHidePasswordCheckBox = new QCheckBox;
 
-    QPushButton * Test = new QPushButton("Test");
-    QObject::connect(Test, SIGNAL(clicked()),this, SLOT(testSlot()));
-
     setLanguagesComboBox();
     optionsLayout->addLayout(innerLayout);
     optionsLayout->addWidget(showHidePasswordCheckBox);
     optionsLayout->addWidget(expertModeCheckBox);
     layout->addLayout(optionsLayout, 100);
-    layout->addWidget(Test);
     setLayout(layout);
 
     QObject::connect(languageComboBox, SIGNAL(currentIndexChanged(int)),this, SLOT(setLanguage()));
@@ -121,14 +117,6 @@ IntroPage::IntroPage(QWidget *parent)
     registerField("EXPERTMODE", expertModeCheckBox);
     registerField("SHOWHIDEPASSWORD", showHidePasswordCheckBox);
 
-    dirWatcher = new QFileSystemWatcher();
-    dirWatcher->addPath("C:/Users/Christoph/Documents/TU/Thesis/hashcat-4.1.0");
-    fileWatcher = new QFileSystemWatcher();
-
-    connect(fileWatcher, SIGNAL(fileChanged(const QString&)), this, SLOT(printStuff(const QString &)));
-    connect(dirWatcher, SIGNAL(directoryChanged(const QString&)), this, SLOT(dirChanged(const QString &)));
-    timerClock = new QTimer(this);
-    connect(timerClock, SIGNAL(timeout()), this, SLOT(onTickTimer()));
 }
 
 int IntroPage::nextId() const
@@ -198,84 +186,3 @@ void IntroPage::setExpertModeTexts()
     QCoreApplication::sendEvent(wizard(), &languageChangeEvent);
 }
 
-void IntroPage::testSlot()
-{
-    QProcess javaProcess;
-
-    QString java = QString(QDir::currentPath() + "/tools/Test/jre1.8.0_172/bin/java.exe");
-    qDebug() << java << endl;
-    javaProcess.setProgram(java);
-    QStringList args;
-    args << "-jar";
-    args << QString(QDir::currentPath() + "/tools/Test/nbvcxz-1.4.1.jar");
-    args << "JohnSmith123";
-
-    javaProcess.setArguments(args);
-    javaProcess.setWorkingDirectory(QString(QDir::currentPath() + "/tools/Test"));
-    javaProcess.start();
-    while (!javaProcess.waitForFinished()) {
-        QThread::msleep(10);
-    }
-
-    QByteArray dataJava1 = javaProcess.readAllStandardOutput();
-    QTextStream outputStreamJava1(dataJava1);
-    QByteArray dataJava2 = javaProcess.readAllStandardError();
-    QTextStream outputStreamJava2(dataJava2);
-
-    qDebug() << "### BEGIN Java ###" << endl;
-    QString line =  outputStreamJava1.readLine();
-    while(!line.isNull()) {
-        qDebug() << line;
-        line =  outputStreamJava1.readLine();
-    }
-    qDebug() << "### END Java ###" << endl;
-}
-
-//void IntroPage::printStuff(const QString &)
-void IntroPage::printStuff()
-{
-    qDebug() << count++ << endl;
-    QFile file("C:/Users/Christoph/Documents/TU/Thesis/hashcat-4.1.0/hashcat.potfile");
-    if(!file.open(QIODevice::ReadOnly)) {
-        //QMessageBox::information(0, "error", file.errorString());
-        qDebug() << "2" << file.errorString() << endl;
-        emit printStuff();
-        return;
-    }
-
-    QTextStream in(&file);
-
-//    while(!in.atEnd()) {
-//        QString line = in.readLine();
-
-//    }
-    qDebug() << in.readAll() << endl;
-
-    file.close();
-}
-
-void IntroPage::dirChanged(const QString &)
-{
-    QStringList tmp = fileWatcher->files();
-
-    qDebug() << "TMP 123" << endl;
-    qDebug() << tmp.isEmpty() << endl;
-    if(tmp.isEmpty())
-    {
-        qDebug() << "Added file" << endl;
-        fileWatcher->addPath("C:/Users/Christoph/Documents/TU/Thesis/hashcat-4.1.0/hashcat.potfile");
-        timerClock->start(1000);
-    }
-
-}
-
-void IntroPage::onTickTimer()
-{
-    QFile file("C:/Users/Christoph/Documents/TU/Thesis/hashcat-4.1.0/hashcat.potfile");
-    if(!file.open(QIODevice::ReadOnly)) {
-        qDebug() << "1" <<file.errorString() << endl;
-        return;
-    }
-    file.close();
-    timerClock->start(1000);
-}

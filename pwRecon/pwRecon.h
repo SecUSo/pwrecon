@@ -53,16 +53,9 @@ private:
     QTranslator *pwReconTranslator;
     QCheckBox *expertModeCheckBox;
     QCheckBox *showHidePasswordCheckBox;
-    QFileSystemWatcher *dirWatcher;
-    QFileSystemWatcher *fileWatcher;
-    QTimer *timerClock;
 
 public slots:
     void setLanguage();
     void setExpertModeTexts();
-    void testSlot();
-    void printStuff();
-    void dirChanged(const QString &);
-    void onTickTimer();
 };
 #endif
