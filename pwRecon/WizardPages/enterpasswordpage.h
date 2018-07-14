@@ -12,6 +12,7 @@ class EnterPasswordPage  : public QWizardPage
 public:
     EnterPasswordPage(QWidget *parent = 0);
     void changeEvent(QEvent *event) override;
+    void initializePage() override;
 
     int nextId() const override;
     bool validatePage() override;

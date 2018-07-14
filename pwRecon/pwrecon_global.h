@@ -21,6 +21,7 @@
 #include <QCoreApplication>
 
 #include "auxiliary/sam_dialog.h"
+#include "auxiliary/executeworker.h"
 
 enum {Page_Intro, Page_SelectMode, Page_SelectRecoveryMode, Page_EnterPassword, Page_EnterHash, Page_ExtractCurrent, Page_AttackSettings, Page_Attack, Page_Results};
 enum {Path_Hash, Path_Password, Path_Sam};

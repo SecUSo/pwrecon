@@ -23,6 +23,8 @@ SelectRecoveryModePage::SelectRecoveryModePage(QWidget *parent)
     QEvent languageChangeEvent(QEvent::LanguageChange);
     QCoreApplication::sendEvent(this, &languageChangeEvent);
 
+    qDebug() << "SelectRecoveryModePage()" << endl;
+
 }
 
 int SelectRecoveryModePage::nextId() const

@@ -26,10 +26,12 @@ protected:
 
 
 private:
+    QProgressBar *extractProgressBar;
     QPushButton *extractPushButton;
     QPushButton *changePushButton;
     QLabel *extractPathLabel;
     bool valid;
+    bool isRunning;
 
     QTextBrowser *extractResultTextBrowser;
 

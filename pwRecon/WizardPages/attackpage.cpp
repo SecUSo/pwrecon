@@ -57,21 +57,7 @@ AttackPage::AttackPage(QWidget *parent)
     }
 
 
-    // Define environment variables
-    if (hc2_fallback) {
-        // Current Hashcat version: 2.00
-        binarydir = QString(QDir::currentPath() + "/tools/Hashcat2");
-        binaryfile = QString(binarydir + "/hashcat-cli");
-
-#ifdef Q_PROCESSOR_X86_64
-        binaryfile.append("64");
-#endif
-#ifdef Q_PROCESSOR_X86_32
-        binaryfile.append("32");
-#endif
-    } else {
-        // Current Hashcat version: 3.10
-        binarydir = QString(QDir::currentPath() + "/tools/Hashcat3");
+        binarydir = QString(QDir::currentPath() + "/tools/Hashcat4");
         binaryfile = QString(binarydir + "/hashcat");
 
 #ifdef Q_PROCESSOR_X86_64
@@ -82,7 +68,7 @@ AttackPage::AttackPage(QWidget *parent)
 #ifdef Q_PROCESSOR_X86_32
         binaryfile.append("32");
 #endif
-    }
+
 #endif // ifndef Q_OS_MACX
 
 #ifdef Q_OS_WIN
@@ -101,8 +87,10 @@ AttackPage::AttackPage(QWidget *parent)
         dictfile = field("DICTIONARY").toString();
     } else{
         dictfile = QString(QDir::currentPath() + "/tools/pwrecon_dict.lst");
+        show_plain_pwds = false;
+
     }
-    potfile = QString(binarydir + "/hashcat.pot");
+    potfile = QString(binarydir + "/hashcat.potfile");
     tempfilepath= QString(QDir::currentPath() + "/tools/tempfile.txt");
     testpwdfilepath= QString(QDir::currentPath() + "/tools/testpwdfile.txt");
     samdumpfilepath= QString(QDir::currentPath() + "/tools/samdumpfile.txt");
@@ -134,7 +122,6 @@ AttackPage::AttackPage(QWidget *parent)
     // Set the Texts
     QEvent languageChangeEvent(QEvent::LanguageChange);
     QCoreApplication::sendEvent(this, &languageChangeEvent);
-
 }
 
 int AttackPage::nextId() const
@@ -158,7 +145,7 @@ void AttackPage::start()
     qDebug() << "hash type" << hashtype << endl;
     disableButtons(true);
 
-    emit startRecovery(showPlain, getHashFilePath(), hashtype);
+    emit startRecovery(!field("SHOWHIDEPASSWORD").toBool(), getHashFilePath(), hashtype);
 }
 
 void AttackPage::stop()
@@ -176,7 +163,6 @@ AttackPage::~AttackPage()
 
 QString AttackPage::getHashFilePath()
 {
-    testpwdfilepath= QString(QDir::currentPath() + "/tools/testpwdfile.txt");
     samdumpfilepath= QString(QDir::currentPath() + "/tools/samdumpfile.txt");
    /* qDebug() << "Workaround: \t" << field("WORKAROUND") << endl;
     int len = wizard()->visitedPages().length();
@@ -389,4 +375,9 @@ void AttackPage::changeEvent(QEvent *event)
         stopPushButton->setText(trUtf8("Stop"));
     } else
         QWidget::changeEvent(event);
+}
+
+void AttackPage::initializePage()
+{
+    wizard()->button(QWizard::NextButton)->setEnabled(false);
 }

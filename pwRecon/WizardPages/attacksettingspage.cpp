@@ -6,26 +6,16 @@ AttackSettingsPage::AttackSettingsPage(QWidget *parent)
     setTitle("");
     setSubTitle(" ");
 
+    setField("WORKAROUND", QString("false"));
     currentDictFile =  QString(QDir::currentPath() + "/tools/pwrecon_dict.lst");
 
-    hideGroupBox = new QGroupBox();
     actionGroupBox = new QGroupBox();
 
     QVBoxLayout *layout = new QVBoxLayout;
-    QHBoxLayout *hideLayout = new QHBoxLayout;
     QVBoxLayout *actionLayout = new QVBoxLayout;
     QHBoxLayout *dictionaryOuterLayout = new QHBoxLayout;
     QHBoxLayout *bruteOuterLayout = new QHBoxLayout;
 
-    // The hide Radio buttons
-    showPasswordRadioButton = new QRadioButton();
-    hidePasswordRadioButton = new QRadioButton();
-    hideLayout->addWidget(showPasswordRadioButton);
-    hideLayout->addWidget(hidePasswordRadioButton);
-    hideGroupBox->setLayout(hideLayout);
-    layout->addWidget(hideGroupBox);
-    hidePasswordRadioButton->setChecked(true);
-    setField("WORKAROUND", QString("false"));
 
     selectDictAttackRadioButton = new QRadioButton();
     actionLayout->addWidget(selectDictAttackRadioButton);
@@ -46,8 +36,6 @@ AttackSettingsPage::AttackSettingsPage(QWidget *parent)
     layout->addWidget(actionGroupBox);
 
     QObject::connect(selectDictionaryButton, SIGNAL(clicked()),this, SLOT(selectDictionary()));
-    QObject::connect(showPasswordRadioButton, SIGNAL(clicked()),this, SLOT(setHide()));
-    QObject::connect(hidePasswordRadioButton, SIGNAL(clicked()),this, SLOT(setHide()));
     QObject::connect(selectBruteAttackRadioButton, SIGNAL(clicked()),this, SLOT(setMode()));
     QObject::connect(selectDictAttackRadioButton, SIGNAL(clicked()),this, SLOT(setMode()));
 
@@ -56,7 +44,7 @@ AttackSettingsPage::AttackSettingsPage(QWidget *parent)
     // Set the Texts
     QEvent languageChangeEvent(QEvent::LanguageChange);
     QCoreApplication::sendEvent(this, &languageChangeEvent);
-    registerField(selectDictionaryLabel,"DICTIONARY");
+    registerField("DICTIONARY", selectDictionaryLabel,"text", "changeEvent");
 
 }
 
@@ -107,10 +95,7 @@ void AttackSettingsPage::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
         setTitle(trUtf8("Angriffseinstellungen"));
-        hideGroupBox->setTitle(trUtf8("&Möchten Sie die Passwörter verbergen?"));
         actionGroupBox->setTitle(trUtf8("&Was möchten Sie tun?"));
-        showPasswordRadioButton->setText(trUtf8("&Passwörter zeigen"));
-        hidePasswordRadioButton->setText(trUtf8("&Passwörter verbergen"));
         selectDictAttackRadioButton->setText(trUtf8("&Wörterbuch Angriff verwenden"));
         selectDictionaryButton->setText(trUtf8("Wörterbuch wechseln"));
         selectBruteAttackRadioButton->setText(trUtf8("&Brute-Force Angriff verwenden"));

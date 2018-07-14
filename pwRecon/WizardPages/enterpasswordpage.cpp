@@ -10,22 +10,12 @@ EnterPasswordPage::EnterPasswordPage(QWidget *parent)
     actionGroupBox = new QGroupBox();
 
     QVBoxLayout *layout = new QVBoxLayout;
-    QHBoxLayout *hideLayout = new QHBoxLayout;
     QVBoxLayout *actionLayout = new QVBoxLayout;
     QHBoxLayout *enterOuterLayout = new QHBoxLayout;
     QHBoxLayout *loadOuterLayout = new QHBoxLayout;
 
     // layout->addLayout(enterOuterLayout);
     //layout->addLayout(loadOuterLayout);
-
-    // The hide Radio buttons
-    showPasswordRadioButton = new QRadioButton();
-    hidePasswordRadioButton = new QRadioButton();
-    hideLayout->addWidget(showPasswordRadioButton);
-    hideLayout->addWidget(hidePasswordRadioButton);
-    hideGroupBox->setLayout(hideLayout);
-    layout->addWidget(hideGroupBox);
-    hidePasswordRadioButton->setChecked(true);
 
     selectEnterPasswordRadioButton = new QRadioButton();
     actionLayout->addWidget(selectEnterPasswordRadioButton);
@@ -51,7 +41,6 @@ EnterPasswordPage::EnterPasswordPage(QWidget *parent)
     loadPushButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     loadPushButton->setEnabled(false);
     pathLabel->setBuddy(loadPushButton);
-
     loadOuterLayout->addWidget(loadPushButton);
     loadOuterLayout->addWidget(pathLabel);
     actionLayout->addLayout(loadOuterLayout);
@@ -61,8 +50,6 @@ EnterPasswordPage::EnterPasswordPage(QWidget *parent)
     layout->addWidget(actionGroupBox);
     setLayout(layout);
 
-    QObject::connect(showPasswordRadioButton, SIGNAL(clicked()),this, SLOT(setHide()));
-    QObject::connect(hidePasswordRadioButton, SIGNAL(clicked()),this, SLOT(setHide()));
     QObject::connect(selectEnterPasswordRadioButton, SIGNAL(clicked()),this, SLOT(setMode()));
     QObject::connect(selectLoadPasswordRadioButton, SIGNAL(clicked()),this, SLOT(setMode()));
     QObject::connect(loadPushButton, SIGNAL(clicked()),this, SLOT(load()));
@@ -70,16 +57,19 @@ EnterPasswordPage::EnterPasswordPage(QWidget *parent)
     registerField("PATHLABEL",pathLabel,"text", "changeEvent");
     registerField("PASSWORDLINEEDIT",passwordLineEdit);
 
+    qDebug() << "EnterPasswordPage() 1" << endl;
     // Set the Texts
     QEvent languageChangeEvent(QEvent::LanguageChange);
     QCoreApplication::sendEvent(this, &languageChangeEvent);
+
+    qDebug() << "EnterPasswordPage()" << endl;
 }
 int EnterPasswordPage::nextId() const
 {
     if(field("EXPERTMODE").toBool()){
         return Page_AttackSettings;
     } else{
-        return Page_Attack;
+        return Page_Results;
     }
 }
 
@@ -87,7 +77,7 @@ void EnterPasswordPage::load()
 {
     QString tmpFile = "";
     tmpFile = QFileDialog::getOpenFileName(this,
-                                           trUtf8("Wählen Sie eine Passwoetliste aus."), "", "*");
+                                           trUtf8("Wählen Sie eine Passwortliste aus."), "", "*");
     //tr("Image Files (*.png *.jpg *.bmp)")
     // if equal return 0
     if(QString::compare(tmpFile, "", Qt::CaseInsensitive))
@@ -103,11 +93,11 @@ void EnterPasswordPage::load()
 
 void EnterPasswordPage::setHide()
 {
-    if(showPasswordRadioButton->isChecked())
+    if(field("SHOWHIDEPASSWORD").toBool())
     {
-        passwordLineEdit->setEchoMode(QLineEdit::Normal);
-    }else if(hidePasswordRadioButton->isChecked()){
         passwordLineEdit->setEchoMode(QLineEdit::Password);
+    }else if(hidePasswordRadioButton->isChecked()){
+        passwordLineEdit->setEchoMode(QLineEdit::Normal);
     }
 }
 
@@ -129,7 +119,7 @@ bool EnterPasswordPage::validatePage()
     {
         if(passwordLineEdit->text() == "")
         {
-            QMessageBox::warning(this, trUtf8("pwRecon"),
+            QMessageBox::warning(this, "pwRecon",
                                  trUtf8("Bitte geben Sie ein Passwort ein."),
                                  QMessageBox::Ok,
                                  QMessageBox::Ok);
@@ -139,7 +129,7 @@ bool EnterPasswordPage::validatePage()
     } else if(selectLoadPasswordRadioButton->isChecked()){
         if(pathLabel->text() == "")
         {
-            QMessageBox::warning(this, trUtf8("pwRecon"),
+            QMessageBox::warning(this, "pwRecon",
                                  trUtf8("Bitte wählen Sie eine Passwortliste aus."),
                                  QMessageBox::Ok,
                                  QMessageBox::Ok);
@@ -155,10 +145,7 @@ void EnterPasswordPage::changeEvent(QEvent *event)
     if (event->type() == QEvent::LanguageChange) {
         setTitle(trUtf8("Passwörter prüfen"));
         setSubTitle(trUtf8("Bitte geben Sie ein Passwort oder eine Passwortliste zum testen an."));
-        hideGroupBox->setTitle(trUtf8("&Möchten Sie die Passwörter verbergen?"));
         actionGroupBox->setTitle(trUtf8("&Was möchten Sie tun?"));
-        showPasswordRadioButton->setText(trUtf8("&Passwörter zeigen"));
-        hidePasswordRadioButton->setText(trUtf8("&Passwörter verbergen"));
         selectEnterPasswordRadioButton->setText(trUtf8("&Ein einzelnes Passwort angeben."));
         passwordLabel->setText(trUtf8("Passwort:"));
         selectLoadPasswordRadioButton->setText(trUtf8("&Eine Passwortliste laden."));
@@ -166,4 +153,16 @@ void EnterPasswordPage::changeEvent(QEvent *event)
 
     } else
         QWidget::changeEvent(event);
+}
+
+void EnterPasswordPage::initializePage()
+{
+    qDebug() << "PW INIT: " << field("SHOWHIDEPASSWORD").toBool() << endl;
+
+    if(field("SHOWHIDEPASSWORD").toBool())
+    {
+        passwordLineEdit->setEchoMode(QLineEdit::Password);
+    }else {
+        passwordLineEdit->setEchoMode(QLineEdit::Normal);
+    }
 }

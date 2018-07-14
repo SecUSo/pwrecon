@@ -23,9 +23,7 @@ SAMDialog::SAMDialog(QString filepath, QWidget *parent) :
     //connect(wizard(), &QWizard::back, this, &SAMDialog::reject);
     samdumpfilepath = filepath;
 
-    QString en("This function will scan the SAM file of your Windows system and extract all password hashes.\n\nWARNING:\nNeeds administrator rights to work.\nIt may be detected as malware by your system.\nUse at your own risk.");
-    QString de("Diese Funktion wird die SAM-Datei des Windows-Systems auslesen und alle Passwort-Hashes extrahieren.\n\nWARNUNG:\nEs werden Administratorrechte benötigt.\nDie Funktion wird womöglich als Schadsoftware erkannt.\nNutzung auf eigene Gefahr.");
-    ui->infoLabel->setText(de);
+    ui->infoLabel->setText(trUtf8("Diese Funktion wird die SAM-Datei des Windows-Systems auslesen und alle Passwort-Hashes extrahieren.\n\nWARNUNG:\nEs werden Administratorrechte benötigt.\nDie Funktion wird womöglich als Schadsoftware erkannt.\nNutzung auf eigene Gefahr."));
 }
 
 SAMDialog::~SAMDialog()

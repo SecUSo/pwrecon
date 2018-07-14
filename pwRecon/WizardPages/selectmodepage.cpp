@@ -26,7 +26,7 @@ SelectModePage::SelectModePage(QWidget *parent)
     // Set the Texts
     QEvent languageChangeEvent(QEvent::LanguageChange);
     QCoreApplication::sendEvent(this, &languageChangeEvent);
-
+    qDebug() << "SelectModePage()" << endl;
 }
 
 int SelectModePage::nextId() const
@@ -49,11 +49,11 @@ void SelectModePage::changeEvent(QEvent *event)
     if (event->type() == QEvent::LanguageChange) {
         setTitle(trUtf8("Vorgansweise Auswählen."));
         topLabel->setText(trUtf8("Sie können sich entscheiden, ob sie ein Passwort testen oder wiederherstellen möchten."));
-        checkPasswordRadioButton->setText(trUtf8("&Ein Passwort prüfen"));
+        checkPasswordRadioButton->setText(trUtf8("&Passwörter prüfen"));
         if(field("EXPERTMODE").toBool()){
             recoverPasswordRadioButton->setText(trUtf8("&Passwörter aus Hashes oder vom Lokalen System wiederherstellen"));
         } else{
-            recoverPasswordRadioButton->setText(trUtf8("&Passwörter des Lokalen Systems wiederherstellen"));
+            recoverPasswordRadioButton->setText(trUtf8("&Passwörter dieses Computers wiederherstellen"));
         }
 
     } else

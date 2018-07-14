@@ -28,6 +28,9 @@ ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
     QHBoxLayout *displayLayout = new QHBoxLayout();
     displayLayout->addWidget(extractResultTextBrowser);
 
+    extractProgressBar = new QProgressBar;
+    entryLayout->addWidget(extractProgressBar);
+    extractProgressBar->setVisible(false);
     registerField("EXTRACTPATHLABEL",extractPathLabel,"text", "changeEvent");
 
 
@@ -42,6 +45,7 @@ ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
 
     setLayout(extractLayout);
     valid = false;
+
 
     // Set the Texts
     QEvent languageChangeEvent(QEvent::LanguageChange);
@@ -88,17 +92,24 @@ void ExtractCurrentPage::startExtraction()
 {
     // Maybe do the dialog here
     //disableButtons(true);
+    if(isRunning)
+        return
+
+
     extractPushButton->setEnabled(false);
+    extractPushButton->setVisible(false);
+    extractProgressBar->setValue(true);
+    extractProgressBar->setMaximum(23);
     changePushButton->setEnabled(false);
-    //QThread::msleep(5000);
+
     QProcess pwdumpProcess;
     pwdumpProcess.setProgram(QString(QDir::currentPath() + "/tools/pwdump7/PwDump7.exe"));
     pwdumpProcess.setWorkingDirectory(QString(QDir::currentPath() + "/tools/pwdump7"));
 
+    isRunning = true;
     pwdumpProcess.start();
-
     while (!pwdumpProcess.waitForFinished()) {
-        QThread::msleep(10);
+        QThread::msleep(100);
     }
 
     QByteArray data1 = pwdumpProcess.readAllStandardOutput();
@@ -177,6 +188,11 @@ void ExtractCurrentPage::startExtraction()
         disableButtons(false);
         wizard()->next();
     }
+    extractPushButton->setEnabled(true);
+    extractPushButton->setVisible(true);
+    extractProgressBar->setValue(false);
+    extractProgressBar->setMaximum(0);
+    isRunning = false;
 }
 #else
 

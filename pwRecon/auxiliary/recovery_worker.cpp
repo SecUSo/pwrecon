@@ -12,6 +12,7 @@
 #include <QSet>
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
+#include <QTime>
 
 RecoveryWorker::RecoveryWorker(const bool& fallback,
                                const QString& newbinarydir,
@@ -33,6 +34,7 @@ RecoveryWorker::RecoveryWorker(const bool& fallback,
 
 void RecoveryWorker::onRecoveryStarted(const bool& showplain, const QString& newhashfilepath, const QString& newhashtype)
 {
+    qDebug() << "RecoveryWorker: \n\t onRecoverStarted: \n\t\t show_plain_pwds: " << showplain << endl;
     show_plain_pwds = showplain;
     hashfilepath = newhashfilepath;
     hashtype = newhashtype;
@@ -207,6 +209,7 @@ void RecoveryWorker::startNextRound()
     QThread::msleep(10);
 
     if (finish) {
+        fileChanged();
         showResults();
         endProcess();
         emit finishRecovery();
@@ -221,10 +224,12 @@ void RecoveryWorker::startNextRound()
         startMang2Attack();
     }
     else if (binaryProcess->arguments() == args_mang2_attack) {
+        fileChanged();
         showResults();
         startBruteAttack();
     }
     else if (binaryProcess->arguments() == args_brute_attack) {
+        fileChanged();
         showResults();
         endProcess();
         emit finishRecovery();
@@ -277,20 +282,9 @@ void RecoveryWorker::showResults()
     res_str.append(" - WIEDERHERGESTELLTE PASSWÖRTER:\n");
     res_str.append("\n");
 
-    QSet<QString> line_set;
+
     int pwd_count = 0;
-
-    // Hashcat pot-file contains already cracked hashes and their plain texts
-    QFile file(potfile);
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QTextStream in(&file);
-        while (!in.atEnd()) {
-            line_set.insert(in.readLine());
-        }
-    }
-    file.close();
-
-    foreach (const QString &value, line_set) {
+    foreach (const QString &value, foundPasswords) {
         QString pw_line;
 
         QStringList splitted = value.split(":");
@@ -303,7 +297,6 @@ void RecoveryWorker::showResults()
         }
 
         QList<QString> users = usernames_table.values(hash);
-
         // pw_line.append("Password: " + hash);
         pw_line.append("Passwort: " + hash);
         if (show_plain_pwds)
@@ -412,16 +405,50 @@ void RecoveryWorker::onProcessFinished(int exitCode, QProcess::ExitStatus exitSt
 void RecoveryWorker::onTickTimer()
 {
     seconds++;
+    interval_count++;
 
     if (seconds >= 60) {
         minutes++;
         seconds = 0;
-        interval_count++;
     }
 
     // Show results every 5 minutes.
-    if (interval_count >= 5) {
+//    if (interval_count >= 5) {
+//        interval_count = 0;
+//        showResults();
+//    }
+
+    if (interval_count >= 5)
+    {
         interval_count = 0;
-        showResults();
+        qDebug() << "Checking File " << QTime::currentTime().toString() << endl;
+        if(fileChanged())
+        {
+            showResults();
+        }
+    }
+}
+
+bool RecoveryWorker::fileChanged()
+{
+
+    QStringList tmpFoundPasswords;
+
+    // Hashcat pot-file contains already cracked hashes and their plain texts
+    QFile file(potfile);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            tmpFoundPasswords << in.readLine();
+        }
+    }
+    file.close();
+
+    if(foundPasswords==tmpFoundPasswords)
+    {
+        return false;
+    }else{
+        foundPasswords = tmpFoundPasswords;
+        return true;
     }
 }

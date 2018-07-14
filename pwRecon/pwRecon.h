@@ -2,6 +2,7 @@
 #define LICENSEWIZARD_H
 
 #include <QWizard>
+#include <QFileSystemWatcher>
 
 #include "pwrecon_global.h"
 #include "testpage.h"
@@ -40,6 +41,7 @@ class IntroPage : public QWizardPage
 
 public:
     IntroPage(QWidget *parent = 0);
+    int count = 0;
 
     int nextId() const override;
     void changeEvent(QEvent *event) override;
@@ -50,9 +52,17 @@ private:
     QComboBox *languageComboBox;
     QTranslator *pwReconTranslator;
     QCheckBox *expertModeCheckBox;
+    QCheckBox *showHidePasswordCheckBox;
+    QFileSystemWatcher *dirWatcher;
+    QFileSystemWatcher *fileWatcher;
+    QTimer *timerClock;
 
 public slots:
     void setLanguage();
     void setExpertModeTexts();
+    void testSlot();
+    void printStuff();
+    void dirChanged(const QString &);
+    void onTickTimer();
 };
 #endif

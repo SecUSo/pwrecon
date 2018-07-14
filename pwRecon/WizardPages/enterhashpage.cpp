@@ -72,6 +72,8 @@ EnterHashPage::EnterHashPage(QWidget *parent)
     // Set the Texts
     QEvent languageChangeEvent(QEvent::LanguageChange);
     QCoreApplication::sendEvent(this, &languageChangeEvent);
+
+    qDebug() << "EnterHashPage()" << endl;
 }
 
 int EnterHashPage::nextId() const

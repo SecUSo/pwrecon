@@ -21,6 +21,8 @@ public:
 
     int nextId() const override;
     void changeEvent(QEvent *event) override;
+    void initializePage() override;
+    static QStringList passwordListFromFile(QString passwordListFilePath);
 
 private:
     QProgressBar *attackProgressBar;
@@ -45,11 +47,10 @@ private:
     QString basePath;
 
     QString getHashFilePath();
-    bool checkFieldByName(QString fieldName);
     QString passwordListToTmpFile(QStringList passwordList);
-    QStringList passwordListFromFile(QString passwordListFilePath);
     QString getHashType();
     void disableButtons(bool bol);
+    bool checkFieldByName(QString fieldName);
 
 public slots:
     void start();

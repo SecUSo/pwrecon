@@ -56,6 +56,8 @@ private:
     int seconds;
     int interval_count;
 
+    QStringList foundPasswords;
+
     void resetData();
     bool importHashfile();
     void setupBinaryArguments();
@@ -68,6 +70,7 @@ private:
     void endProcess();
     void checkEmptyHashfile();
     bool isHex(QString str);
+    bool fileChanged();
 
 public slots:
 
