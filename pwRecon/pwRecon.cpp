@@ -10,6 +10,8 @@ QString emailRegExp = QStringLiteral(".+@.+");
 pwRecon::pwRecon(QWidget *parent)
     : QWizard(parent)
 {
+
+    // TODO: Add button to restart wizard
     translator2 = new QTranslator(qApp);
     setOption(HaveHelpButton, true);
     setPage(Page_Intro, new IntroPage);
@@ -40,6 +42,7 @@ pwRecon::pwRecon(QWidget *parent)
     QCoreApplication::sendEvent(this, &languageChangeEvent);
 }
 
+// TODO: Implement Help for all pages
 void pwRecon::showHelp()
 {
     static QString lastHelpMessage;
@@ -71,6 +74,7 @@ void pwRecon::changeEvent(QEvent *event)
         this->setButtonText(WizardButton::BackButton, "< " + backText);
         this->setButtonText(WizardButton::NextButton, nextText + " >");
         this->setButtonText(WizardButton::CancelButton, trUtf8("Abbrechen"));
+        this->setButtonText(WizardButton::FinishButton, trUtf8("Beenden"));
         this->setButtonText(WizardButton::HelpButton, trUtf8("Hilfe"));
         //...
         //okPushButton->setText(tr("&OK"));

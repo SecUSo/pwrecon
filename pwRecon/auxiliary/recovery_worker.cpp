@@ -32,6 +32,7 @@ RecoveryWorker::RecoveryWorker(const bool& fallback,
     tempfilepath = newtempfilepath;
 }
 
+// TODO: Make messages translatable
 void RecoveryWorker::onRecoveryStarted(const bool& showplain, const QString& newhashfilepath, const QString& newhashtype)
 {
     qDebug() << "RecoveryWorker: \n\t onRecoverStarted: \n\t\t show_plain_pwds: " << showplain << endl;

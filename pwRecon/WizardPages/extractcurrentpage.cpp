@@ -3,6 +3,12 @@
 ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
     : QWizardPage(parent)
 {
+    // TODO: Disable Buttons
+    // TODO: Add progress bar
+    // TODO: Disable when on mac
+    // TODO: Implement Linux variant
+    // TODO: If expert dont do next directly
+    // TODO: Dont display Hashes in layman mode but write some information (Extraction started ...)
     setTitle("");
     setSubTitle("");
 

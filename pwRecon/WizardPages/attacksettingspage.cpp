@@ -17,6 +17,7 @@ AttackSettingsPage::AttackSettingsPage(QWidget *parent)
     QHBoxLayout *bruteOuterLayout = new QHBoxLayout;
 
 
+    //TODO: Implement Brute Force
     selectDictAttackRadioButton = new QRadioButton();
     actionLayout->addWidget(selectDictAttackRadioButton);
 
