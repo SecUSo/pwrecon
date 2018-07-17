@@ -128,8 +128,7 @@ int AttackPage::nextId() const
 {
     // TODO: Is estimation still wanted???
     // TODO: Seperate Result Page?
-    // TODO: This should be a last page for now.
-    return Page_Results;
+    return -1;
 }
 
 void AttackPage::start()

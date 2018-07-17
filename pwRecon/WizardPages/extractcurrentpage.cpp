@@ -36,7 +36,7 @@ ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
 
     extractProgressBar = new QProgressBar;
     entryLayout->addWidget(extractProgressBar);
-    extractProgressBar->setVisible(false);
+    extractProgressBar->setVisible(true);
     registerField("EXTRACTPATHLABEL",extractPathLabel,"text", "changeEvent");
 
 
@@ -47,6 +47,7 @@ ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
 
     QVBoxLayout *extractLayout = new QVBoxLayout;
     extractLayout->addLayout(entryLayout);
+    extractLayout->addWidget(extractProgressBar);
     extractLayout->addLayout(displayLayout);
 
     setLayout(extractLayout);
@@ -56,6 +57,19 @@ ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
     // Set the Texts
     QEvent languageChangeEvent(QEvent::LanguageChange);
     QCoreApplication::sendEvent(this, &languageChangeEvent);
+
+#ifdef Q_OS_WIN
+    QString programPath = QString(QDir::currentPath() + "/tools/pwdump7/PwDump7.exe");
+    qDebug() << programPath << endl;
+
+    eWorker = new executeWorker(programPath);
+    eWorker->moveToThread(&workerThread);
+    QObject::connect(&workerThread, &QThread::finished, eWorker, &QObject::deleteLater);
+    QObject::connect(this,&ExtractCurrentPage::onStartExtraction, eWorker, &executeWorker::startWorker);
+    //QObject::connect(eWorker, SIGNAL(sendOutput(const QStringList&)), this, SLOT(onEstimationFinished(const QStringList&)));
+    QObject::connect(eWorker, &executeWorker::sendOutput, this, &ExtractCurrentPage::onExtractionFinished);
+    workerThread.start();
+#endif
 }
 
 int ExtractCurrentPage::nextId() const
@@ -93,44 +107,69 @@ void ExtractCurrentPage::change()
     extractPathLabel->setText(currentFile);
 }
 
-#ifndef Q_OS_MACX
+#ifdef Q_OS_WIN
 void ExtractCurrentPage::startExtraction()
 {
+    extractProgressBar->setMaximum(0);
     // Maybe do the dialog here
-    //disableButtons(true);
-    if(isRunning)
-        return
+    disableButtons(true);
+    emit ExtractCurrentPage::onStartExtraction();
 
 
-    extractPushButton->setEnabled(false);
-    extractPushButton->setVisible(false);
-    extractProgressBar->setValue(true);
-    extractProgressBar->setMaximum(23);
-    changePushButton->setEnabled(false);
 
-    QProcess pwdumpProcess;
-    pwdumpProcess.setProgram(QString(QDir::currentPath() + "/tools/pwdump7/PwDump7.exe"));
-    pwdumpProcess.setWorkingDirectory(QString(QDir::currentPath() + "/tools/pwdump7"));
 
-    isRunning = true;
-    pwdumpProcess.start();
-    while (!pwdumpProcess.waitForFinished()) {
-        QThread::msleep(100);
+//    extractPushButton->setEnabled(false);
+//    extractPushButton->setVisible(false);
+    //extractProgressBar->setValue(true);
+    //extractProgressBar->setMaximum(23);
+//    changePushButton->setEnabled(false);
+
+}
+
+void ExtractCurrentPage::onExtractionFinished(const QStringList &output)
+{
+    qDebug() << "Finished!!!" << endl;
+
+    QStringList parsedOutput = parseOutput(output);
+    // TODO: Iterate over it two times???
+//    for(int itk = 0; itk < parsedOutput.length(); itk++)
+//    {
+//        extractResultTextBrowser->append(parsedOutput.at(itk));
+//        qDebug() << parsedOutput.at(itk);
+//    }
+
+    qDebug() << endl << "PWDUMP SUCCESS" << endl;
+
+    QFile tempfile(samdumpfilepath);
+    if (tempfile.exists())
+        tempfile.remove();
+    if (tempfile.open(QIODevice::ReadWrite)) {
+        QTextStream stream(&tempfile);
+        foreach (const QString &line, parsedOutput) {
+            stream << line << endl;
+            extractResultTextBrowser->append(line);
+        }
     }
+    tempfile.close();
+    valid = true;
 
-    QByteArray data1 = pwdumpProcess.readAllStandardOutput();
-    QTextStream outputStream1(data1);
-    QByteArray data2 = pwdumpProcess.readAllStandardError();
-    QTextStream outputStream2(data2);
 
-    bool breakup = false;
-    QStringList tempfilestring;
+    disableButtons(false);
+    wizard()->next();
 
-    QString line;
+    extractProgressBar->setMaximum(23);
+}
 
-    line = outputStream1.readLine();
+QStringList ExtractCurrentPage::parseOutput(QStringList output)
+{
+    currentResults.clear();
+
+    currentResults << "----------------------------------------------------------";
+
     qDebug() << endl << "PWDUMP OUTPUT LOG: " << endl;
-    while(!line.isNull()) {
+    QString line;
+    for(int itk = 0; itk < output.length(); itk++) {
+        line = output.at(itk);
         qDebug() << line;
 
         QStringList splitted = line.split(":");
@@ -144,63 +183,45 @@ void ExtractCurrentPage::startExtraction()
                 hash = QString("31D6CFE0D16AE931B73C59D7E0C089C0");
             }
 
-            tempfilestring.append(QString(username + ":" + hash.toLower()));
+            currentResults << QString(username + ":" + hash.toLower());
 
         } else {
+            // TODO: Check if it is needed!
             breakup = true;
         }
 
-        line = outputStream1.readLine();
     }
 
-    line = outputStream2.readLine();
-    qDebug() << endl << "PWDUMP ERROR OUTPUT LOG: " << endl;
-    while(!line.isNull()) {
-        qDebug() << line;
-        line = outputStream2.readLine();
-    }
+    currentResults << "----------------------------------------------------------";
+    return currentResults;
+}
 
-
+void ExtractCurrentPage::printError(const QStringList& errorOutput)
+{
     if (breakup) {
         qDebug() << endl << "PWDUMP NO SUCCESS" << endl;
 
+        // TODO: Translate!
         QString en("Error:\nProcess not possible.");
         QString de("Fehler:\nVorgang nicht möglich.");
         extractResultTextBrowser->setText(de);
         // disableButtons(false);
         valid = false;
-    }
-    else {
-        qDebug() << endl << "PWDUMP SUCCESS" << endl;
 
-        QFile tempfile(samdumpfilepath);
-        if (tempfile.exists())
-            tempfile.remove();
-        if (tempfile.open(QIODevice::ReadWrite)) {
-            QTextStream stream(&tempfile);
-            foreach (const QString &line, tempfilestring) {
-                stream << line << endl;
-                extractResultTextBrowser->append(line);
-            }
+        for(int itk = 0; itk < errorOutput.length(); itk++)
+        {
+            qDebug() << errorOutput.at(itk) << endl;
         }
-        tempfile.close();
-        valid = true;
     }
-
-    if(valid == false)
-    {
-        wizard()->button(QWizard::NextButton)->setDisabled(true);
-    } else {
-        disableButtons(false);
-        wizard()->next();
-    }
-    extractPushButton->setEnabled(true);
-    extractPushButton->setVisible(true);
-    extractProgressBar->setValue(false);
-    extractProgressBar->setMaximum(0);
-    isRunning = false;
 }
-#else
+
+ExtractCurrentPage::~ExtractCurrentPage()
+{
+    workerThread.quit();
+    workerThread.wait();
+}
+
+#elif Q_OS_MACX
 
 void ExtractCurrentPage::startExtraction()
 {
@@ -408,3 +429,4 @@ void ExtractCurrentPage::changeEvent(QEvent *event)
     } else
         QWidget::changeEvent(event);
 }
+

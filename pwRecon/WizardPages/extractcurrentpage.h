@@ -16,13 +16,15 @@ class ExtractCurrentPage : public QWizardPage
 
 public:
     explicit ExtractCurrentPage(QWidget *parent = 0);
-
+    ~ExtractCurrentPage();
     int nextId() const override;
     bool validatePage() override;
     void changeEvent(QEvent *event) override;
 
 protected:
     void initializePage() override;
+
+
 
 
 private:
@@ -32,18 +34,38 @@ private:
     QLabel *extractPathLabel;
     bool valid;
     bool isRunning;
+    bool breakup;
 
     QTextBrowser *extractResultTextBrowser;
 
     QString currentFile;
     QString samdumpfilepath;
-
     void disableButtons(bool bol);
+
+#ifdef Q_OS_WIN
+    executeWorker *eWorker;
+    QStringList currentResults;
+
+    QThread workerThread;
+
+    QStringList getArguments();
+    QStringList parseOutput(QStringList);
+#endif
+
 signals:
 
+#ifdef Q_OS_WIN
+    void onStartExtraction();
+#endif
+
 public slots:
-    void change();
     void startExtraction();
+    void change();
+
+#ifdef Q_OS_WIN
+    void onExtractionFinished(const QStringList& output);
+    void printError(const QStringList& errorOutput);
+#endif
 };
 
 #endif // EXTRACTCURRENTPAGE_H

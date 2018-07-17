@@ -18,8 +18,16 @@ void executeWorker::startWorker()
     connect(binaryProcess, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             this, &executeWorker::onFinish);
     binaryProcess->setProgram(programPath);
-    //binaryProcess->setWorkingDirectory(binarydir);
-    binaryProcess->setArguments(arguments);
+    QFileInfo fileInfo(programPath);
+    binaryProcess->setWorkingDirectory(fileInfo.absolutePath());
+    if(!arguments.empty())
+    {
+        binaryProcess->setArguments(arguments);
+    }else
+    {
+        qDebug() << "Problem with the Arguments" << endl;
+    }
+
     binaryProcess->start();
 
 }
@@ -39,7 +47,8 @@ void executeWorker::onFinish()
 {
 
     QString line;
-    QStringList output;// = new QStringList();
+    QStringList output;
+    QStringList errorOutput;
     QByteArray outputData = binaryProcess->readAllStandardOutput();
     QTextStream outputStream(outputData);
     QByteArray errorData = binaryProcess->readAllStandardError();
@@ -53,17 +62,19 @@ void executeWorker::onFinish()
         qDebug() << line;
         line = outputStream.readLine();
         output << line;
-        //output << outputStream.readLine();
     }
 
     line = errorStream.readLine();
+    errorOutput << line;
     qDebug() << endl << "- BINARY ERRORS:" << endl;
     while(!line.isNull()) {
         qDebug() << line;
+        errorOutput << line;
         line = errorStream.readLine();
     }
 
     emit sendOutput(output);
+    emit sendErrorOutput(errorOutput);
 }
 
 void executeWorker::setArguments(QStringList arguments)

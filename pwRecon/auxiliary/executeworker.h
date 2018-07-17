@@ -6,6 +6,8 @@
 #include <QProcess>
 #include <QDebug>
 
+#include <QFileInfo>
+
 class executeWorker : public QObject
 {
     Q_OBJECT
@@ -24,6 +26,7 @@ private:
 
 signals:
     void sendOutput(const QStringList& output);
+    void sendErrorOutput(const QStringList& errorOutput);
 
 public slots:
     void startWorker();
