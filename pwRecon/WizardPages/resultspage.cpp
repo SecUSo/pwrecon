@@ -39,6 +39,7 @@ int ResultsPage::nextId() const
     return -1;
 }
 
+// TODO: Make Passwords hidable
 
 void ResultsPage::initializePage()
 {

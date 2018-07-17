@@ -3,8 +3,6 @@
 ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    // TODO: Disable Buttons
-    // TODO: Add progress bar
     // TODO: Disable when on mac
     // TODO: Implement Linux variant
     // TODO: If expert dont do next directly
@@ -155,9 +153,13 @@ void ExtractCurrentPage::onExtractionFinished(const QStringList &output)
 
 
     disableButtons(false);
-    wizard()->next();
 
     extractProgressBar->setMaximum(23);
+
+    // Experts want to see the results
+    if(field("EXPERTMODE").toBool()){
+        wizard()->next();
+    }
 }
 
 QStringList ExtractCurrentPage::parseOutput(QStringList output)
@@ -422,7 +424,11 @@ void ExtractCurrentPage::changeEvent(QEvent *event)
         setTitle(trUtf8("Passwörter von diesem Computer wiederherstellen"));
         setSubTitle(trUtf8("Die Passwort Datenbank dieses Computers wird extrahiert um sie zu testen."));
         changePushButton->setText(trUtf8("Speicherort ändern"));
-        extractPushButton->setText(trUtf8("Datenbank extrahieren\n und weiter"));
+        if(field("EXPERTMODE").toBool()){
+            extractPushButton->setText(trUtf8("Datenbank extrahieren"));
+        }else{
+            extractPushButton->setText(trUtf8("Datenbank extrahieren\n und weiter"));
+        }
         // Expert Mode CHanges
         changePushButton->setVisible(field("EXPERTMODE").toBool());
         extractPathLabel->setVisible(field("EXPERTMODE").toBool());
