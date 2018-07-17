@@ -29,13 +29,15 @@ private:
 
     QStringList getArguments();
     QStringList parseOutput(QStringList);
-
+    void disableButtons(bool bol);
+    void triggerEstimation();
 
 signals:
     void startEstemation();
 public slots:
     void onTickTimer();
     void onEstimationFinished(const QStringList& output);
+    void onEstimationStarted();
 };
 
 #endif // RESULTSPAGE_H

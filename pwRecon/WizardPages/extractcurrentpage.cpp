@@ -399,7 +399,6 @@ void ExtractCurrentPage::startExtraction()
 
 void ExtractCurrentPage::disableButtons(bool bol)
 {
-    qDebug() << "Print the disable bool: " << bol << endl;
     wizard()->button(QWizard::BackButton)->setDisabled(bol);
     wizard()->button(QWizard::NextButton)->setDisabled(bol);
     this->changePushButton->setDisabled(bol);

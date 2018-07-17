@@ -31,6 +31,7 @@ ResultsPage::ResultsPage(QWidget *parent)
     QObject::connect(this,&ResultsPage::startEstemation, eWorker, &executeWorker::startWorker);
     //QObject::connect(eWorker, SIGNAL(sendOutput(const QStringList&)), this, SLOT(onEstimationFinished(const QStringList&)));
     QObject::connect(eWorker, &executeWorker::sendOutput, this, &ResultsPage::onEstimationFinished);
+    QObject::connect(eWorker, &executeWorker::onWorkerStarted, this, &ResultsPage::onEstimationStarted);
     workerThread.start();
 
 }
@@ -46,6 +47,11 @@ void ResultsPage::initializePage()
     resultsProgressBar->setMaximum(0);
     eWorker->setArguments(getArguments());
     emit ResultsPage::startEstemation();
+}
+
+void ResultsPage::onEstimationStarted()
+{
+    disableButtons(true);
 }
 
 bool ResultsPage::checkFieldByName(QString fieldName)
@@ -111,6 +117,7 @@ void ResultsPage::onEstimationFinished(const QStringList &output)
         qDebug() << parsedOutput.at(itk);
     }
 
+    disableButtons(false);
     resultsProgressBar->setMaximum(23);
 }
 
@@ -203,6 +210,15 @@ QStringList ResultsPage::parseOutput(QStringList output)
     }
     currentResults << "----------------------------------------------------------";
     return currentResults;
+}
+
+void ResultsPage::disableButtons(bool bol)
+{
+    qDebug() << "Print the disable bool: " << bol << endl;
+    wizard()->button(QWizard::FinishButton)->setDisabled(bol);
+    wizard()->button(QWizard::BackButton)->setDisabled(bol);
+    //this->changePushButton->setDisabled(bol);
+    //this->extractPushButton->setDisabled(bol);
 }
 
 ResultsPage::~ResultsPage()

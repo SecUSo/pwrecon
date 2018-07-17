@@ -41,6 +41,7 @@ void executeWorker::onStart()
 {
    // start();
     qDebug() << "Debug Output From Started process" << endl;
+    emit onWorkerStarted();
 }
 
 void executeWorker::onFinish()

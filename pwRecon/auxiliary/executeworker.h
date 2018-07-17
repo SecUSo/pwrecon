@@ -27,6 +27,7 @@ private:
 signals:
     void sendOutput(const QStringList& output);
     void sendErrorOutput(const QStringList& errorOutput);
+    void onWorkerStarted(); // Just for disabling buttons
 
 public slots:
     void startWorker();
