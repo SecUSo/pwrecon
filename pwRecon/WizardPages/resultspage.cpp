@@ -4,7 +4,6 @@ ResultsPage::ResultsPage(QWidget *parent)
     : QWizardPage(parent)
 {
     // TODO: Change Caption
-    // TODO: Disable buttons when started
     // TODO: Add text to textbrowser when page opens to tell what is going to happen.
     // TODO: Implement Language changed
     setTitle(trUtf8("Ergebnisse"));
@@ -44,6 +43,7 @@ int ResultsPage::nextId() const
 
 void ResultsPage::initializePage()
 {
+    ResultTextBrowser->clear();
     resultsProgressBar->setMaximum(0);
     eWorker->setArguments(getArguments());
     emit ResultsPage::startEstemation();

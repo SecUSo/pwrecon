@@ -124,6 +124,8 @@ AttackPage::AttackPage(QWidget *parent)
     QCoreApplication::sendEvent(this, &languageChangeEvent);
 }
 
+// TODO: Start attack directly?
+
 int AttackPage::nextId() const
 {
     // TODO: Is estimation still wanted???
@@ -382,4 +384,6 @@ void AttackPage::changeEvent(QEvent *event)
 void AttackPage::initializePage()
 {
     wizard()->button(QWizard::NextButton)->setEnabled(false);
+    attackResultTextBrowser->clear();
+    // TODO: Text for TextBrowser
 }
