@@ -140,7 +140,12 @@ QStringList ResultsPage::parseOutput(QStringList output)
         if(currentLine.contains("Passwort: ") && begin)
         {
             currentResults << "----------------------------------------------------------";
-            currentResults << currentLine;
+            if(field("SHOWHIDEPASSWORD").toBool())
+            {
+               currentResults << "Passwort: *****";
+            }else{
+                currentResults << currentLine;
+            }
             begin = false;
             continue;
         }
