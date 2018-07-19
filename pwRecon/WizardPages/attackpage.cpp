@@ -360,8 +360,9 @@ void AttackPage::deleteTemporaryFiles()
 void AttackPage::disableButtons(bool bol)
 {
     startPushButton->setDisabled(bol);
-    wizard()->button(QWizard::BackButton)->setEnabled(!bol);
-    wizard()->button(QWizard::NextButton)->setEnabled(!bol);
+    wizard()->button(QWizard::BackButton)->setDisabled(bol);
+    wizard()->button(QWizard::NextButton)->setDisabled(bol);
+    wizard()->button(QWizard::CustomButton1)->setDisabled(bol);
     stopPushButton->setEnabled(bol);
 
     if (bol)
@@ -386,4 +387,20 @@ void AttackPage::initializePage()
     wizard()->button(QWizard::NextButton)->setEnabled(false);
     attackResultTextBrowser->clear();
     // TODO: Text for TextBrowser
+}
+
+void AttackPage::setVisible(bool visible)
+{
+    QWizardPage::setVisible(visible);
+
+    if (visible) {
+        wizard()->setButtonText(QWizard::CustomButton1, tr("&Neue Wiederherstellung Starten"));
+        wizard()->setOption(QWizard::HaveCustomButton1, true);
+        connect(wizard(), &QWizard::customButtonClicked,
+                wizard(), &QWizard::restart);
+    } else {
+        wizard()->setOption(QWizard::HaveCustomButton1, false);
+        disconnect(wizard(), &QWizard::customButtonClicked,
+                   wizard(), &QWizard::restart);
+    }
 }

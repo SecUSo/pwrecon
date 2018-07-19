@@ -263,6 +263,7 @@ void ResultsPage::disableButtons(bool bol)
     qDebug() << "Print the disable bool: " << bol << endl;
     wizard()->button(QWizard::FinishButton)->setDisabled(bol);
     wizard()->button(QWizard::BackButton)->setDisabled(bol);
+    wizard()->button(QWizard::CustomButton1)->setDisabled(bol);
     //this->changePushButton->setDisabled(bol);
     //this->extractPushButton->setDisabled(bol);
 }
@@ -352,4 +353,20 @@ void ResultsPage::possibleOutputs()
     trUtf8("Tag:");
     trUtf8("Trennzeichen:");
     */
+}
+
+void ResultsPage::setVisible(bool visible)
+{
+    QWizardPage::setVisible(visible);
+
+    if (visible) {
+        wizard()->setButtonText(QWizard::CustomButton1, tr("&Neuen Test Starten"));
+        wizard()->setOption(QWizard::HaveCustomButton1, true);
+        connect(wizard(), &QWizard::customButtonClicked,
+                wizard(), &QWizard::restart);
+    } else {
+        wizard()->setOption(QWizard::HaveCustomButton1, false);
+        disconnect(wizard(), &QWizard::customButtonClicked,
+                   wizard(), &QWizard::restart);
+    }
 }

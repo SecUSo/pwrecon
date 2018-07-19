@@ -32,6 +32,7 @@ private:
     void disableButtons(bool bol);
     void triggerEstimation();
     void possibleOutputs();
+    void setVisible(bool visible) override;
 
 signals:
     void startEstemation();

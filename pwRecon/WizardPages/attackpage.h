@@ -23,6 +23,7 @@ public:
     void changeEvent(QEvent *event) override;
     void initializePage() override;
     static QStringList passwordListFromFile(QString passwordListFilePath);
+    void setVisible(bool visible) override;
 
 private:
     QProgressBar *attackProgressBar;
