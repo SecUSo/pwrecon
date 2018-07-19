@@ -373,8 +373,8 @@ void AttackPage::disableButtons(bool bol)
 void AttackPage::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
-        setTitle(trUtf8("Angriff"));
-        setSubTitle(trUtf8("Sie könne den Angriff starten."));
+        setTitle(trUtf8("Wiederherstellung"));
+        setSubTitle(trUtf8("Sie können die Wiederherstellung Ihrer Passwörter starten."));
         startPushButton->setText(trUtf8("Start"));
         stopPushButton->setText(trUtf8("Stop"));
     } else

@@ -31,6 +31,7 @@ private:
     QStringList parseOutput(QStringList);
     void disableButtons(bool bol);
     void triggerEstimation();
+    void possibleOutputs();
 
 signals:
     void startEstemation();
