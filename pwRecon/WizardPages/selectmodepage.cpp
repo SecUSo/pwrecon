@@ -49,7 +49,7 @@ void SelectModePage::changeEvent(QEvent *event)
     if (event->type() == QEvent::LanguageChange) {
         setTitle(trUtf8("Vorgansweise Auswählen."));
         topLabel->setText(trUtf8("Sie können sich entscheiden, ob sie ein Passwort testen oder wiederherstellen möchten."));
-        checkPasswordRadioButton->setText(trUtf8("&Passwörter prüfen"));
+        checkPasswordRadioButton->setText(trUtf8("&Passwörter testen"));
         if(field("EXPERTMODE").toBool()){
             recoverPasswordRadioButton->setText(trUtf8("&Passwörter aus Hashes oder vom Lokalen System wiederherstellen"));
         } else{

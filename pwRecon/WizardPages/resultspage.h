@@ -33,6 +33,7 @@ private:
     void triggerEstimation();
     void possibleOutputs();
     void setVisible(bool visible) override;
+    void changeEvent(QEvent *event) override;
 
 signals:
     void startEstemation();

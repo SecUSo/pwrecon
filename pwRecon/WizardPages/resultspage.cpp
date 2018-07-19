@@ -6,8 +6,8 @@ ResultsPage::ResultsPage(QWidget *parent)
     // TODO: Change Caption
     // TODO: Add text to textbrowser when page opens to tell what is going to happen.
     // TODO: Implement Language changed
-    setTitle(trUtf8("Ergebnisse"));
-    setSubTitle(trUtf8("Das sind Ihre Ergebnisse"));
+    setTitle("");
+    setSubTitle("");
 
     timerClock = new QTimer(this);
     connect(timerClock, SIGNAL(timeout()), this, SLOT(onTickTimer()));
@@ -370,4 +370,15 @@ void ResultsPage::setVisible(bool visible)
         disconnect(wizard(), &QWizard::customButtonClicked,
                    wizard(), &QWizard::restart);
     }
+}
+
+
+void ResultsPage::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::LanguageChange) {
+        setTitle(trUtf8("Die Sicherheit von Passwörtern einschätzen."));
+        setSubTitle(trUtf8("Die angegebenen asswörter werden untersucht und eine Einschätzung ihrer Sicherheit wird erstellt."));
+
+    } else
+        QWidget::changeEvent(event);
 }

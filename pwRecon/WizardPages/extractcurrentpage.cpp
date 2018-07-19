@@ -433,12 +433,12 @@ void ExtractCurrentPage::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
         setTitle(trUtf8("Passwörter von diesem Computer wiederherstellen"));
-        setSubTitle(trUtf8("Die Passwort Datenbank dieses Computers wird extrahiert um sie zu testen."));
+        setSubTitle(trUtf8("Die Passwörter dieses Computers werden ausgelesen um sie wiederherzustellen."));
         changePushButton->setText(trUtf8("Speicherort ändern"));
         if(field("EXPERTMODE").toBool()){
-            extractPushButton->setText(trUtf8("Datenbank extrahieren"));
+            extractPushButton->setText(trUtf8("Passwörter auslesen"));
         }else{
-            extractPushButton->setText(trUtf8("Datenbank extrahieren\n und weiter"));
+            extractPushButton->setText(trUtf8("Passwörter auslesen\nund wiederherstellen"));
         }
         // Expert Mode CHanges
         changePushButton->setVisible(field("EXPERTMODE").toBool());
