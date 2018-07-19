@@ -23,9 +23,9 @@ SAMDialog::SAMDialog(QString filepath, QWidget *parent) :
     //connect(wizard(), &QWizard::back, this, &SAMDialog::reject);
     samdumpfilepath = filepath;
 
-    // TODO: Change Text
     // TODO: Add Cancle button
-    ui->infoLabel->setText(trUtf8("Diese Funktion wird die SAM-Datei des Windows-Systems auslesen und alle Passwort-Hashes extrahieren.\n\nWARNUNG:\nEs werden Administratorrechte benötigt.\nDie Funktion wird womöglich als Schadsoftware erkannt.\nNutzung auf eigene Gefahr."));
+    this->setWindowTitle("Passwörter auslesen");
+    ui->infoLabel->setText(trUtf8("Diese Funktion wird die Passwörter dieses Computers auslesen um sie wiederherzustellen.\n\nWARNUNG:\nEs werden Administratorrechte benötigt.\nDie Funktion wird womöglich als Schadsoftware erkannt.\nNutzung auf eigene Gefahr."));
     ui->startButton->setText(trUtf8("Weiter"));
 }
 
