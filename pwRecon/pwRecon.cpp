@@ -11,7 +11,6 @@ pwRecon::pwRecon(QWidget *parent)
     : QWizard(parent)
 {
 
-    // TODO: Add button to restart wizard
     translator2 = new QTranslator(qApp);
     setOption(HaveHelpButton, true);
     setPage(Page_Intro, new IntroPage);

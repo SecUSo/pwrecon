@@ -74,8 +74,8 @@ void executeWorker::onFinish()
         line = errorStream.readLine();
     }
 
-    emit sendOutput(output);
     emit sendErrorOutput(errorOutput);
+    emit sendOutput(output);
 }
 
 void executeWorker::setArguments(QStringList arguments)

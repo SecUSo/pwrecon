@@ -41,7 +41,8 @@ int ResultsPage::nextId() const
 
 void ResultsPage::initializePage()
 {
-    ResultTextBrowser->clear();
+    ResultTextBrowser->setText(trUtf8("Die Einschätzung wurde gestartet. \n"
+                                      "Dieser Vorgang kann einige Minuten dauern."));
     resultsProgressBar->setMaximum(0);
     eWorker->setArguments(getArguments());
     emit ResultsPage::startEstemation();

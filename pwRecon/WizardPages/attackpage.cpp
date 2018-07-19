@@ -385,8 +385,8 @@ void AttackPage::changeEvent(QEvent *event)
 void AttackPage::initializePage()
 {
     wizard()->button(QWizard::NextButton)->setEnabled(false);
-    attackResultTextBrowser->clear();
-    // TODO: Text for TextBrowser
+    attackResultTextBrowser->setText(trUtf8("Die Widerherstellen wurde gestartet.\n"
+                                            "Dieser Vorgang kann einige Zeit dauern."));
 }
 
 void AttackPage::setVisible(bool visible)

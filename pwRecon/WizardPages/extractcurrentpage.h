@@ -45,11 +45,13 @@ private:
 #ifdef Q_OS_WIN
     executeWorker *eWorker;
     QStringList currentResults;
+    QStringList errorOutput;
 
     QThread workerThread;
 
     QStringList getArguments();
     QStringList parseOutput(QStringList);
+    void printError();
 #endif
 
 signals:
@@ -63,8 +65,9 @@ public slots:
     void change();
 
 #ifdef Q_OS_WIN
+    void workerStarted();
     void onExtractionFinished(const QStringList& output);
-    void printError(const QStringList& errorOutput);
+    void getError(const QStringList& errorOutput);
 #endif
 };
 

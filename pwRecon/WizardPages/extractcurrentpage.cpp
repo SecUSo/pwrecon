@@ -20,8 +20,6 @@ ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
     // Connenct the label with the text field
     extractPathLabel->setBuddy(extractPushButton);
     extractPathLabel->setWordWrap(true);
-    QObject::connect(changePushButton, SIGNAL(clicked()),this, SLOT(change()));
-    QObject::connect(extractPushButton, SIGNAL(clicked()),this, SLOT(startExtraction()));
 
     QHBoxLayout *entryLayout = new QHBoxLayout();
     entryLayout->addWidget(extractPushButton);
@@ -56,6 +54,8 @@ ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
     QEvent languageChangeEvent(QEvent::LanguageChange);
     QCoreApplication::sendEvent(this, &languageChangeEvent);
 
+    QObject::connect(changePushButton, SIGNAL(clicked()),this, SLOT(change()));
+    QObject::connect(extractPushButton, SIGNAL(clicked()),this, SLOT(startExtraction()));
 #ifdef Q_OS_WIN
     QString programPath = QString(QDir::currentPath() + "/tools/pwdump7/PwDump7.exe");
     qDebug() << programPath << endl;
@@ -64,8 +64,9 @@ ExtractCurrentPage::ExtractCurrentPage(QWidget *parent)
     eWorker->moveToThread(&workerThread);
     QObject::connect(&workerThread, &QThread::finished, eWorker, &QObject::deleteLater);
     QObject::connect(this,&ExtractCurrentPage::onStartExtraction, eWorker, &executeWorker::startWorker);
-    //QObject::connect(eWorker, SIGNAL(sendOutput(const QStringList&)), this, SLOT(onEstimationFinished(const QStringList&)));
     QObject::connect(eWorker, &executeWorker::sendOutput, this, &ExtractCurrentPage::onExtractionFinished);
+    QObject::connect(eWorker, &executeWorker::onWorkerStarted, this, &ExtractCurrentPage::workerStarted);
+    QObject::connect(eWorker, &executeWorker::sendErrorOutput, this, &ExtractCurrentPage::getError);
     workerThread.start();
 #endif
 }
@@ -85,7 +86,17 @@ void ExtractCurrentPage::initializePage()
     QString samdumpfilepath= QString(QDir::currentPath() + "/tools/samdumpfile.txt");
     SAMDialog *samDialog = new SAMDialog(samdumpfilepath);
     samDialog->exec();
-    disableButtons(false);
+
+    if(field("EXPERTMODE").toBool()){
+        extractResultTextBrowser->setText(trUtf8("Die Passwörter des lokalen Systems können ausgelesen werden.\n"
+                                                 "Dieser Vorgang kann einige Minuten dauern.\n"
+                                                 "Sie können den Speicherort der extrahierten Daten ändern."));
+        disableButtons(false);
+    }else{
+        extractResultTextBrowser->setText(trUtf8("Die Passwörter des lokalen Systems werden ausgelesen.\n"
+                                                 "Dieser Vorgang kann einige Minuten dauern."));
+        emit ExtractCurrentPage::onStartExtraction();
+    }
 }
 
 void ExtractCurrentPage::change()
@@ -106,35 +117,31 @@ void ExtractCurrentPage::change()
 }
 
 #ifdef Q_OS_WIN
-void ExtractCurrentPage::startExtraction()
+void ExtractCurrentPage::workerStarted()
 {
     extractProgressBar->setMaximum(0);
-    // Maybe do the dialog here
     disableButtons(true);
+}
+
+void ExtractCurrentPage::startExtraction()
+{
     emit ExtractCurrentPage::onStartExtraction();
-
-
-
-
-//    extractPushButton->setEnabled(false);
-//    extractPushButton->setVisible(false);
-    //extractProgressBar->setValue(true);
-    //extractProgressBar->setMaximum(23);
-//    changePushButton->setEnabled(false);
-
 }
 
 void ExtractCurrentPage::onExtractionFinished(const QStringList &output)
 {
     qDebug() << "Finished!!!" << endl;
 
+    if(!errorOutput.empty())
+        foreach (const QString &line, errorOutput) {
+            if(line.contains("Error",Qt::CaseInsensitive))
+            {
+                printError();
+                return;
+            }
+        }
+
     QStringList parsedOutput = parseOutput(output);
-    // TODO: Iterate over it two times???
-//    for(int itk = 0; itk < parsedOutput.length(); itk++)
-//    {
-//        extractResultTextBrowser->append(parsedOutput.at(itk));
-//        qDebug() << parsedOutput.at(itk);
-//    }
 
     qDebug() << endl << "PWDUMP SUCCESS" << endl;
 
@@ -157,7 +164,7 @@ void ExtractCurrentPage::onExtractionFinished(const QStringList &output)
     extractProgressBar->setMaximum(23);
 
     // Experts want to see the results
-    if(field("EXPERTMODE").toBool()){
+    if(!field("EXPERTMODE").toBool()){
         wizard()->next();
     }
 }
@@ -198,21 +205,26 @@ QStringList ExtractCurrentPage::parseOutput(QStringList output)
     return currentResults;
 }
 
-void ExtractCurrentPage::printError(const QStringList& errorOutput)
+void ExtractCurrentPage::getError(const QStringList& errorOutput)
+{
+    this->errorOutput = errorOutput;
+}
+
+void ExtractCurrentPage::printError()
 {
     if (breakup) {
         qDebug() << endl << "PWDUMP NO SUCCESS" << endl;
 
-        // TODO: Translate!
-        QString en("Error:\nProcess not possible.");
-        QString de("Fehler:\nVorgang nicht möglich.");
-        extractResultTextBrowser->setText(de);
-        // disableButtons(false);
+        extractResultTextBrowser->setText(trUtf8("Fehler:\nVorgang nicht möglich.\nStellen Sie sicher, dass Sie Administrator Rechte besitzen."));
+        disableButtons(true);
+        extractProgressBar->setMaximum(23);
+        wizard()->button(QWizard::BackButton)->setDisabled(false);
         valid = false;
 
         for(int itk = 0; itk < errorOutput.length(); itk++)
         {
             qDebug() << errorOutput.at(itk) << endl;
+           // extractResultTextBrowser->append(errorOutput.at(itk));
         }
     }
 }
