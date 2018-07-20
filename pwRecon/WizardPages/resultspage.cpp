@@ -146,7 +146,11 @@ QStringList ResultsPage::parseOutput(QStringList output)
             {
                currentResults << "Passwort: *****";
             }else{
-                currentResults << currentLine;
+                QStringList values = currentLine.split(": ");
+                QString x = values.last();
+                const QByteArray& latinName = x.toUtf8();
+                const char* c = latinName.data(); // Convert it to char* to make it translatable
+                currentResults << trUtf8("Passwort:") + " " + trUtf8(c);
             }
             begin = false;
             continue;
@@ -155,9 +159,9 @@ QStringList ResultsPage::parseOutput(QStringList output)
 
         if(currentLine.contains("Ihr Passwort entspricht"))
         {
-            //QStringList values = currentLine.split(":");
-            //currentResults << "Online (eingeschränkt): " + values.last();
-            currentResults << currentLine;
+            const QByteArray& latinName = currentLine.toUtf8();
+            const char* c = latinName.data(); // Convert it to char* to make it translatable
+            currentResults << trUtf8(c);
             continue;
         }
 
@@ -231,7 +235,7 @@ QStringList ResultsPage::parseOutput(QStringList output)
         {
             currentResults << "-----------------------------------";
             QStringList values = currentLine.split(":");
-            currentResults << "Art des Treffers:" + values.last();
+            currentResults << trUtf8("Art des Treffers:") + values.last();
 
             // Don't display information about parts of the password if it shall be hidden.
             if(!field("SHOWHIDEPASSWORD").toBool())
@@ -379,7 +383,7 @@ void ResultsPage::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
         setTitle(trUtf8("Die Sicherheit von Passwörtern einschätzen."));
-        setSubTitle(trUtf8("Die angegebenen asswörter werden untersucht und eine Einschätzung ihrer Sicherheit wird erstellt."));
+        setSubTitle(trUtf8("Die angegebenen Passwörter werden untersucht und eine Einschätzung ihrer Sicherheit wird erstellt."));
 
     } else
         QWidget::changeEvent(event);

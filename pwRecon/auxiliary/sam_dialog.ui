@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>SAM-Datei auslesen</string>
+   <string/>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -199,7 +199,7 @@
      <item>
       <widget class="QPushButton" name="startButton">
        <property name="text">
-        <string>Continue</string>
+        <string/>
        </property>
       </widget>
      </item>
