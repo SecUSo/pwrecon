@@ -21,7 +21,10 @@ ResultsPage::ResultsPage(QWidget *parent)
 
 
 
-    QString programPath = QString(QDir::currentPath() + "/tools/Test/jre1.8.0_172/bin/java.exe");
+    QString programPath = QString(QDir::currentPath() + "/tools/nbvcxz/");
+#ifdef Q_OS_WIN
+    programPath = programPath + "WIN_jre1.8.0_172/bin/java.exe";
+#endif
     qDebug() << programPath << endl;
 
     eWorker = new executeWorker(programPath);
@@ -74,7 +77,7 @@ QStringList ResultsPage::getArguments()
 {
     QStringList args;
     args << "-jar";
-    args << QString(QDir::currentPath() + "/tools/Test/nbvcxz-1.4.1.jar");
+    args << QString(QDir::currentPath() + "/tools/nbvcxz/nbvcxz-1.4.1.jar");
 
     QStringList passwordList;
 
@@ -371,7 +374,6 @@ void ResultsPage::setVisible(bool visible)
                    wizard(), &QWizard::restart);
     }
 }
-
 
 void ResultsPage::changeEvent(QEvent *event)
 {
