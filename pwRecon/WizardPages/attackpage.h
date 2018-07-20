@@ -24,6 +24,7 @@ public:
     void initializePage() override;
     static QStringList passwordListFromFile(QString passwordListFilePath);
     void setVisible(bool visible) override;
+    bool validatePage() override;
 
 private:
     QProgressBar *attackProgressBar;
@@ -35,6 +36,7 @@ private:
     QThread workerThread;
     bool hc2_fallback;
     bool show_plain_pwds;
+    bool isValid;
 
     QString binarydir;
     QString binaryfile;
@@ -63,7 +65,7 @@ public slots:
 
 signals:
 
-    void startRecovery(const bool& showplain, const QString& newhashfilepath, const QString& newhashtype);
+    void startRecovery(const bool& showplain, const bool& expertMode, const QString& newhashfilepath, const QString& newhashtype);
     void stopProcess();
 
 };

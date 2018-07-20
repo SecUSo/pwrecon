@@ -50,8 +50,73 @@ void pwRecon::showHelp()
 
     switch (currentId()) {
     case Page_Intro:
-        message = trUtf8("Wählen eine Widerherstellungsoption aus.");
-        //        message = trUtf8("Select the mode you want to use during the Wizard");
+        message = trUtf8("Sie können die Sprache umstellen.");
+        message += "\n";
+        message += trUtf8("Verbergen Sie ihre Passwörter, für den fall, dass Ihnen jemand über die Schulter schauen könnte.");
+        message += "\n";
+        message += trUtf8("Mit dem Experten Modus können Sie zusätzlich Hashes wiederherstellen und Einstellungen für die Widerherstellung vornehmen");
+        break;
+    case Page_SelectMode:
+        message = trUtf8("Sie können sich zwischen diesen zwei Optionen entscheiden.");
+        message += "\n";
+        message += trUtf8("Beim Testen eines Passwortes (oder einer Liste) wird untersucht, wie schnell es mit unserem Wörterbuch gefunden werden würde und es werden Hinweise zur verbesserung gegeben.");
+        message += "\n";
+        message += trUtf8("Beim Wiederherstellen können Sie die Passwörter dieses Systems auslesen und im Anschluss wiederherstellen.");
+        break;
+    case Page_SelectRecoveryMode:
+        message = trUtf8("Sie können sich zwischen diesen zwei Optionen entscheiden.");
+        message += "\n";
+        message += trUtf8("Stellen Sie die Passwörter dieses Computers wieder her.");
+        message += "\n";
+        message += trUtf8("Sie können auch eigene Hashes oder Listen von Hashes wiederherstellen.");
+        break;
+    case Page_EnterPassword:
+        message = trUtf8("Alle hier angegebene Passwörter werden anschließend auf ihre Sicherheit geprüft.");
+        message += "\n";
+        message += trUtf8("Sie können ein einzelnes Passwort testen.");
+        message += "\n";
+        message += trUtf8("Oder Sie testen eine Liste von Passwörtern.");
+        break;
+    case Page_EnterHash:
+        message = trUtf8("Alle hier angegebene Hashes werden anschließend wiederhergestellt.");
+        message += "\n";
+        message = trUtf8("Bitte geben Sie auch den verwendeten Hashalgorithmus an.");
+        message += "\n";
+        message += trUtf8("Sie können einen einzelnen Hash testen.");
+        message += "\n";
+        message += trUtf8("Oder Sie testen eine Liste von Hashes.");
+        break;
+    case Page_ExtractCurrent:
+        message = trUtf8("Um die Passwörter dieses Computers wiederherstellen zu können müssen diese zuerst ausgelesen werden.");
+        message += "\n";
+        message = trUtf8("Dieser Vorgang sollte automatisch gestartet werden.");
+        message += "\n";
+        message += trUtf8("Falls dies nicht passiert stellen Sie bitte sicher, dass Sie Administratorrechte besitzen.");
+        message += "\n";
+        message += trUtf8("Experten können die Password Hashes einsehen und einen Speicherort dafür festlegen.");
+        break;
+    case Page_Results:
+        message = trUtf8("Die Sicherheit der angegebenen Passwörter wird geprüft.");
+        message += "\n";
+        message += trUtf8("Nach Abschluss der Prüfung können Sie eine Abschätzung sehen, wie lange es dauern würde, ihr Passwort zu berechnen.");
+        message += "\n";
+        message += trUtf8("Empfehlungen, wie Sie Ihr Passwort verbessern können, finden Sie auch unten in der Textbox.");
+        break;
+    case Page_Attack:
+        message = trUtf8("Sie können die Wiederherstellung der Passwörter starten.");
+        message += "\n";
+        message += trUtf8("Dieser Vorgang läuft solange, bis alle Passwörter gefunden wurden oder Sie den Vorgang abbrechen.");
+        message += "\n";
+        message += trUtf8("Es werden mehrere Ansätze probiert um Ihre Passwörter wiederherzustellen.");
+        message += "\n";
+        message += trUtf8("Das Programm wird Ihnen Mitteilen sobalt Passwörter gefunden wurden.");
+        break;
+    case Page_AttackSettings:
+        message += trUtf8("Einstellungen zur Wiederherstellung.");
+        message += "\n";
+        message += trUtf8("Sie können ein eigenens Wörterbuch angeben.");
+        message += "\n";
+        message += trUtf8("Sie können die Passwörter auch ohne Wörterbuch nur mit einem Bruteforce Angriff wiederherstellne.");
         break;
 
     }

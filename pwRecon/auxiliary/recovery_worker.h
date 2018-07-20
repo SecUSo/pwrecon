@@ -48,6 +48,7 @@ private:
     QMultiHash<QString, QString> usernames_table;
 
     bool hc2_fallback;
+    bool expertMode;
     bool show_plain_pwds;
     bool finish;
 
@@ -74,7 +75,7 @@ private:
 
 public slots:
 
-    void onRecoveryStarted(const bool& showplain, const QString& newhashfilepath, const QString& newhashtype);
+    void onRecoveryStarted(const bool& showplain, const bool& expertMode, const QString& newhashfilepath, const QString& newhashtype);
     void onProcessStopped();
 
 private slots:

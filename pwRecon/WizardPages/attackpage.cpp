@@ -122,6 +122,7 @@ AttackPage::AttackPage(QWidget *parent)
     // Set the Texts
     QEvent languageChangeEvent(QEvent::LanguageChange);
     QCoreApplication::sendEvent(this, &languageChangeEvent);
+    isValid = false;
 }
 
 // TODO: Start attack directly?
@@ -135,6 +136,7 @@ int AttackPage::nextId() const
 
 void AttackPage::start()
 {
+    isValid = true;
     qDebug() << "Start button has been pressed!" << endl;
     bool showPlain;
     if(field("WORKAROUND").toString() == "true")
@@ -148,8 +150,9 @@ void AttackPage::start()
     qDebug() << "FilePath: " << getHashFilePath() << endl;
     qDebug() << "hash type" << hashtype << endl;
     disableButtons(true);
-
-    emit startRecovery(!field("SHOWHIDEPASSWORD").toBool(), getHashFilePath(), hashtype);
+    attackResultTextBrowser->setText(trUtf8("Die Widerherstellen wurde gestartet.\n"
+                                            "Dieser Vorgang kann einige Zeit dauern."));
+    emit startRecovery(!field("SHOWHIDEPASSWORD").toBool(), field("EXPERTMODE").toBool(), getHashFilePath(), hashtype);
 }
 
 void AttackPage::stop()
@@ -361,6 +364,7 @@ void AttackPage::disableButtons(bool bol)
 {
     startPushButton->setDisabled(bol);
     wizard()->button(QWizard::BackButton)->setDisabled(bol);
+    wizard()->button(QWizard::FinishButton)->setDisabled(bol);
     wizard()->button(QWizard::NextButton)->setDisabled(bol);
     wizard()->button(QWizard::CustomButton1)->setDisabled(bol);
     stopPushButton->setEnabled(bol);
@@ -384,7 +388,6 @@ void AttackPage::changeEvent(QEvent *event)
 
 void AttackPage::initializePage()
 {
-    wizard()->button(QWizard::NextButton)->setEnabled(false);
     attackResultTextBrowser->setText(trUtf8("Die Widerherstellen wurde gestartet.\n"
                                             "Dieser Vorgang kann einige Zeit dauern."));
 }
@@ -394,6 +397,8 @@ void AttackPage::setVisible(bool visible)
     QWizardPage::setVisible(visible);
 
     if (visible) {
+        wizard()->button(QWizard::FinishButton)->setEnabled(false);
+        wizard()->button(QWizard::CustomButton1)->setEnabled(false);
         wizard()->setButtonText(QWizard::CustomButton1, tr("&Neue Wiederherstellung Starten"));
         wizard()->setOption(QWizard::HaveCustomButton1, true);
         connect(wizard(), &QWizard::customButtonClicked,
@@ -403,4 +408,16 @@ void AttackPage::setVisible(bool visible)
         disconnect(wizard(), &QWizard::customButtonClicked,
                    wizard(), &QWizard::restart);
     }
+}
+
+bool AttackPage::validatePage()
+{
+    if(!isValid)
+    {
+        QMessageBox::warning(this, "pwRecon",
+                             trUtf8("Die Wiederherstellung wurde noch nicht gestartet."),
+                             QMessageBox::Ok,
+                             QMessageBox::Ok);
+    }
+   return isValid;
 }
