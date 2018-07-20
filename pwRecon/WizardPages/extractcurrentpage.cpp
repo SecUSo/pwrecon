@@ -88,9 +88,6 @@ void ExtractCurrentPage::initializePage()
     samDialog->exec();
 
     if(field("EXPERTMODE").toBool()){
-        extractResultTextBrowser->setText(trUtf8("Die Passwörter des lokalen Systems können ausgelesen werden.\n"
-                                                 "Dieser Vorgang kann einige Minuten dauern.\n"
-                                                 "Sie können den Speicherort der extrahierten Daten ändern."));
         disableButtons(false);
     }else{
         extractResultTextBrowser->setText(trUtf8("Die Passwörter des lokalen Systems werden ausgelesen.\n"
@@ -435,9 +432,15 @@ void ExtractCurrentPage::changeEvent(QEvent *event)
         setTitle(trUtf8("Passwörter von diesem Computer wiederherstellen"));
         setSubTitle(trUtf8("Die Passwörter dieses Computers werden ausgelesen um sie wiederherzustellen."));
         changePushButton->setText(trUtf8("Speicherort ändern"));
+
         if(field("EXPERTMODE").toBool()){
+            extractResultTextBrowser->setText(trUtf8("Die Passwörter des lokalen Systems können ausgelesen werden.\n"
+                                                     "Dieser Vorgang kann einige Minuten dauern.\n"
+                                                     "Sie können den Speicherort der extrahierten Daten ändern."));
             extractPushButton->setText(trUtf8("Passwörter auslesen"));
         }else{
+            extractResultTextBrowser->setText(trUtf8("Die Passwörter des lokalen Systems werden ausgelesen.\n"
+                                                     "Dieser Vorgang kann einige Minuten dauern."));
             extractPushButton->setText(trUtf8("Passwörter auslesen\nund wiederherstellen"));
         }
         // Expert Mode CHanges
