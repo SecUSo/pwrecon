@@ -25,7 +25,7 @@ SAMDialog::SAMDialog(QString filepath, QWidget *parent) :
 
     // TODO: Add Cancle button
     this->setWindowTitle("Passwörter auslesen");
-    ui->infoLabel->setText(trUtf8("Diese Funktion wird die Passwörter dieses Computers auslesen um sie wiederherzustellen.\n\nWARNUNG:\nEs werden Administratorrechte benötigt.\nDie Funktion wird womöglich als Schadsoftware erkannt.\nNutzung auf eigene Gefahr."));
+    ui->infoLabel->setText(trUtf8("Diese Funktion wird die Passwörter dieses Computers auslesen um sie wiederherzustellen.\n\nWARNUNG:\nZum Auslesen der Passwörter dieses Computers werden Administratorrechte benötigt.\nDiese Funktion wird womöglich als Schadsoftware erkannt.\nNutzung auf eigene Gefahr."));
     ui->startButton->setText(trUtf8("Weiter"));
 }
 
