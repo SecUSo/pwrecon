@@ -170,7 +170,7 @@ AttackPage::~AttackPage()
 
 QString AttackPage::getHashFilePath()
 {
-    samdumpfilepath= QString(QDir::currentPath() + "/tools/samdumpfile.txt");
+    samdumpfilepath = QString(QDir::currentPath() + "/tools/samdumpfile.txt");
    /* qDebug() << "Workaround: \t" << field("WORKAROUND") << endl;
     int len = wizard()->visitedPages().length();
     qDebug() << "Length of visitedPages: " << len << endl;
@@ -230,7 +230,7 @@ QString AttackPage::getHashFilePath()
 #ifdef Q_OS_MACX
         hashtype = QString("--hash-type=7100");
 #endif
-        return field("EXTRACTPATHLABEL").toString();
+            return field("EXTRACTPATHLABEL").toString();
     }
 
     return "";

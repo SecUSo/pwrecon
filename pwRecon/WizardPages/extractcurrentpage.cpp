@@ -170,8 +170,6 @@ QStringList ExtractCurrentPage::parseOutput(QStringList output)
 {
     currentResults.clear();
 
-    currentResults << "----------------------------------------------------------";
-
     qDebug() << endl << "PWDUMP OUTPUT LOG: " << endl;
     QString line;
     for(int itk = 0; itk < output.length(); itk++) {
@@ -198,7 +196,6 @@ QStringList ExtractCurrentPage::parseOutput(QStringList output)
 
     }
 
-    currentResults << "----------------------------------------------------------";
     return currentResults;
 }
 
