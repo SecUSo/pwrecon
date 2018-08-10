@@ -103,14 +103,13 @@ void ExtractCurrentPage::change()
                                            tr("Choose a file to store the results"), "", "*");
     //tr("Image Files (*.png *.jpg *.bmp)")
     // if equal return 0
-    if(QString::compare(tmpFile, "", Qt::CaseInsensitive))
+    if(tmpFile == "")
     {
-        currentFile = tmpFile;
+        qDebug() << "No file selected" << endl;
     }else{
-        //ignore
+        currentFile = tmpFile;
+        extractPathLabel->setText(currentFile);
     }
-    qInfo(qPrintable(currentFile));
-    extractPathLabel->setText(currentFile);
 }
 
 #ifdef Q_OS_WIN

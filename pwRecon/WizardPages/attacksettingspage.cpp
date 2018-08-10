@@ -95,7 +95,7 @@ void AttackSettingsPage::setMode()
 void AttackSettingsPage::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
-        setTitle(trUtf8("Angriffseinstellungen"));
+        setTitle(trUtf8("Wiederherstellungseinstellungen"));
         actionGroupBox->setTitle(trUtf8("&Was möchten Sie tun?"));
         selectDictAttackRadioButton->setText(trUtf8("&Wörterbuch Angriff verwenden"));
         selectDictionaryButton->setText(trUtf8("Wörterbuch wechseln"));
