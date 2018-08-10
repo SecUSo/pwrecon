@@ -150,6 +150,7 @@ void AttackPage::start()
     qDebug() << "FilePath: " << getHashFilePath() << endl;
     qDebug() << "hash type" << hashtype << endl;
     disableButtons(true);
+    attackResultTextBrowser->clear();
     attackResultTextBrowser->setText(trUtf8("Die Widerherstellen wurde gestartet.\n"
                                             "Dieser Vorgang kann einige Zeit dauern."));
     emit startRecovery(!field("SHOWHIDEPASSWORD").toBool(), field("EXPERTMODE").toBool(), getHashFilePath(), hashtype);
@@ -388,8 +389,7 @@ void AttackPage::changeEvent(QEvent *event)
 
 void AttackPage::initializePage()
 {
-    attackResultTextBrowser->setText(trUtf8("Die Widerherstellen wurde gestartet.\n"
-                                            "Dieser Vorgang kann einige Zeit dauern."));
+    attackResultTextBrowser->setText(trUtf8("Sie können die Wiederherstellung mit dem Klicken auf Start starten."));
 }
 
 void AttackPage::setVisible(bool visible)
