@@ -19,6 +19,7 @@
 #include <QMessageBox>
 #include <QTranslator>
 #include <QCoreApplication>
+#include<QScrollBar>
 
 #include "auxiliary/sam_dialog.h"
 #include "auxiliary/executeworker.h"

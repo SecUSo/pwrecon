@@ -113,12 +113,13 @@ void ResultsPage::onEstimationFinished(const QStringList &output)
 //    ResultTextBrowser->setText("output Length: " + output.length());
     //currentResults = output;
     QStringList parsedOutput = parseOutput(output);
+    ResultTextBrowser->clear();
     for(int itk = 0; itk < parsedOutput.length(); itk++)
     {
         ResultTextBrowser->append(parsedOutput.at(itk));
         qDebug() << parsedOutput.at(itk);
     }
-
+    ResultTextBrowser->verticalScrollBar()->setValue(0);
     disableButtons(false);
     resultsProgressBar->setMaximum(23);
 }

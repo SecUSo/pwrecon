@@ -378,7 +378,7 @@ void RecoveryWorker::onProcessFinished(int exitCode, QProcess::ExitStatus exitSt
 {
     if(exitCode =! 0)
     {
-        qDebug() << "Recovery Worker exit Code: " + exitCode + " " + exitStatus << endl;
+        qDebug() << "Recovery Worker exit Code: " + QString(exitCode) + " " + QString(exitStatus) << endl;
     }
 
     QString line;
