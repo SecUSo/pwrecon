@@ -376,6 +376,11 @@ void RecoveryWorker::onProcessStarted()
 
 void RecoveryWorker::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
+    if(exitCode =! 0)
+    {
+        qDebug() << "Recovery Worker exit Code: " + exitCode + " " + exitStatus << endl;
+    }
+
     QString line;
 
     QByteArray outputData = binaryProcess->readAllStandardOutput();

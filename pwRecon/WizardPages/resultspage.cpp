@@ -232,34 +232,36 @@ QStringList ResultsPage::parseOutput(QStringList output)
         }
 
         // Expert Output??
-        if(currentLine.contains("Entspricht Typ:"))
-        {
-            currentResults << "-----------------------------------";
-            QStringList values = currentLine.split(":");
-            currentResults << trUtf8("Art des Treffers:") + values.last();
-
-            // Don't display information about parts of the password if it shall be hidden.
-            if(!field("SHOWHIDEPASSWORD").toBool())
+        if(field("EXPERTMODE").toBool()){
+            if(currentLine.contains("Entspricht Typ:"))
             {
-                itk = itk + 2; // Skip entropie
-                currentLine = output.at(itk);
-                values = currentLine.split(":");
-                currentResults << trUtf8("Bestandteil des Passworts:") + values.last();
+                currentResults << "-----------------------------------";
+                QStringList values = currentLine.split(":");
+                currentResults << trUtf8("Art des Treffers:") + values.last();
 
-                if(output.at(itk + 4).contains("Wörterbuch:"))
+                // Don't display information about parts of the password if it shall be hidden.
+                if(!field("SHOWHIDEPASSWORD").toBool())
                 {
-                    itk = itk + 4; // Skip entropie
+                    itk = itk + 2; // Skip entropie
                     currentLine = output.at(itk);
                     values = currentLine.split(":");
-                    currentResults << trUtf8("Wörterbuch:") + values.last();
-                    itk++; // Skip entropie
-                    currentLine = output.at(itk);
-                    values = currentLine.split(":");
-                    currentResults << trUtf8("Wörterbuch Eintrag:") + values.last();
-                }
-            }
+                    currentResults << trUtf8("Bestandteil des Passworts:") + values.last();
 
-            //currentResults << "-----------------------------------";
+                    if(output.at(itk + 4).contains("Wörterbuch:"))
+                    {
+                        itk = itk + 4; // Skip entropie
+                        currentLine = output.at(itk);
+                        values = currentLine.split(":");
+                        currentResults << trUtf8("Wörterbuch:") + values.last();
+                        itk++; // Skip entropie
+                        currentLine = output.at(itk);
+                        values = currentLine.split(":");
+                        currentResults << trUtf8("Wörterbuch Eintrag:") + values.last();
+                    }
+                }
+
+                //currentResults << "-----------------------------------";
+            }
         }
 
     }
