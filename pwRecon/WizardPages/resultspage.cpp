@@ -191,6 +191,7 @@ QStringList ResultsPage::parseOutput(QStringList output)
         // Get time estimate
         if(currentLine.contains("Benötigte Zeit um das Passwort zu knacken:"))
         {
+            QString outputLine = trUtf8("Benötigte Zeit um das Passwort zu knacken:");
             QStringList values = currentLine.split(":");
             QString tmpTimeValue = values.last();
             QString timeValue = "";
@@ -215,16 +216,16 @@ QStringList ResultsPage::parseOutput(QStringList output)
             }
             if(currentLine.contains("ONLINE_THROTTLED: "))
             {
-                currentResults << trUtf8("Online (eingeschränkt):") + " " + timeValue;
+                currentResults << outputLine + " " + trUtf8("Online (eingeschränkt):") + " " + timeValue;
             } else if(currentLine.contains("ONLINE_UNTHROTTLED:"))
             {
-                currentResults << trUtf8("Online (uneingeschränkt):") + " " + timeValue;
+                currentResults << outputLine + " " + trUtf8("Online (uneingeschränkt):") + " " + timeValue;
             }else if(currentLine.contains("OFFLINE_BCRYPT_14:"))
             {
-                currentResults << trUtf8("Offline (langsam):") + " " + timeValue;
+                currentResults << outputLine + " " + trUtf8("Offline (langsam):") + " " + timeValue;
             }else if(currentLine.contains("OFFLINE_MD5:"))
             {
-                currentResults << trUtf8("Offline (schnell):") + " " + timeValue;
+                currentResults << outputLine + " " + trUtf8("Offline (schnell):") + " " + timeValue;
 
             }
             continue;

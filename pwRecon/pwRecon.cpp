@@ -98,9 +98,23 @@ void pwRecon::showHelp()
     case Page_Results:
         message = trUtf8("Die Sicherheit der angegebenen Passwörter wird geprüft.");
         message += "\n";
-        message += trUtf8("Nach Abschluss der Prüfung können Sie eine Abschätzung sehen, wie lange es dauern würde, ihr Passwort zu berechnen.");
+        message += trUtf8("Nach Abschluss der Prüfung können Sie eine Abschätzung sehen, wie lange es dauern würde, Ihre Passwörter zu berechnen.");
         message += "\n";
         message += trUtf8("Empfehlungen, wie Sie Ihr Passwort verbessern können, finden Sie auch unten in der Textbox.");
+        message += "\n";
+        message += trUtf8("Informationen zur Abschätzung der Berechnugszeit von Passwörtern:");
+        message += "\n\t";
+        message += trUtf8("Online (eingeschränkt):") + " " + trUtf8("Bis zu 100 Versuche pro Stunde");
+        message += "\n\t";
+        message += trUtf8("Online (uneingeschränkt):") + " " + trUtf8("Bis zu 10 Versuche pro Sekunde");
+        message += "\n\t";
+        message += trUtf8("Offline (schnell):") + " " + trUtf8("Bis zu 10.000.000.000 Versuche pro Stunde");
+        message += "\n\t";
+        message += trUtf8("Offline (langsam):") + " " + trUtf8("Bis zu 10.000 Versuche pro Sekunde");
+        /*offline_fast_hashing_1e10_per_second': 0.00025678,
+        'offline_slow_hashing_1e4_per_second': 256.78
+        'online_no_throttling_10_per_second': 256780.0,
+        'online_throttling_100_per_hour': 92440800.0,*/
         break;
     case Page_Attack:
         message = trUtf8("Sie können die Wiederherstellung der Passwörter starten.");
