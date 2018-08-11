@@ -68,14 +68,14 @@ int EnterPasswordPage::nextId() const
 {
     if(field("EXPERTMODE").toBool()){
         if (field("EVALUATE").toBool()) {
-            return Page_Results;
+            return Page_Evaluation;
         } else if (field("SIMULATE").toBool()) {
             return Page_AttackSettings;
         }
     } else{
-        return Page_Results;
+        return Page_Evaluation;
     }
-     return Page_Results;
+     return Page_Evaluation;
 }
 
 void EnterPasswordPage::load()

@@ -17,6 +17,7 @@ HEADERS       = \
     opencl/include/CL/cl.hpp \
     WizardPages/selectrecoverymodepage.h \
     WizardPages/selecttestmodepage.h \
+    WizardPages/evaluationpage.h \
     auxiliary/executeworker.h
 
 SOURCES       = \
@@ -34,6 +35,7 @@ SOURCES       = \
     auxiliary/recovery_worker.cpp \
     WizardPages/selectrecoverymodepage.cpp \
     WizardPages/selecttestmodepage.cpp \
+    WizardPages/evaluationpage.cpp \
     auxiliary/executeworker.cpp
 
 

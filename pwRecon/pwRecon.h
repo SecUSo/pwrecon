@@ -15,6 +15,7 @@
 #include "WizardPages/selectrecoverymodepage.h"
 #include "WizardPages/selecttestmodepage.h"
 #include "WizardPages/attacksettingspage.h"
+#include "WizardPages/evaluationpage.h"
 
 class QCheckBox;
 class QLabel;
