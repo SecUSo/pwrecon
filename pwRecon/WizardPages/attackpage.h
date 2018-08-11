@@ -45,6 +45,7 @@ private:
     QString hashfilepath;
     QString hashtype;
     QString tempfilepath;
+    QString tmpHashFile;
     QString testpwdfilepath;
     QString samdumpfilepath;
     QString basePath;

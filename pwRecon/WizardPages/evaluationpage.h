@@ -12,7 +12,7 @@ class EvaluationPage  : public QWizardPage
 
 public:
     explicit EvaluationPage(QWidget *parent = 0);
-    ~ResultsPage();
+    ~EvaluationPage();
     int nextId() const override;
     void initializePage() override;
     bool checkFieldByName(QString);

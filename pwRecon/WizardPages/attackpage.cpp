@@ -131,7 +131,7 @@ int AttackPage::nextId() const
 {
     // TODO: Is estimation still wanted???
     // TODO: Seperate Result Page?
-    return -1;
+    return Page_Results;
 }
 
 void AttackPage::start()
@@ -147,13 +147,14 @@ void AttackPage::start()
         showPlain = false;
     }
     qDebug() << "Show plain: " << showPlain << endl;
-    qDebug() << "FilePath: " << getHashFilePath() << endl;
+    tmpHashFile = getHashFilePath();
+    qDebug() << "FilePath: " << tmpHashFile << endl;
     qDebug() << "hash type" << hashtype << endl;
     disableButtons(true);
     attackResultTextBrowser->clear();
     attackResultTextBrowser->setText(trUtf8("Die Widerherstellen wurde gestartet.\n"
                                             "Dieser Vorgang kann einige Zeit dauern."));
-    emit startRecovery(!field("SHOWHIDEPASSWORD").toBool(), field("EXPERTMODE").toBool(), getHashFilePath(), hashtype);
+    emit startRecovery(!field("SHOWHIDEPASSWORD").toBool(), field("EXPERTMODE").toBool(), tmpHashFile, hashtype);
 }
 
 void AttackPage::stop()
@@ -344,17 +345,17 @@ void AttackPage::deleteTemporaryFiles()
     if (file1.exists())
         file1.remove();
 
-    //    QFile file2(tempfilepath);
-    //    if (file2.exists())
-    //        file2.remove();
+//    QFile file2(tempfilepath);
+//    if (file2.exists())
+//        file2.remove();
 
-    //    QFile file3(testpwdfilepath);
-    //    if (file3.exists())
-    //        file3.remove();
+//    QFile file3(testpwdfilepath);
+//    if (file3.exists())
+//        file3.remove();
 
-    //    QFile file4(samdumpfilepath);
-    //    if (file4.exists())
-    //        file4.remove();
+    QFile file4(tmpHashFile);
+    if (file4.exists())
+        file4.remove();
 
     QFile file5(QString(binarydir + "/hashcat.log"));
     if (file5.exists())
@@ -365,9 +366,7 @@ void AttackPage::disableButtons(bool bol)
 {
     startPushButton->setDisabled(bol);
     wizard()->button(QWizard::BackButton)->setDisabled(bol);
-    wizard()->button(QWizard::FinishButton)->setDisabled(bol);
     wizard()->button(QWizard::NextButton)->setDisabled(bol);
-    wizard()->button(QWizard::CustomButton1)->setDisabled(bol);
     stopPushButton->setEnabled(bol);
 
     if (bol)
@@ -396,18 +395,18 @@ void AttackPage::setVisible(bool visible)
 {
     QWizardPage::setVisible(visible);
 
-    if (visible) {
-        wizard()->button(QWizard::FinishButton)->setEnabled(false);
-        wizard()->button(QWizard::CustomButton1)->setEnabled(false);
-        wizard()->setButtonText(QWizard::CustomButton1, tr("&Neue Wiederherstellung Starten"));
-        wizard()->setOption(QWizard::HaveCustomButton1, true);
-        connect(wizard(), &QWizard::customButtonClicked,
-                wizard(), &QWizard::restart);
-    } else {
-        wizard()->setOption(QWizard::HaveCustomButton1, false);
-        disconnect(wizard(), &QWizard::customButtonClicked,
-                   wizard(), &QWizard::restart);
-    }
+//    if (visible) {
+//        wizard()->button(QWizard::FinishButton)->setEnabled(false);
+//        wizard()->button(QWizard::CustomButton1)->setEnabled(false);
+//        wizard()->setButtonText(QWizard::CustomButton1, tr("&Neue Wiederherstellung Starten"));
+//        wizard()->setOption(QWizard::HaveCustomButton1, true);
+//        connect(wizard(), &QWizard::customButtonClicked,
+//                wizard(), &QWizard::restart);
+//    } else {
+//        wizard()->setOption(QWizard::HaveCustomButton1, false);
+//        disconnect(wizard(), &QWizard::customButtonClicked,
+//                   wizard(), &QWizard::restart);
+//    }
 }
 
 bool AttackPage::validatePage()

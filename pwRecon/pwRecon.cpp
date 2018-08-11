@@ -22,6 +22,7 @@ pwRecon::pwRecon(QWidget *parent)
     setPage(Page_ExtractCurrent, new ExtractCurrentPage);
     setPage(Page_AttackSettings, new AttackSettingsPage);
     setPage(Page_Attack, new AttackPage);
+    setPage(Page_Evaluation, new EvaluationPage);
     setPage(Page_Results, new ResultsPage);
 
     setStartId(Page_Intro);

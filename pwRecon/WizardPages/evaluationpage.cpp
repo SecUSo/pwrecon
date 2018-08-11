@@ -1,6 +1,6 @@
 #include "WizardPages/evaluationpage.h"
 
-EvalutaionPage::EvalutaionPage(QWidget *parent)
+EvaluationPage::EvaluationPage(QWidget *parent)
     : QWizardPage(parent)
 {
     // TODO: Change Caption
@@ -30,33 +30,33 @@ EvalutaionPage::EvalutaionPage(QWidget *parent)
     eWorker = new executeWorker(programPath);
     eWorker->moveToThread(&workerThread);
     QObject::connect(&workerThread, &QThread::finished, eWorker, &QObject::deleteLater);
-    QObject::connect(this,&EvalutaionPage::startEstemation, eWorker, &executeWorker::startWorker);
+    QObject::connect(this,&EvaluationPage::startEstemation, eWorker, &executeWorker::startWorker);
     //QObject::connect(eWorker, SIGNAL(sendOutput(const QStringList&)), this, SLOT(onEstimationFinished(const QStringList&)));
-    QObject::connect(eWorker, &executeWorker::sendOutput, this, &EvalutaionPage::onEstimationFinished);
-    QObject::connect(eWorker, &executeWorker::onWorkerStarted, this, &EvalutaionPage::onEstimationStarted);
+    QObject::connect(eWorker, &executeWorker::sendOutput, this, &EvaluationPage::onEstimationFinished);
+    QObject::connect(eWorker, &executeWorker::onWorkerStarted, this, &EvaluationPage::onEstimationStarted);
     workerThread.start();
 
 }
-int EvalutaionPage::nextId() const
+int EvaluationPage::nextId() const
 {
-    return -1;
+    return Page_Results;
 }
 
-void EvalutaionPage::initializePage()
+void EvaluationPage::initializePage()
 {
     ResultTextBrowser->setText(trUtf8("Die Einschätzung wurde gestartet. \n"
                                       "Dieser Vorgang kann einige Minuten dauern."));
     resultsProgressBar->setMaximum(0);
     eWorker->setArguments(getArguments());
-    emit EvalutaionPage::startEstemation();
+    emit EvaluationPage::startEstemation();
 }
 
-void EvalutaionPage::onEstimationStarted()
+void EvaluationPage::onEstimationStarted()
 {
     disableButtons(true);
 }
 
-bool EvalutaionPage::checkFieldByName(QString fieldName)
+bool EvaluationPage::checkFieldByName(QString fieldName)
 {
     if(!field(fieldName).isValid())
     {
@@ -73,7 +73,7 @@ bool EvalutaionPage::checkFieldByName(QString fieldName)
     return true;
 }
 
-QStringList EvalutaionPage::getArguments()
+QStringList EvaluationPage::getArguments()
 {
     QStringList args;
     args << "-jar";
@@ -101,13 +101,13 @@ QStringList EvalutaionPage::getArguments()
 }
 
 // TODO: Kann Weg
-void EvalutaionPage::onTickTimer()
+void EvaluationPage::onTickTimer()
 {
     timerClock->stop();
     getArguments();
 }
 
-void EvalutaionPage::onEstimationFinished(const QStringList &output)
+void EvaluationPage::onEstimationFinished(const QStringList &output)
 {
     qDebug() << "Finished!!!" << endl;
 //    ResultTextBrowser->setText("output Length: " + output.length());
@@ -125,7 +125,7 @@ void EvalutaionPage::onEstimationFinished(const QStringList &output)
 }
 
 // TODO: Cleane Up Code
-QStringList EvalutaionPage::parseOutput(QStringList output)
+QStringList EvaluationPage::parseOutput(QStringList output)
 {
     bool begin = false;
     currentResults.clear();
@@ -270,23 +270,21 @@ QStringList EvalutaionPage::parseOutput(QStringList output)
     return currentResults;
 }
 
-void EvalutaionPage::disableButtons(bool bol)
+void EvaluationPage::disableButtons(bool bol)
 {
     qDebug() << "Print the disable bool: " << bol << endl;
-    wizard()->button(QWizard::FinishButton)->setDisabled(bol);
+    wizard()->button(QWizard::NextButton)->setDisabled(bol);
     wizard()->button(QWizard::BackButton)->setDisabled(bol);
-    wizard()->button(QWizard::CustomButton1)->setDisabled(bol);
-    //this->changePushButton->setDisabled(bol);
-    //this->extractPushButton->setDisabled(bol);
+    //wizard()->button(QWizard::CustomButton1)->setDisabled(bol);
 }
 
-EvalutaionPage::~EvalutaionPage()
+EvaluationPage::~EvaluationPage()
 {
     workerThread.quit();
     workerThread.wait();
 }
 
-void EvalutaionPage::possibleOutputs()
+void EvaluationPage::possibleOutputs()
 {
     //# Main text translations
     trUtf8("Benötigte Zeit für die Berechnung:");
@@ -367,23 +365,23 @@ void EvalutaionPage::possibleOutputs()
     */
 }
 
-void EvalutaionPage::setVisible(bool visible)
+void EvaluationPage::setVisible(bool visible)
 {
     QWizardPage::setVisible(visible);
 
-    if (visible) {
-        wizard()->setButtonText(QWizard::CustomButton1, tr("&Neuen Test Starten"));
-        wizard()->setOption(QWizard::HaveCustomButton1, true);
-        connect(wizard(), &QWizard::customButtonClicked,
-                wizard(), &QWizard::restart);
-    } else {
-        wizard()->setOption(QWizard::HaveCustomButton1, false);
-        disconnect(wizard(), &QWizard::customButtonClicked,
-                   wizard(), &QWizard::restart);
-    }
+//    if (visible) {
+//        wizard()->setButtonText(QWizard::CustomButton1, tr("&Neuen Test Starten"));
+//        wizard()->setOption(QWizard::HaveCustomButton1, true);
+//        connect(wizard(), &QWizard::customButtonClicked,
+//                wizard(), &QWizard::restart);
+//    } else {
+//        wizard()->setOption(QWizard::HaveCustomButton1, false);
+//        disconnect(wizard(), &QWizard::customButtonClicked,
+//                   wizard(), &QWizard::restart);
+//    }
 }
 
-void EvalutaionPage::changeEvent(QEvent *event)
+void EvaluationPage::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
         setTitle(trUtf8("Die Sicherheit von Passwörtern einschätzen."));
