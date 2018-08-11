@@ -51,5 +51,4 @@ void SelectRecoveryModePage::changeEvent(QEvent *event)
 
 void SelectRecoveryModePage::initializePage()
 {
-     qDebug() << "TMP = " << field("EXPERTMODE").toBool() << endl;
 }

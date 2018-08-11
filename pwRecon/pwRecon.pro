@@ -16,6 +16,7 @@ HEADERS       = \
     auxiliary/sam_dialog.h \
     opencl/include/CL/cl.hpp \
     WizardPages/selectrecoverymodepage.h \
+    WizardPages/selecttestmodepage.h \
     auxiliary/executeworker.h
 
 SOURCES       = \
@@ -32,6 +33,7 @@ SOURCES       = \
     WizardPages/attacksettingspage.cpp \
     auxiliary/recovery_worker.cpp \
     WizardPages/selectrecoverymodepage.cpp \
+    WizardPages/selecttestmodepage.cpp \
     auxiliary/executeworker.cpp
 
 

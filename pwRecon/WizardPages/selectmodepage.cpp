@@ -32,7 +32,11 @@ SelectModePage::SelectModePage(QWidget *parent)
 int SelectModePage::nextId() const
 {
     if (checkPasswordRadioButton->isChecked()) {
-        return Page_EnterPassword;
+        if(field("EXPERTMODE").toBool()){
+            return Page_SelectTestMode;
+        } else{
+            return Page_EnterPassword;
+        }
     } else if (recoverPasswordRadioButton->isChecked()) {
         if(field("EXPERTMODE").toBool()){
             return Page_SelectRecoveryMode;

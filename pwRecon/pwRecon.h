@@ -13,6 +13,7 @@
 #include "WizardPages/resultspage.h"
 #include "WizardPages/selectmodepage.h"
 #include "WizardPages/selectrecoverymodepage.h"
+#include "WizardPages/selecttestmodepage.h"
 #include "WizardPages/attacksettingspage.h"
 
 class QCheckBox;

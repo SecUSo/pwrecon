@@ -67,10 +67,15 @@ EnterPasswordPage::EnterPasswordPage(QWidget *parent)
 int EnterPasswordPage::nextId() const
 {
     if(field("EXPERTMODE").toBool()){
-        return Page_Results;
+        if (field("EVALUATE").toBool()) {
+            return Page_Results;
+        } else if (field("SIMULATE").toBool()) {
+            return Page_AttackSettings;
+        }
     } else{
         return Page_Results;
     }
+     return Page_Results;
 }
 
 void EnterPasswordPage::load()
