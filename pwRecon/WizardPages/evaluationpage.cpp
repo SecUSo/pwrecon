@@ -161,14 +161,17 @@ QStringList EvaluationPage::parseOutput(QStringList output)
             const QByteArray& latinName = currentLine.toUtf8();
             const char* c = latinName.data(); // Convert it to char* to make it translatable
             tmpString = trUtf8(c);
-            currentResults << tmpString;
+            QString tmpHtml = "";
 
             if(currentLine.contains("Ihr Passwort entspricht nicht"))
             {
-                htmlResults += "<font style=\"color:Red;\">"+ password + "  (" + tmpString + ")<font><br>";
+                htmlResults += "<font style=\"color:Red;\">"+ password + "  (" + tmpString + ")</font><br>";
+                tmpHtml +="<font style=\"color:Red;\"><b>" + tmpString + "</b></font>";
             }else{
-                htmlResults += "<font style=\"color:Green;\">"+ password + "  (" + tmpString + ")<font><br>";
+                htmlResults += "<font style=\"color:Green;\">"+ password + "  (" + tmpString + ")</font><br>";
+                tmpHtml +="<font style=\"color:Green;\"><b>" + tmpString + "</b></font>";
             }
+            currentResults << tmpHtml;
             continue;
         }
 
@@ -178,7 +181,7 @@ QStringList EvaluationPage::parseOutput(QStringList output)
             QString x = values.last();
             const QByteArray& latinName = x.toUtf8();
             const char* c = latinName.data(); // Convert it to char* to make it translatable
-            currentResults << trUtf8("Warnung:") + " " + trUtf8(c);
+            currentResults << "<font style=\"color:Orange;\"><b>" + trUtf8("Warnung:") + "</b></font>" + " " + trUtf8(c);
             continue;
         }
 
@@ -191,7 +194,7 @@ QStringList EvaluationPage::parseOutput(QStringList output)
             qDebug() << "\t" << latinName << endl;
             const char* c = latinName.data(); // Convert it to char* to make it translatable
             qDebug() << "\t" << c << endl;
-            currentResults << trUtf8("Empfehlung:") + " " + trUtf8(c);
+            currentResults << "<i><b>" + trUtf8("Empfehlung:") + "</i></b>" + " " + trUtf8(c);
             continue;
         }
 

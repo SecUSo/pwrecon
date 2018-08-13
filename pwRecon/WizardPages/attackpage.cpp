@@ -436,7 +436,7 @@ void AttackPage::writeHTML()
     if(wizard()->visitedPages().contains(Page_ExtractCurrent) || wizard()->visitedPages().contains(Page_EnterHash))
     {
         recover = true;
-    }else if(wizard()->visitedPages().contains(Page_ExtractCurrent))
+    }else if(wizard()->visitedPages().contains(Page_EnterPassword))
     {
         recover = false;
     }
