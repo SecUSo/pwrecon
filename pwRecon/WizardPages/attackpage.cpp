@@ -498,7 +498,8 @@ void AttackPage::writeHTML()
         {
             userName = trUtf8("leer");
         }
-        pw_line.append(trUtf8("von Benutzer") + " (" + userName + ") " + trUtf8("gefunden"));
+
+        pw_line.append(trUtf8("eines Benutzers (%1) wiederhergestellt").arg(userName));
         if (show_plain_pwds)
             pw_line.append("  -->  [" + plaintext + "]");
        // else
@@ -568,7 +569,7 @@ void AttackPage::writeHTML()
             break;
         }
 
-        htmlStr.append(QString(trUtf8("Passwort für Benutzer") + " (" + username + ") "+ trUtf8("nicht Wiederhergestellt!")));
+        htmlStr.append(trUtf8("Passwort eines Benutzers (%1) nicht wiederhergestellt!").arg(username));
         if(expertMode){
            htmlStr.append(" [" + hash.toLower() + "]<br>");
         }else

@@ -52,7 +52,7 @@ void ResultsPage::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
         setTitle(trUtf8("Ergebnise"));
-        setSubTitle(trUtf8(" "));
+        setSubTitle(trUtf8("Das sind Ihre Resultate"));
 
     } else
         QWidget::changeEvent(event);
