@@ -32,8 +32,11 @@ private:
     QPushButton *stopPushButton;
     QTextBrowser *attackResultTextBrowser;
     QWizard     *pwReconWizard;
+    QLineEdit *htmlOutput;
     RecoveryWorker *rWorker;
     QThread workerThread;
+    QMultiHash<QString, QString> usernames_table;
+    int pwd_amount;
     bool hc2_fallback;
     bool show_plain_pwds;
     bool isValid;
@@ -56,6 +59,7 @@ private:
     void disableButtons(bool bol);
     bool checkFieldByName(QString fieldName);
 
+    void writeHTML();
 public slots:
     void start();
     void stop();
@@ -63,6 +67,7 @@ public slots:
     void onTxtBrowserAppend(const QString& str);
     void onRecoveryFinished();
     void deleteTemporaryFiles();
+    void setResultData(const QMultiHash<QString, QString> usernames_table, const int pwd_amount);
 
 signals:
 

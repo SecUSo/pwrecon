@@ -97,7 +97,7 @@ void pwRecon::showHelp()
         message += "\n";
         message += trUtf8("Experten können die Password Hashes einsehen und einen Speicherort dafür festlegen.");
         break;
-    case Page_Results:
+    case Page_Evaluation:
         message = trUtf8("Die Sicherheit der angegebenen Passwörter wird geprüft.");
         message += "\n";
         message += trUtf8("Nach Abschluss der Prüfung können Sie eine Abschätzung sehen, wie lange es dauern würde, Ihre Passwörter zu berechnen.");

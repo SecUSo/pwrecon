@@ -89,6 +89,7 @@ signals:
     void txtBrowserSet(const QString& str);
     void txtBrowserAppend(const QString& str);
     void finishRecovery();
+    void setResultData(const QMultiHash<QString, QString> usernames_table, const int pwd_amount);
 
 };
 

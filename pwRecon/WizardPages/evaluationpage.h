@@ -21,9 +21,9 @@ public:
 private:
     QTextBrowser *ResultTextBrowser;
     QProgressBar * resultsProgressBar;
-    QTimer *timerClock;
     executeWorker *eWorker;
     QStringList currentResults;
+    QLineEdit *htmlTextEdit;
 
     QThread workerThread;
 
@@ -32,13 +32,11 @@ private:
     void disableButtons(bool bol);
     void triggerEstimation();
     void possibleOutputs();
-    void setVisible(bool visible) override;
     void changeEvent(QEvent *event) override;
 
 signals:
     void startEstemation();
 public slots:
-    void onTickTimer();
     void onEstimationFinished(const QStringList& output);
     void onEstimationStarted();
 };

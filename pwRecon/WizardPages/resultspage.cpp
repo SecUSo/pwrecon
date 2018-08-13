@@ -18,7 +18,14 @@ int ResultsPage::nextId() const
 }
 void ResultsPage::initializePage()
 {
-    ResultTextBrowser->setText(trUtf8("Hier könnte Ihre Werbung stehen."));
+    if(wizard()->visitedPages().contains(Page_Evaluation))
+    {
+        ResultTextBrowser->setText(field("HTMLEVAL").toString());
+    }else if(wizard()->visitedPages().contains(Page_Attack))
+    {
+        qDebug() << "Attack HTML: \n" <<  field("HTMLATTACK").toString() << endl;
+        ResultTextBrowser->setText(field("HTMLATTACK").toString());
+    }
 }
 
 ResultsPage::~ResultsPage()

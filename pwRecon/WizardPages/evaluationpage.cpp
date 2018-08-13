@@ -3,15 +3,14 @@
 EvaluationPage::EvaluationPage(QWidget *parent)
     : QWizardPage(parent)
 {
-    // TODO: Change Caption
-    // TODO: Add text to textbrowser when page opens to tell what is going to happen.
-    // TODO: Implement Language changed
     setTitle("");
     setSubTitle("");
 
-    timerClock = new QTimer(this);
-    connect(timerClock, SIGNAL(timeout()), this, SLOT(onTickTimer()));
     ResultTextBrowser = new QTextBrowser();
+    htmlTextEdit = new QLineEdit();
+    htmlTextEdit->setVisible(false);
+
+    registerField("HTMLEVAL",htmlTextEdit);
 
     resultsProgressBar = new QProgressBar();
     QVBoxLayout *displayLayout = new QVBoxLayout();
@@ -100,13 +99,6 @@ QStringList EvaluationPage::getArguments()
 
 }
 
-// TODO: Kann Weg
-void EvaluationPage::onTickTimer()
-{
-    timerClock->stop();
-    getArguments();
-}
-
 void EvaluationPage::onEstimationFinished(const QStringList &output)
 {
     qDebug() << "Finished!!!" << endl;
@@ -127,6 +119,9 @@ void EvaluationPage::onEstimationFinished(const QStringList &output)
 // TODO: Cleane Up Code
 QStringList EvaluationPage::parseOutput(QStringList output)
 {
+    QString htmlResults = "";
+    QString password = "";
+    int passwordCount = 1;
     bool begin = false;
     currentResults.clear();
     for(int itk = 0; itk < output.length(); itk++)
@@ -145,14 +140,16 @@ QStringList EvaluationPage::parseOutput(QStringList output)
             currentResults << "----------------------------------------------------------";
             if(field("SHOWHIDEPASSWORD").toBool())
             {
-               currentResults << "Passwort: *****";
+               password = trUtf8("Passwort") + " " + QString::number(passwordCount) + ": *****";
+               passwordCount++;
             }else{
                 QStringList values = currentLine.split(": ");
                 QString x = values.last();
                 const QByteArray& latinName = x.toUtf8();
                 const char* c = latinName.data(); // Convert it to char* to make it translatable
-                currentResults << trUtf8("Passwort:") + " " + trUtf8(c);
+                password = trUtf8("Passwort:") + " " + trUtf8(c);
             }
+            currentResults << password;
             begin = false;
             continue;
         }
@@ -160,9 +157,18 @@ QStringList EvaluationPage::parseOutput(QStringList output)
 
         if(currentLine.contains("Ihr Passwort entspricht"))
         {
+            QString tmpString = "";
             const QByteArray& latinName = currentLine.toUtf8();
             const char* c = latinName.data(); // Convert it to char* to make it translatable
-            currentResults << trUtf8(c);
+            tmpString = trUtf8(c);
+            currentResults << tmpString;
+
+            if(currentLine.contains("Ihr Passwort entspricht nicht"))
+            {
+                htmlResults += "<font style=\"color:Red;\">"+ password + "  (" + tmpString + ")<font><br>";
+            }else{
+                htmlResults += "<font style=\"color:Green;\">"+ password + "  (" + tmpString + ")<font><br>";
+            }
             continue;
         }
 
@@ -267,6 +273,7 @@ QStringList EvaluationPage::parseOutput(QStringList output)
 
     }
     currentResults << "----------------------------------------------------------";
+    htmlTextEdit->setText(htmlResults);
     return currentResults;
 }
 
@@ -363,22 +370,6 @@ void EvaluationPage::possibleOutputs()
     trUtf8("Tag:");
     trUtf8("Trennzeichen:");
     */
-}
-
-void EvaluationPage::setVisible(bool visible)
-{
-    QWizardPage::setVisible(visible);
-
-//    if (visible) {
-//        wizard()->setButtonText(QWizard::CustomButton1, tr("&Neuen Test Starten"));
-//        wizard()->setOption(QWizard::HaveCustomButton1, true);
-//        connect(wizard(), &QWizard::customButtonClicked,
-//                wizard(), &QWizard::restart);
-//    } else {
-//        wizard()->setOption(QWizard::HaveCustomButton1, false);
-//        disconnect(wizard(), &QWizard::customButtonClicked,
-//                   wizard(), &QWizard::restart);
-//    }
 }
 
 void EvaluationPage::changeEvent(QEvent *event)

@@ -95,6 +95,7 @@ bool RecoveryWorker::importHashfile()
 {
     QStringList tempfilestring;
 
+    emit txtBrowserAppend(hashfilepath);
     QFile hashfile(hashfilepath);
     if (!hashfile.open(QIODevice::ReadOnly | QIODevice::Text))
         return false;
@@ -331,6 +332,7 @@ void RecoveryWorker::showResults()
     QString de2(trUtf8("Passwörtern wiederhergestellt"));
     res_str.append("----- " + QString::number(pwd_count) + ' ' + de1 + ' ' + QString::number(pwd_amount) + ' ' + de2 + ". (" + QString::number(percent, 'f', 1) + "%)\n\n");
 
+    emit setResultData(usernames_table, pwd_amount);
     emit txtBrowserAppend(res_str);
 }
 

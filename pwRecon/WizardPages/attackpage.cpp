@@ -5,14 +5,14 @@ AttackPage::AttackPage(QWidget *parent)
 {
     setTitle("");
     setSubTitle("");
-//    setTitle(trUtf8"Select the attack mode for this test."));
-//    setSubTitle(tr("Please chose between Dictionary Arrack and Brute Force attack"));
 
     startPushButton = new QPushButton("");
     stopPushButton = new QPushButton("");
     startPushButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     stopPushButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
     attackProgressBar = new QProgressBar();
+    htmlOutput = new QLineEdit();
+    htmlOutput->setVisible(false);
 
 
     QHBoxLayout *startStopLayout = new QHBoxLayout();
@@ -108,6 +108,8 @@ AttackPage::AttackPage(QWidget *parent)
     rWorker = new RecoveryWorker(hc2_fallback, binarydir, binaryfile, dictfile, potfile, tempfilepath);
     rWorker->moveToThread(&workerThread);
 
+    qRegisterMetaType<QMultiHash<QString, QString> >("QMultiHash<QString, QString>");
+
     connect(&workerThread, &QThread::finished, rWorker, &QObject::deleteLater);
     QObject::connect(startPushButton, SIGNAL(clicked()),this, SLOT(start()));
     QObject::connect(stopPushButton, SIGNAL(clicked()),this, SLOT(stop()));
@@ -116,6 +118,7 @@ AttackPage::AttackPage(QWidget *parent)
     connect(rWorker, &RecoveryWorker::finishRecovery, this, &AttackPage::onRecoveryFinished);
     connect(rWorker, &RecoveryWorker::txtBrowserSet, this, &AttackPage::onTxtBrowserSet);
     connect(rWorker, &RecoveryWorker::txtBrowserAppend, this, &AttackPage::onTxtBrowserAppend);
+    connect(rWorker, &RecoveryWorker::setResultData, this, &AttackPage::setResultData);
 
 
     workerThread.start();
@@ -123,14 +126,12 @@ AttackPage::AttackPage(QWidget *parent)
     QEvent languageChangeEvent(QEvent::LanguageChange);
     QCoreApplication::sendEvent(this, &languageChangeEvent);
     isValid = false;
-}
 
-// TODO: Start attack directly?
+    registerField("HTMLATTACK", htmlOutput);
+}
 
 int AttackPage::nextId() const
 {
-    // TODO: Is estimation still wanted???
-    // TODO: Seperate Result Page?
     return Page_Results;
 }
 
@@ -221,7 +222,12 @@ QString AttackPage::getHashFilePath()
         {
             hashtype = getHashType();
             qDebug() << "Field HASHPATHLABEL" << endl;
-            return field("HASHPATHLABEL").toString();
+            if (QFile::exists(testpwdfilepath))
+            {
+                QFile::remove(testpwdfilepath);
+            }
+            QFile::copy(field("HASHPATHLABEL").toString(), testpwdfilepath);
+            return testpwdfilepath;
         }
     }else if(wizard()->visitedPages().contains(Page_ExtractCurrent))
     {
@@ -331,6 +337,7 @@ void AttackPage::onRecoveryFinished()
 {
     qDebug() << "Recovery Finished" << endl;
     // Delete pot-file immediately after finish.
+    writeHTML();
     QFile file(potfile);
     if (file.exists())
         file.remove();
@@ -345,15 +352,15 @@ void AttackPage::deleteTemporaryFiles()
     if (file1.exists())
         file1.remove();
 
-//    QFile file2(tempfilepath);
-//    if (file2.exists())
-//        file2.remove();
+    QFile file2(tempfilepath);
+    if (file2.exists())
+        file2.remove();
 
-//    QFile file3(testpwdfilepath);
-//    if (file3.exists())
-//        file3.remove();
+    QFile file3(testpwdfilepath);
+    if (file3.exists())
+        file3.remove();
 
-    QFile file4(tmpHashFile);
+    QFile file4(field("EXTRACTPATHLABEL").toString());
     if (file4.exists())
         file4.remove();
 
@@ -419,4 +426,165 @@ bool AttackPage::validatePage()
                              QMessageBox::Ok);
     }
    return isValid;
+}
+
+void AttackPage::writeHTML()
+{
+    bool recover;
+    bool show_plain_pwds = !field("SHOWHIDEPASSWORD").toBool();
+    bool expertMode = field("EXPERTMODE").toBool();
+    if(wizard()->visitedPages().contains(Page_ExtractCurrent) || wizard()->visitedPages().contains(Page_EnterHash))
+    {
+        recover = true;
+    }else if(wizard()->visitedPages().contains(Page_ExtractCurrent))
+    {
+        recover = false;
+    }
+    QString htmlStr;
+
+    if(recover)
+    {
+         htmlStr = "<font style=\"color:Green;\">";
+    }else{
+        htmlStr = "<font style=\"color:Red;\">";
+    }
+    htmlStr.append("<font  SIZE=\"+1\">");
+    htmlStr.append(trUtf8(" - WIEDERHERGESTELLTE PASSWÖRTER:"));
+    htmlStr.append("</font>");
+    htmlStr.append("<br><br>");
+
+    QStringList foundPasswords;
+
+    // Hashcat pot-file contains already cracked hashes and their plain texts
+    QFile file(potfile);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            foundPasswords << in.readLine();
+        }
+    }
+
+    file.close();
+    int pwd_count = 0;
+    int count = 0;
+    foreach (const QString &value, foundPasswords) {
+        QString pw_line;
+
+        QStringList splitted = value.split(":");
+        QString hash = splitted[0];
+        QString plaintext = splitted[1];
+        if (plaintext.isEmpty()) {
+            plaintext = trUtf8("(leer)");
+        }
+
+        QList<QString> users = usernames_table.values(hash);
+        // pw_line.append("Password: " + hash);
+        QString passwordString = trUtf8("Passwort");
+        if(expertMode){
+            pw_line.append(passwordString + ": " + hash + " ");
+        }else{
+            count++;
+            pw_line.append(passwordString + " #" + QString::number(count)  + ": ");
+        }
+        QString userName = "";
+        for (int i = 0; i < users.size(); ++i) {
+            userName = users[i];
+
+            if (users.size() > 1 && i < (users.size() - 1)) {
+                userName.append(", ");
+            }
+        }
+        if(userName.isEmpty())
+        {
+            userName = trUtf8("leer");
+        }
+        pw_line.append(trUtf8("von Benutzer") + " (" + userName + ") " + trUtf8("gefunden"));
+        if (show_plain_pwds)
+            pw_line.append("  -->  [" + plaintext + "]");
+       // else
+           // pw_line.append("  -->  [*****]");
+        //pw_line.append("<br>");
+
+        // pw_line.append("- Username(s): { ");
+        pwd_count += users.size();
+        htmlStr.append(pw_line + "<br>");
+    }
+
+
+    if(!recover)
+    {
+         htmlStr.append("<font style=\"color:Green;\">");
+    }else{
+        htmlStr.append("<font style=\"color:Red;\">");
+    }
+
+    htmlStr.append("<br><br>");
+    htmlStr.append("<font  SIZE=\"+1\">");
+    htmlStr.append(trUtf8(" - NICHT WIEDERHERGESTELLTE PASSWÖRTER:"));
+    htmlStr.append("</font>");
+    htmlStr.append("<br><br>");
+
+    QFile hashfile(tempfilepath);
+    hashfile.open(QIODevice::ReadOnly | QIODevice::Text);
+
+    QTextStream in(&hashfile);
+    while (!in.atEnd()) {
+
+        QString line = in.readLine();
+        QString username;
+        QString hash;
+        QStringList splitted;
+
+        if (!line.isEmpty()) {
+            splitted = line.split(":");
+        }
+
+        if (splitted.size() == 1) {
+            hash = splitted[0];
+        }
+
+        if (splitted.size() == 2) {
+            username = splitted[0];
+            hash = splitted[1];
+        }
+
+        qDebug() << "Help" << endl;
+        if (username.isEmpty()) {
+             QList<QString> users = usernames_table.values(hash);
+            for (int i = 0; i < users.size(); ++i) {
+                username = users[i];
+
+                if (users.size() > 1 && i < (users.size() - 1)) {
+                    username.append(", ");
+                }
+            }
+        }
+        qDebug() << "Help2" << endl;
+        if (username.isEmpty()) {
+            username = trUtf8("leer");
+        }
+
+        if(splitted.size() < 1 || splitted.size() > 2 || hash.isEmpty()) {
+            break;
+        }
+
+        htmlStr.append(QString(trUtf8("Passwort für Benutzer") + " (" + username + ") "+ trUtf8("nicht Wiederhergestellt!")));
+        if(expertMode){
+           htmlStr.append(" [" + hash.toLower() + "]<br>");
+        }else
+        {
+            htmlStr.append("<br>");
+        }
+
+    }
+    hashfile.close();
+    htmlStr.append("</font><br>");
+
+    htmlOutput->setText(htmlStr);
+}
+
+void AttackPage::setResultData(const QMultiHash<QString, QString> usernames_table, const int pwd_amount)
+{
+    this->usernames_table = usernames_table;
+    this->pwd_amount = pwd_amount;
 }
