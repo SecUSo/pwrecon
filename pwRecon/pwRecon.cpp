@@ -112,7 +112,7 @@ void pwRecon::showHelp()
         message += "\n\t";
         message += trUtf8("Offline (langsam):") + " " + trUtf8("Bis zu 10.000 Versuche pro Sekunde");
         message += "\n\t";
-        message += trUtf8("Offline (schnell):") + " " + trUtf8("Bis zu 10.000.000.000 Versuche pro Stunde");
+        message += trUtf8("Offline (schnell):") + " " + trUtf8("Bis zu 10.000.000.000 Versuche pro Sekunde");
         /*offline_fast_hashing_1e10_per_second': 0.00025678,
         'offline_slow_hashing_1e4_per_second': 256.78
         'online_no_throttling_10_per_second': 256780.0,
