@@ -13,6 +13,8 @@ pwRecon::pwRecon(QWidget *parent)
 
     translator2 = new QTranslator(qApp);
     setOption(HaveHelpButton, true);
+    setOption(DisabledBackButtonOnLastPage, true);
+    setWindowFlags(Qt::Window | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
     setPage(Page_Intro, new IntroPage);
     setPage(Page_SelectMode, new SelectModePage);
     setPage(Page_SelectRecoveryMode, new SelectRecoveryModePage);
