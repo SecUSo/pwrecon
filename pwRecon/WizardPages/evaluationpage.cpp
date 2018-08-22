@@ -257,16 +257,16 @@ QStringList EvaluationPage::parseOutput(QStringList output)
             }
             if(currentLine.contains("ONLINE_THROTTLED: "))
             {
-                times << indent + trUtf8("Online (eingeschränkt):") + " " + timeValue;
+                times << indent + trUtf8("Online (bis zu 2 Versuchen/sec):") + "              " + timeValue;
             } else if(currentLine.contains("ONLINE_UNTHROTTLED:"))
             {
-                times << indent + trUtf8("Online (uneingeschränkt):") + " " + timeValue;
+                times << indent + trUtf8("Online (bis zu 100 Versuchen/sec):") + "          " + timeValue;
             }else if(currentLine.contains("OFFLINE_BCRYPT_14:"))
             {
-                times << indent + trUtf8("Offline (langsam):") + " " + timeValue;
+                times << indent + trUtf8("Offline (bis zu 259 Versuchen/sec):") + "         " + timeValue;
             }else if(currentLine.contains("OFFLINE_MD5:"))
             {
-                times << indent + trUtf8("Offline (schnell):") + " " + timeValue;
+                times << indent + trUtf8("Offline (bis zu 250 Mrd. Versuchen/sec):") + " " + timeValue;
 
             }
             continue;
