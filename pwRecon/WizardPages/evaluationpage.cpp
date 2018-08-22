@@ -102,7 +102,7 @@ QStringList EvaluationPage::getArguments()
 void EvaluationPage::onEstimationFinished(const QStringList &output)
 {
     qDebug() << "Finished!!!" << endl;
-//    ResultTextBrowser->setText("output Length: " + output.length());
+    //    ResultTextBrowser->setText("output Length: " + output.length());
     //currentResults = output;
     QStringList parsedOutput = parseOutput(output);
     ResultTextBrowser->clear();
@@ -116,22 +116,54 @@ void EvaluationPage::onEstimationFinished(const QStringList &output)
     resultsProgressBar->setMaximum(23);
 }
 
-// TODO: Cleane Up Code
 QStringList EvaluationPage::parseOutput(QStringList output)
 {
     QString htmlResults = "";
     QString password = "";
+    QString htmlPassword = "";
+    QStringList suggestions;
+    QStringList warnings;
+    QStringList times;
+    QStringList expertOutput;
     int passwordCount = 1;
+    QString indent = "        ";
     bool begin = false;
     currentResults.clear();
+    output << "---ENDE DER AUSGABE---";
     for(int itk = 0; itk < output.length(); itk++)
     {
         QString currentLine = output.at(itk);
 
-        if(currentLine.contains("Benötigte Zeit für die Berechnung:"))
+        if(currentLine.contains("Benötigte Zeit für die Berechnung:") || currentLine.contains("---ENDE DER AUSGABE---"))
         {
             begin = true;
-            continue;
+            if(suggestions.isEmpty() && warnings.isEmpty() && times.isEmpty())
+            {
+                continue;
+            } else{
+
+                if(!warnings.isEmpty()){
+                    currentResults << "<font style=\"color:Black;\"><b><center>" + trUtf8("Warnung:") + "</center></b></font>";
+                    currentResults = currentResults + warnings;
+                }
+                currentResults << "<p style=\"color:Black; text-align:center;\"><b>" + trUtf8("Benötigte Zeit zum Berechnen der Passwörter: ") + "</b></p>";
+                currentResults = currentResults + times;
+                if(!suggestions.isEmpty()){
+                    currentResults << "<b>" + trUtf8("Empfehlung:") + "</b>";
+                    currentResults = currentResults + suggestions;
+                }
+                if(!expertOutput.isEmpty())
+                {
+                    currentResults = currentResults + expertOutput;
+                    expertOutput.clear();
+                }
+
+                suggestions.clear();
+                warnings.clear();
+                times.clear();
+
+                continue;
+            }
         }
 
         // Find Start
@@ -140,11 +172,12 @@ QStringList EvaluationPage::parseOutput(QStringList output)
             currentResults << "----------------------------------------------------------";
             if(field("SHOWHIDEPASSWORD").toBool())
             {
-               password = trUtf8("Passwort") + " " + QString::number(passwordCount) + ": *****";
-               passwordCount++;
+                password = trUtf8("Passwort") + " " + QString::number(passwordCount) + ": *****";
+                passwordCount++;
             }else{
                 QStringList values = currentLine.split(": ");
-                password = trUtf8("Passwort:") + " " + values.last();
+                htmlPassword = "<font style=\"color:Black;\"><b>"+ values.last() + "</b></font>";
+                password = trUtf8("Passwort:") + " " + htmlPassword;
             }
             currentResults << password;
             begin = false;
@@ -166,9 +199,11 @@ QStringList EvaluationPage::parseOutput(QStringList output)
                 tmpHtml +="<font style=\"color:Red;\"><b>" + tmpString + "</b></font>";
             }else{
                 htmlResults += "<font style=\"color:Green;\">"+ password + "  (" + tmpString + ")</font><br>";
-                tmpHtml +="<font style=\"color:Green;\"><b>" + tmpString + "</b></font>";
+                tmpHtml +="<font style=\"color:Green;\"><b>" + tmpString + "</b></font><br>";
             }
+            currentResults << " ";
             currentResults << tmpHtml;
+            currentResults << " ";
             continue;
         }
 
@@ -178,7 +213,8 @@ QStringList EvaluationPage::parseOutput(QStringList output)
             QString x = values.last();
             const QByteArray& latinName = x.toUtf8();
             const char* c = latinName.data(); // Convert it to char* to make it translatable
-            currentResults << "<font style=\"color:Orange;\"><b>" + trUtf8("Warnung:") + "</b></font>" + " " + trUtf8(c);
+            //currentResults << "<font style=\"color:Orange;\"><b>" + trUtf8("Warnung:") + "</b></font>" + " " + trUtf8(c);
+            warnings << indent + trUtf8(c);
             continue;
         }
 
@@ -186,19 +222,17 @@ QStringList EvaluationPage::parseOutput(QStringList output)
         {
             QStringList values = currentLine.split(": ");
             QString x = values.last();
-            qDebug() << x << endl;
             const QByteArray& latinName = x.toUtf8();
-            qDebug() << "\t" << latinName << endl;
             const char* c = latinName.data(); // Convert it to char* to make it translatable
-            qDebug() << "\t" << c << endl;
-            currentResults << "<i><b>" + trUtf8("Empfehlung:") + "</i></b>" + " " + trUtf8(c);
+            //currentResults << "<i><b>" + trUtf8("Empfehlung:") + "</i></b>" + " " + trUtf8(c);
+            suggestions << indent + trUtf8(c);
             continue;
         }
 
         // Get time estimate
         if(currentLine.contains("Benötigte Zeit um das Passwort zu knacken:"))
         {
-            QString outputLine = trUtf8("Benötigte Zeit um das Passwort zu knacken:");
+            //QString outputLine = trUtf8("Benötigte Zeit um das Passwort zu knacken:");
             QStringList values = currentLine.split(":");
             QString tmpTimeValue = values.last();
             QString timeValue = "";
@@ -223,16 +257,16 @@ QStringList EvaluationPage::parseOutput(QStringList output)
             }
             if(currentLine.contains("ONLINE_THROTTLED: "))
             {
-                currentResults << outputLine + " " + trUtf8("Online (eingeschränkt):") + " " + timeValue;
+                times << indent + trUtf8("Online (eingeschränkt):") + " " + timeValue;
             } else if(currentLine.contains("ONLINE_UNTHROTTLED:"))
             {
-                currentResults << outputLine + " " + trUtf8("Online (uneingeschränkt):") + " " + timeValue;
+                times << indent + trUtf8("Online (uneingeschränkt):") + " " + timeValue;
             }else if(currentLine.contains("OFFLINE_BCRYPT_14:"))
             {
-                currentResults << outputLine + " " + trUtf8("Offline (langsam):") + " " + timeValue;
+                times << indent + trUtf8("Offline (langsam):") + " " + timeValue;
             }else if(currentLine.contains("OFFLINE_MD5:"))
             {
-                currentResults << outputLine + " " + trUtf8("Offline (schnell):") + " " + timeValue;
+                times << indent + trUtf8("Offline (schnell):") + " " + timeValue;
 
             }
             continue;
@@ -242,9 +276,9 @@ QStringList EvaluationPage::parseOutput(QStringList output)
         if(field("EXPERTMODE").toBool()){
             if(currentLine.contains("Entspricht Typ:"))
             {
-                currentResults << "-----------------------------------";
+                expertOutput << "-----------------------------------";
                 QStringList values = currentLine.split(":");
-                currentResults << trUtf8("Art des Treffers:") + values.last();
+                expertOutput << trUtf8("Art des Treffers:") + values.last();
 
                 // Don't display information about parts of the password if it shall be hidden.
                 if(!field("SHOWHIDEPASSWORD").toBool())
@@ -252,18 +286,18 @@ QStringList EvaluationPage::parseOutput(QStringList output)
                     itk = itk + 2; // Skip entropie
                     currentLine = output.at(itk);
                     values = currentLine.split(":");
-                    currentResults << trUtf8("Bestandteil des Passworts:") + values.last();
+                    expertOutput << trUtf8("Bestandteil des Passworts:") + values.last();
 
                     if(output.at(itk + 4).contains("Wörterbuch:"))
                     {
                         itk = itk + 4; // Skip entropie
                         currentLine = output.at(itk);
                         values = currentLine.split(":");
-                        currentResults << trUtf8("Wörterbuch:") + values.last();
+                        expertOutput << trUtf8("Wörterbuch:") + values.last();
                         itk++; // Skip entropie
                         currentLine = output.at(itk);
                         values = currentLine.split(":");
-                        currentResults << trUtf8("Wörterbuch Eintrag:") + values.last();
+                        expertOutput << trUtf8("Wörterbuch Eintrag:") + values.last();
                     }
                 }
 
@@ -272,6 +306,7 @@ QStringList EvaluationPage::parseOutput(QStringList output)
         }
 
     }
+
     currentResults << "----------------------------------------------------------";
     htmlTextEdit->setText(htmlResults);
     return currentResults;
