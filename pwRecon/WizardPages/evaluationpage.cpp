@@ -144,10 +144,7 @@ QStringList EvaluationPage::parseOutput(QStringList output)
                passwordCount++;
             }else{
                 QStringList values = currentLine.split(": ");
-                QString x = values.last();
-                const QByteArray& latinName = x.toUtf8();
-                const char* c = latinName.data(); // Convert it to char* to make it translatable
-                password = trUtf8("Passwort:") + " " + trUtf8(c);
+                password = trUtf8("Passwort:") + " " + values.last();
             }
             currentResults << password;
             begin = false;
