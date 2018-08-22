@@ -82,7 +82,7 @@ void EnterPasswordPage::load()
 {
     QString tmpFile = "";
     tmpFile = QFileDialog::getOpenFileName(this,
-                                           trUtf8("Wählen Sie eine Passwortliste aus."), "", "*");
+                                           trUtf8("Wählen Sie eine Passwortliste aus."), "", "*.txt");
     //tr("Image Files (*.png *.jpg *.bmp)")
     // if equal return 0
     if(QString::compare(tmpFile, "", Qt::CaseInsensitive))

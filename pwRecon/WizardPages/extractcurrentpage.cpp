@@ -133,6 +133,7 @@ void ExtractCurrentPage::onExtractionFinished(const QStringList &output)
             if(line.contains("Error",Qt::CaseInsensitive))
             {
                 printError();
+                breakup = true;
                 return;
             }
         }
