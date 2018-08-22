@@ -95,7 +95,7 @@ bool RecoveryWorker::importHashfile()
 {
     QStringList tempfilestring;
 
-    emit txtBrowserAppend(hashfilepath);
+    //emit txtBrowserAppend(hashfilepath);
     QFile hashfile(hashfilepath);
     if (!hashfile.open(QIODevice::ReadOnly | QIODevice::Text))
         return false;
