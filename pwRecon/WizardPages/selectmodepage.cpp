@@ -57,7 +57,7 @@ void SelectModePage::changeEvent(QEvent *event)
         if(field("EXPERTMODE").toBool()){
             recoverPasswordRadioButton->setText(trUtf8("&Passwörter aus Hashes oder vom Lokalen System wiederherstellen"));
         } else{
-            recoverPasswordRadioButton->setText(trUtf8("&Passwörter der  Benutzer dieses Computers wiederherstellen"));
+            recoverPasswordRadioButton->setText(trUtf8("&Passwörter der  Benutzerkonten dieses Computers wiederherstellen"));
         }
 
     } else

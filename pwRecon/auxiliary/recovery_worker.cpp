@@ -59,7 +59,7 @@ void RecoveryWorker::onRecoveryStarted(const bool& showplain, const bool& expert
     binaryProcess->setProgram(binaryfile);
     binaryProcess->setWorkingDirectory(binarydir);
 
-    emit txtBrowserAppend(trUtf8(" - WIEDERHERSTELLUNG GESTARTET -\n\nBitte warten...\n\n"));
+    emit txtBrowserAppend(trUtf8(" - WIEDERHERSTELLUNG GESTARTET - \n\n"));
 
     // Setup timer clock
     timerClock = new QTimer(this);
@@ -67,6 +67,7 @@ void RecoveryWorker::onRecoveryStarted(const bool& showplain, const bool& expert
     timerClock->start(1000);
 
     startNextRound();
+    showResults();
 }
 
 void RecoveryWorker::onProcessStopped()
@@ -266,7 +267,7 @@ void RecoveryWorker::showResults()
     QString res_str;
     // res_str.append(" - RECOVERY STATUS -\n");
     // res_str.append(" Duration:\n ");
-    res_str.append(trUtf8(" - WIEDERHERSTELLUNG STATUS -\n"));
+    res_str.append(trUtf8(" - WIEDERHERSTELLUNGS STATUS -\n"));
     res_str.append(trUtf8(" Dauer:\n "));
     res_str.append(QString::number(minutes));
     res_str.append(":");

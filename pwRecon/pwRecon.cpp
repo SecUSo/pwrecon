@@ -207,7 +207,8 @@ void IntroPage::changeEvent(QEvent *event)
         setTitle(trUtf8("Einleitung"));
         topLabel->setText(trUtf8("Dieser Assistent wird Sie durch den Prozess der Wiederherstellung verlorener Passwörter führen.\n"
                                  "Sie können sich zwischen zwei verschiedenen Wiederherstellungsarten entscheiden.\n"
-                                 "Es besteht auch die Möglichkeit die Sicherheit bereits bestehender Passwörter zu testen."));
+                                 "Es besteht auch die Möglichkeit die Sicherheit bereits bestehender Passwörter zu testen.\n"
+                                 "Falls Sie sich unsicher sind, können Sie die Hilfe verwenden."));
         expertModeCheckBox->setText(trUtf8("Experten Modus verwenden."));
         showHidePasswordCheckBox->setText(trUtf8("Die Passwörter verbergen."));
 

@@ -396,6 +396,8 @@ void AttackPage::changeEvent(QEvent *event)
 void AttackPage::initializePage()
 {
     attackResultTextBrowser->setText(trUtf8("Sie können die Wiederherstellung mit dem Klicken auf Start starten."));
+    attackResultTextBrowser->append(trUtf8("Dieser Prozess wird alle verfügbaren Resourcen für die Wiederherstellung verwenden."));
+    attackResultTextBrowser->append(trUtf8("Andere Prozesse könnten verzögert werden."));
 }
 
 void AttackPage::setVisible(bool visible)
