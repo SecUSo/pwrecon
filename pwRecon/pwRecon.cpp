@@ -56,14 +56,14 @@ void pwRecon::showHelp()
     case Page_Intro:
         message = trUtf8("Sie können die Sprache umstellen.");
         message += "\n";
-        message += trUtf8("Verbergen Sie ihre Passwörter, für den fall, dass Ihnen jemand über die Schulter schauen könnte.");
+        message += trUtf8("Verbergen Sie ihre Passwörter, für den Fall, dass Ihnen jemand über die Schulter schauen könnte.");
         message += "\n";
         message += trUtf8("Mit dem Experten Modus können Sie zusätzlich Hashes wiederherstellen und Einstellungen für die Widerherstellung vornehmen");
         break;
     case Page_SelectMode:
         message = trUtf8("Sie können sich zwischen diesen zwei Optionen entscheiden.");
         message += "\n";
-        message += trUtf8("Beim Testen eines Passwortes (oder einer Liste) wird untersucht, wie schnell es mit unserem Wörterbuch gefunden werden würde und es werden Hinweise zur verbesserung gegeben.");
+        message += trUtf8("Beim Testen eines Passwortes (oder einer Liste) wird untersucht, wie schnell es mit unserem Wörterbuch gefunden werden würde und es werden Hinweise zur Verbesserung gegeben.");
         message += "\n";
         message += trUtf8("Beim Wiederherstellen können Sie die Passwörter dieses Systems auslesen und im Anschluss wiederherstellen.");
         break;
