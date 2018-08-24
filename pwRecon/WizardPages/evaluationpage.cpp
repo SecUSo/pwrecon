@@ -24,6 +24,10 @@ EvaluationPage::EvaluationPage(QWidget *parent)
 #ifdef Q_OS_WIN
     programPath = programPath + "WIN_jre1.8.0_172/bin/java.exe";
 #endif
+
+#ifdef Q_OS_LINUX
+    programPath = programPath + "LIN_jre1.8.0_181/bin/java";
+#endif
     qDebug() << programPath << endl;
 
     eWorker = new executeWorker(programPath);
