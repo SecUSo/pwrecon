@@ -16,7 +16,10 @@ class ExtractCurrentPage : public QWizardPage
 
 public:
     explicit ExtractCurrentPage(QWidget *parent = 0);
+#ifdef Q_OS_WIN
     ~ExtractCurrentPage();
+#endif
+
     int nextId() const override;
     bool validatePage() override;
     void changeEvent(QEvent *event) override;

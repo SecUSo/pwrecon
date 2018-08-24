@@ -197,6 +197,12 @@ void RecoveryWorker::setupBinaryArguments()
     if (!hc2_fallback) // Hashcat 3 only
         args_brute_attack << QString("--restore-disable") << QString("--logfile-disable") << QString("--gpu-temp-disable");
     args_brute_attack << tempfilepath << QString("?a?a?a?a?a?a?a?a?a?a?a?a?a?a?a?a");
+
+    args_dict_attack << "--force";
+    args_mang1_attack << "--force";
+    args_mang2_attack << "--force";
+    args_brute_attack << "--force";
+
 }
 
 /*

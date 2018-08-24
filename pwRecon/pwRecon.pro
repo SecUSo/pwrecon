@@ -50,7 +50,7 @@ FORMS += \
 TRANSLATIONS += translate/pwRecon_en_US.ts
 
 # OpenCL libs only for Windows included yet
-win32: contains(QMAKE_HOST.arch, x86_64) {
+win: contains(QMAKE_HOST.arch, x86_64) {
 LIBS += -L$$PWD/opencl/lib/x86_64/ -lOpenCL
 
 INCLUDEPATH += opencl/include \
@@ -62,27 +62,27 @@ opencl_dll.files = opencl/dll/x86_64/OpenCL.dll
 INSTALLS += \
     opencl_dll
 
-} else {
-LIBS += -L$$PWD/opencl/lib/x86/ -lOpenCL
-
-INCLUDEPATH += opencl/include \
-             $$PWD/opencl/lib/x86
-DEPENDPATH += $$PWD/opencl/lib/x86
-
-opencl_dll.path = $$OUT_PWD
-opencl_dll.files = opencl/dll/x86/OpenCL.dll
-INSTALLS += \
-    opencl_dll
 }
 
-win32: contains(QMAKE_HOST.arch, x86_64) {
+win{
 !win32-g++: PRE_TARGETDEPS += $$PWD/opencl/lib/x86_64/OpenCL.lib
 else:win32-g++: PRE_TARGETDEPS += $$PWD/opencl/lib/x86_64/libOpenCL.a
-} else {
-!win32-g++: PRE_TARGETDEPS += $$PWD/opencl/lib/x86/OpenCL.lib
-else:win32-g++: PRE_TARGETDEPS += $$PWD/opencl/lib/x86/libOpenCL.a
 }
-
 macx{
     QMAKE_LFLAGS += -framework OpenCL
+}
+unix{
+
+LIBS += -L$$PWD/opencl/lib/x86_64/ -lOpenCL
+
+INCLUDEPATH += opencl/include \
+             $$PWD/opencl/lib/x86_64
+DEPENDPATH += $$PWD/opencl/lib/x86_64
+
+opencl_dll.path = $$OUT_PWD
+opencl_dll.files = opencl/dll/x86_64/OpenCL.dll
+INSTALLS += \
+    opencl_dll
+    PRE_TARGETDEPS += $$PWD/opencl/lib/x86_64/OpenCL.lib
+    win32-g++: PRE_TARGETDEPS += $$PWD/opencl/lib/x86_64/libOpenCL.a
 }

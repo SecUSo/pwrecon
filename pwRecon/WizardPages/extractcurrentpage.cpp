@@ -92,7 +92,9 @@ void ExtractCurrentPage::initializePage()
     }else{
         extractResultTextBrowser->setText(trUtf8("Die Passwörter des lokalen Systems werden ausgelesen.\n"
                                                  "Dieser Vorgang kann einige Minuten dauern."));
+#ifdef Q_OS_WIN
         emit ExtractCurrentPage::onStartExtraction();
+#endif
     }
 }
 
@@ -400,6 +402,15 @@ void ExtractCurrentPage::startExtraction()
         disableButtons(false);
         wizard()->next();
     }
+}
+#endif
+
+#ifdef Q_OS_UNIX
+void ExtractCurrentPage::startExtraction()
+{
+
+
+
 }
 #endif
 

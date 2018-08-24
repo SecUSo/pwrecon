@@ -212,8 +212,8 @@ void IntroPage::changeEvent(QEvent *event)
         expertModeCheckBox->setText(trUtf8("Experten Modus verwenden."));
         showHidePasswordCheckBox->setText(trUtf8("Die Passwörter verbergen."));
 
-        QString tmp = field("EXPERTMODE").toBool();
-        qDebug() << "TEST: \t" << tmp << endl;
+        //QString tmp = field("EXPERTMODE").toBool();
+        //qDebug() << "TEST: \t" << tmp << endl;
     } else
         QWidget::changeEvent(event);
 }

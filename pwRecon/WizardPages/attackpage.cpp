@@ -31,7 +31,7 @@ AttackPage::AttackPage(QWidget *parent)
     setLayout(extractLayout);
 
     // Set up Hashcat
-#ifndef Q_OS_MACX
+#ifdef Q_OS_MACX
     hc2_fallback = false;
 
     if (!hc2_fallback)
@@ -57,16 +57,16 @@ AttackPage::AttackPage(QWidget *parent)
     }
 
 
-        binarydir = QString(QDir::currentPath() + "/tools/Hashcat4");
-        binaryfile = QString(binarydir + "/hashcat");
+    binarydir = QString(QDir::currentPath() + "/tools/Hashcat4");
+    binaryfile = QString(binarydir + "/hashcat");
 
 #ifdef Q_PROCESSOR_X86_64
 
-        binaryfile.append("64");
+    binaryfile.append("64");
 #endif
 
 #ifdef Q_PROCESSOR_X86_32
-        binaryfile.append("32");
+    binaryfile.append("32");
 #endif
 
 #endif // ifndef Q_OS_MACX
@@ -81,6 +81,8 @@ AttackPage::AttackPage(QWidget *parent)
 
 #endif
 #ifdef Q_OS_LINUX // No support yet
+    binarydir = QString(QDir::currentPath() + "/tools/Hashcat4");
+    binaryfile = QString(binarydir + "/hashcat64");
     binaryfile.append(".bin");
 #endif
     if(field("EXPERTMODE").toBool()){
@@ -90,6 +92,7 @@ AttackPage::AttackPage(QWidget *parent)
         show_plain_pwds = false;
 
     }
+    qDebug() << binaryfile << endl;
     potfile = QString(binarydir + "/hashcat.potfile");
     tempfilepath= QString(QDir::currentPath() + "/tools/tempfile.txt");
     testpwdfilepath= QString(QDir::currentPath() + "/tools/testpwdfile.txt");
@@ -174,7 +177,7 @@ AttackPage::~AttackPage()
 QString AttackPage::getHashFilePath()
 {
     samdumpfilepath = QString(QDir::currentPath() + "/tools/samdumpfile.txt");
-   /* qDebug() << "Workaround: \t" << field("WORKAROUND") << endl;
+    /* qDebug() << "Workaround: \t" << field("WORKAROUND") << endl;
     int len = wizard()->visitedPages().length();
     qDebug() << "Length of visitedPages: " << len << endl;
     for(int i = 0; i < len; i++)
@@ -238,7 +241,10 @@ QString AttackPage::getHashFilePath()
 #ifdef Q_OS_MACX
         hashtype = QString("--hash-type=7100");
 #endif
-            return field("EXTRACTPATHLABEL").toString();
+#ifdef Q_OS_LINUX
+        hashtype = QString("--hash-type=1800");
+#endif
+        return field("EXTRACTPATHLABEL").toString();
     }
 
     return "";
@@ -360,9 +366,12 @@ void AttackPage::deleteTemporaryFiles()
     if (file3.exists())
         file3.remove();
 
-    QFile file4(field("EXTRACTPATHLABEL").toString());
-    if (file4.exists())
-        file4.remove();
+    if(field("EXTRACTPATHLABEL").toString())
+    {
+        QFile file4(field("EXTRACTPATHLABEL").toString());
+        if (file4.exists())
+            file4.remove();
+    }
 
     QFile file5(QString(binarydir + "/hashcat.log"));
     if (file5.exists())
@@ -404,18 +413,18 @@ void AttackPage::setVisible(bool visible)
 {
     QWizardPage::setVisible(visible);
 
-//    if (visible) {
-//        wizard()->button(QWizard::FinishButton)->setEnabled(false);
-//        wizard()->button(QWizard::CustomButton1)->setEnabled(false);
-//        wizard()->setButtonText(QWizard::CustomButton1, tr("&Neue Wiederherstellung Starten"));
-//        wizard()->setOption(QWizard::HaveCustomButton1, true);
-//        connect(wizard(), &QWizard::customButtonClicked,
-//                wizard(), &QWizard::restart);
-//    } else {
-//        wizard()->setOption(QWizard::HaveCustomButton1, false);
-//        disconnect(wizard(), &QWizard::customButtonClicked,
-//                   wizard(), &QWizard::restart);
-//    }
+    //    if (visible) {
+    //        wizard()->button(QWizard::FinishButton)->setEnabled(false);
+    //        wizard()->button(QWizard::CustomButton1)->setEnabled(false);
+    //        wizard()->setButtonText(QWizard::CustomButton1, tr("&Neue Wiederherstellung Starten"));
+    //        wizard()->setOption(QWizard::HaveCustomButton1, true);
+    //        connect(wizard(), &QWizard::customButtonClicked,
+    //                wizard(), &QWizard::restart);
+    //    } else {
+    //        wizard()->setOption(QWizard::HaveCustomButton1, false);
+    //        disconnect(wizard(), &QWizard::customButtonClicked,
+    //                   wizard(), &QWizard::restart);
+    //    }
 }
 
 bool AttackPage::validatePage()
@@ -427,7 +436,7 @@ bool AttackPage::validatePage()
                              QMessageBox::Ok,
                              QMessageBox::Ok);
     }
-   return isValid;
+    return isValid;
 }
 
 void AttackPage::writeHTML()
@@ -446,7 +455,7 @@ void AttackPage::writeHTML()
 
     if(recover)
     {
-         htmlStr = "<font style=\"color:Green;\">";
+        htmlStr = "<font style=\"color:Green;\">";
     }else{
         htmlStr = "<font style=\"color:Red;\">";
     }
@@ -504,8 +513,8 @@ void AttackPage::writeHTML()
         pw_line.append(trUtf8("eines Benutzers (%1) wiederhergestellt").arg(userName));
         if (show_plain_pwds)
             pw_line.append("  -->  [" + plaintext + "]");
-       // else
-           // pw_line.append("  -->  [*****]");
+        // else
+        // pw_line.append("  -->  [*****]");
         //pw_line.append("<br>");
 
         // pw_line.append("- Username(s): { ");
@@ -516,7 +525,7 @@ void AttackPage::writeHTML()
 
     if(!recover)
     {
-         htmlStr.append("<font style=\"color:Green;\">");
+        htmlStr.append("<font style=\"color:Green;\">");
     }else{
         htmlStr.append("<font style=\"color:Red;\">");
     }
@@ -551,9 +560,8 @@ void AttackPage::writeHTML()
             hash = splitted[1];
         }
 
-        qDebug() << "Help" << endl;
         if (username.isEmpty()) {
-             QList<QString> users = usernames_table.values(hash);
+            QList<QString> users = usernames_table.values(hash);
             for (int i = 0; i < users.size(); ++i) {
                 username = users[i];
 
@@ -562,7 +570,7 @@ void AttackPage::writeHTML()
                 }
             }
         }
-        qDebug() << "Help2" << endl;
+
         if (username.isEmpty()) {
             username = trUtf8("leer");
         }
@@ -573,7 +581,7 @@ void AttackPage::writeHTML()
 
         htmlStr.append(trUtf8("Passwort eines Benutzers (%1) nicht wiederhergestellt!").arg(username));
         if(expertMode){
-           htmlStr.append(" [" + hash.toLower() + "]<br>");
+            htmlStr.append(" [" + hash.toLower() + "]<br>");
         }else
         {
             htmlStr.append("<br>");
