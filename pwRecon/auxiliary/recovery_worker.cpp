@@ -123,13 +123,20 @@ bool RecoveryWorker::importHashfile()
             username = splitted[0];
             hash = splitted[1];
         }
-
+#ifdef Q_OS_WIN
         if(splitted.size() < 1 || splitted.size() > 2 || !isHex(hash) || hash.isEmpty()) {
             breakup = true;
             break;
         }
-
         tempfilestring.append(QString(username + ":" + hash.toLower())); // Hashcat works with lower case
+#else
+        if(splitted.size() < 1 || splitted.size() > 2 || hash.isEmpty()) {
+            breakup = true;
+            break;
+        }
+        tempfilestring.append(QString(username + ":" + hash)); // Hashcat works with lower case
+#endif
+
         pwd_amount++;
     }
     hashfile.close();
@@ -198,10 +205,12 @@ void RecoveryWorker::setupBinaryArguments()
         args_brute_attack << QString("--restore-disable") << QString("--logfile-disable") << QString("--gpu-temp-disable");
     args_brute_attack << tempfilepath << QString("?a?a?a?a?a?a?a?a?a?a?a?a?a?a?a?a");
 
-    args_dict_attack << "--force";
-    args_mang1_attack << "--force";
-    args_mang2_attack << "--force";
-    args_brute_attack << "--force";
+#ifdef Q_OS_LINUX
+    args_dict_attack << "--force" << "-O";
+    args_mang1_attack << "--force" << "-O";
+    args_mang2_attack << "--force" << "-O";
+    args_brute_attack << "--force" << "-O";
+#endif
 
 }
 

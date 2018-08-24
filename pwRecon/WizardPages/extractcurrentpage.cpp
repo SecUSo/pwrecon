@@ -220,7 +220,7 @@ void ExtractCurrentPage::printError()
         for(int itk = 0; itk < errorOutput.length(); itk++)
         {
             qDebug() << errorOutput.at(itk) << endl;
-           // extractResultTextBrowser->append(errorOutput.at(itk));
+            // extractResultTextBrowser->append(errorOutput.at(itk));
         }
     }
 }
@@ -264,7 +264,7 @@ void ExtractCurrentPage::startExtraction()
     {
         if(users.at(i) != "Shared" && users.at(i) != ".localized")
         {
-            // defaults read /var/db/dslocal/nodes/Default/users/Lilian.plist ShadowHashData|tr -dc 0-9a-f|xxd -r -p|plutil -convert xml1 - -o -
+            // defaults read /var/db/dslocal/nodes/Default/users/user.plist ShadowHashData|tr -dc 0-9a-f|xxd -r -p|plutil -convert xml1 - -o -
             QProcess defaultProc;
 
             // Get the password file of the specific users
@@ -409,7 +409,37 @@ void ExtractCurrentPage::startExtraction()
 void ExtractCurrentPage::startExtraction()
 {
 
+    QFile shadowFile("/etc/shadow");
+    QStringList readPasswords;
+    //if (tempfile.exists())
+    //  tempfile.remove();
+    if (shadowFile.open(QIODevice::ReadOnly)) {
+        QTextStream stream(&shadowFile);
+        while(!stream.atEnd()) {
+            QString line = stream.readLine();
+            QStringList values = line.split(":");
+            if(values.at(1).length() != 1 && values.at(1).length() != 13)
+            {
+                extractResultTextBrowser->append(line);
+                readPasswords << QString(values.at(0) + ":" + values.at(1));
+            }
+        }
+    }
+    shadowFile.close();
 
+    QFile tempfile(samdumpfilepath);
+    if (tempfile.exists())
+        tempfile.remove();
+    if (tempfile.open(QIODevice::ReadWrite)) {
+        QTextStream stream(&tempfile);
+        foreach (const QString &line, readPasswords) {
+            stream << line << endl;
+        }
+    }
+    valid = true;
+    if(!field("EXPERTMODE").toBool()){
+        wizard()->next();
+    }
 
 }
 #endif

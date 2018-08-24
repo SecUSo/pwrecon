@@ -366,12 +366,12 @@ void AttackPage::deleteTemporaryFiles()
     if (file3.exists())
         file3.remove();
 
-    if(field("EXTRACTPATHLABEL").toString())
-    {
-        QFile file4(field("EXTRACTPATHLABEL").toString());
-        if (file4.exists())
-            file4.remove();
-    }
+//    if(!field("EXTRACTPATHLABEL").isValid())
+//    {
+//        QFile file4(field("EXTRACTPATHLABEL").toString());
+//        if (file4.exists())
+//            file4.remove();
+//    }
 
     QFile file5(QString(binarydir + "/hashcat.log"));
     if (file5.exists())
