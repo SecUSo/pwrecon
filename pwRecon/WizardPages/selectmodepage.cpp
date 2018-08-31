@@ -51,7 +51,7 @@ int SelectModePage::nextId() const
 void SelectModePage::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
-        setTitle(trUtf8("Vorgansweise Auswählen."));
+        setTitle(trUtf8("Vorgangsweise auswählen."));
         topLabel->setText(trUtf8("Sie können sich entscheiden, ob sie ein Passwort testen oder wiederherstellen möchten."));
         checkPasswordRadioButton->setText(trUtf8("&Passwörter testen"));
         if(field("EXPERTMODE").toBool()){

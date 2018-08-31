@@ -57,6 +57,7 @@ AttackPage::AttackPage(QWidget *parent)
     }
 
 
+#endif // ifndef Q_OS_MACX
     binarydir = QString(QDir::currentPath() + "/tools/Hashcat4");
     binaryfile = QString(binarydir + "/hashcat");
 
@@ -69,7 +70,6 @@ AttackPage::AttackPage(QWidget *parent)
     binaryfile.append("32");
 #endif
 
-#endif // ifndef Q_OS_MACX
 
 #ifdef Q_OS_WIN
     binaryfile.append(".exe");
@@ -104,6 +104,7 @@ AttackPage::AttackPage(QWidget *parent)
     qDebug() << binarydir << endl << binaryfile << endl;
     if (!file.exists()) {
         attackResultTextBrowser->setText(trUtf8("Keine Hashcat Dateien gefunden!\n"));
+        qDebug() << trUtf8("Keine Hashcat Dateien gefunden!\n");
         startPushButton->setDisabled(true);
         stopPushButton->setDisabled(true);
     }
@@ -405,7 +406,7 @@ void AttackPage::changeEvent(QEvent *event)
 void AttackPage::initializePage()
 {
     attackResultTextBrowser->setText(trUtf8("Sie können die Wiederherstellung mit dem Klicken auf Start starten."));
-    attackResultTextBrowser->append(trUtf8("Dieser Prozess wird alle verfügbaren Resourcen für die Wiederherstellung verwenden."));
+    attackResultTextBrowser->append(trUtf8("Dieser Prozess wird alle verfügbaren Ressourcen für die Wiederherstellung verwenden."));
     attackResultTextBrowser->append(trUtf8("Andere Prozesse könnten verzögert werden."));
 }
 

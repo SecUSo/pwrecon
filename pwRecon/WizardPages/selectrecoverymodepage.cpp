@@ -42,7 +42,7 @@ void SelectRecoveryModePage::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
         setTitle(trUtf8("Art der Wiederherstellung auswählen."));
-        topLabel->setText(trUtf8("Sie können auswählen welche Art von Passwort wiedergestellt werden soll."));
+        topLabel->setText(trUtf8("Sie können auswählen welche Art von Passwort wiederhergestellt werden soll."));
         recoverHashRadioButton->setText(trUtf8("&Ein Passwort von einem Hash wiederherstellen"));
         recoverLocalPwFileRadioButton->setText(trUtf8("&Die Passwörter der Benutzerkonten dieses Computers wiederherstellen."));
     } else

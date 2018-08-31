@@ -468,7 +468,7 @@ void ExtractCurrentPage::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
         setTitle(trUtf8("Passwörter von diesem Computer wiederherstellen"));
-        setSubTitle(trUtf8("Die Passwörter dieses Computers werden ausgelesen um sie wiederherzustellen."));
+        setSubTitle(trUtf8("Die Passwörter dieses Computers werden ausgelesen, um sie wiederherzustellen."));
         changePushButton->setText(trUtf8("Speicherort ändern"));
 
         if(field("EXPERTMODE").toBool()){

@@ -44,7 +44,7 @@ void SelectTestModePage::changeEvent(QEvent *event)
         setTitle(trUtf8("Art des Tests auswählen."));
         topLabel->setText(trUtf8("Sie können auswählen wie die Stärke der Passwörter bestimmt werden soll."));
         testPasswordRadioButton->setText(trUtf8("&Passwortstärke evaluieren."));
-        simulateAttackRadioButton->setText(trUtf8("&Wiederherstellungs simulation Starten."));
+        simulateAttackRadioButton->setText(trUtf8("&Wiederherstellungs-Simulation Starten."));
     } else
         QWidget::changeEvent(event);
 }

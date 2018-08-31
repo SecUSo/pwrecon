@@ -58,7 +58,7 @@ void pwRecon::showHelp()
         message += "\n";
         message += trUtf8("Verbergen Sie ihre Passwörter, für den Fall, dass Ihnen jemand über die Schulter schauen könnte.");
         message += "\n";
-        message += trUtf8("Mit dem Experten Modus können Sie zusätzlich Hashes wiederherstellen und Einstellungen für die Widerherstellung vornehmen");
+        message += trUtf8("Mit dem Experten Modus können Sie zusätzlich Hashes wiederherstellen und Einstellungen für die Wiederherstellung vornehmen");
         break;
     case Page_SelectMode:
         message = trUtf8("Sie können sich zwischen diesen zwei Optionen entscheiden.");
@@ -101,7 +101,7 @@ void pwRecon::showHelp()
         message += "\n";
         message += trUtf8("Falls dies nicht passiert stellen Sie bitte sicher, dass Sie Administratorrechte besitzen.");
         message += "\n";
-        message += trUtf8("Experten können die Password Hashes einsehen und einen Speicherort dafür festlegen.");
+        message += trUtf8("Experten können die Passwort Hashes einsehen und einen Speicherort dafür festlegen.");
         break;
     case Page_Evaluation:
         message = trUtf8("Die Sicherheit der angegebenen Passwörter wird geprüft.");
@@ -115,16 +115,16 @@ void pwRecon::showHelp()
         message += "\n";
         message += trUtf8("Dieser Vorgang läuft solange, bis alle Passwörter gefunden wurden oder Sie den Vorgang abbrechen.");
         message += "\n";
-        message += trUtf8("Es werden mehrere Ansätze probiert um Ihre Passwörter wiederherzustellen.");
+        message += trUtf8("Es werden mehrere Ansätze probiert, um Ihre Passwörter wiederherzustellen.");
         message += "\n";
-        message += trUtf8("Das Programm wird Ihnen Mitteilen sobalt Passwörter gefunden wurden.");
+        message += trUtf8("Das Programm wird Ihnen mitteilen, sobald Ihre Passwörter gefunden wurden.");
         break;
     case Page_AttackSettings:
         message += trUtf8("Einstellungen zur Wiederherstellung.");
         message += "\n";
-        message += trUtf8("Sie können ein eigenens Wörterbuch angeben.");
+        message += trUtf8("Sie können ein eigenes Wörterbuch angeben.");
         message += "\n";
-        message += trUtf8("Sie können die Passwörter auch ohne Wörterbuch nur mit einem Bruteforce Angriff wiederherstellne.");
+        message += trUtf8("Sie können die Passwörter auch ohne Wörterbuch nur mit einem Bruteforce Angriff wiederherstellen.");
         break;
 
     }
