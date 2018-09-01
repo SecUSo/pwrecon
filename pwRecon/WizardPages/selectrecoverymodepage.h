@@ -15,6 +15,7 @@ public:
 
     int nextId() const override;
     void changeEvent(QEvent *event) override;
+    bool validatePage() override;
 
 private:
     QLabel *topLabel;
@@ -23,7 +24,6 @@ private:
 
 protected:
     void initializePage() override;
-
 public slots:
 };
 

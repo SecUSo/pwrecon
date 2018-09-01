@@ -63,3 +63,27 @@ void SelectModePage::changeEvent(QEvent *event)
     } else
         QWidget::changeEvent(event);
 }
+
+bool SelectModePage::validatePage()
+{
+#ifdef Q_OS_OSX
+    if (recoverPasswordRadioButton->isChecked()) {
+        if(!field("EXPERTMODE").toBool())
+        {
+            QMessageBox::warning(this, "pwRecon",
+                                 trUtf8("Das Wiederherstellen der lokalen Passwörter wird unter macOS zur Zeit nicht unterstützt."),
+                                 QMessageBox::Ok,
+                                 QMessageBox::Ok);
+            return false;
+        } else{
+            return true;
+        }
+    }
+    else{
+        return true;
+    }
+#else
+
+    return true;
+#endif
+}
