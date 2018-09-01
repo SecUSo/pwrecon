@@ -5,7 +5,7 @@
 #include <QWidget>
 #include "pwrecon_global.h"
 #include "pwRecon.h"
-#ifdef Q_OS_MACX
+#ifdef Q_OS_OSX
 #include <QtXml>
 #include <QDomDocument>
 #endif

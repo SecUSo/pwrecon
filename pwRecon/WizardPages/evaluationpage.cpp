@@ -1,4 +1,5 @@
 #include "WizardPages/evaluationpage.h"
+#include <qglobal.h>
 
 EvaluationPage::EvaluationPage(QWidget *parent)
     : QWizardPage(parent)
@@ -21,6 +22,10 @@ EvaluationPage::EvaluationPage(QWidget *parent)
 
 
     QString programPath = QString(QDir::currentPath() + "/tools/nbvcxz/");
+
+#ifdef Q_OS_MACX
+    programPath = programPath + "MAC_jre1.8.0_172/bin/java";
+#endif
 #ifdef Q_OS_WIN
     programPath = programPath + "WIN_jre1.8.0_172/bin/java.exe";
 #endif

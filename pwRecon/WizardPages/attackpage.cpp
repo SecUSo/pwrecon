@@ -31,7 +31,7 @@ AttackPage::AttackPage(QWidget *parent)
     setLayout(extractLayout);
 
     // Set up Hashcat
-#ifdef Q_OS_MACX
+#ifdef Q_OS_OSX
     hc2_fallback = false;
 
     if (!hc2_fallback)
@@ -57,7 +57,7 @@ AttackPage::AttackPage(QWidget *parent)
     }
 
 
-#endif // ifndef Q_OS_MACX
+#endif // ifndef Q_MV_OSX
     binarydir = QString(QDir::currentPath() + "/tools/Hashcat4");
     binaryfile = QString(binarydir + "/hashcat");
 
@@ -74,7 +74,7 @@ AttackPage::AttackPage(QWidget *parent)
 #ifdef Q_OS_WIN
     binaryfile.append(".exe");
 #endif
-#ifdef Q_OS_MACX // No support yet
+#ifdef Q_OS_OSX // No support yet
     binarydir = QString(QDir::currentPath() + "/tools/HashcatMAC");
     binaryfile = QString(binarydir + "/hashcat");
     binaryfile.append(".ppa");
@@ -239,7 +239,7 @@ QString AttackPage::getHashFilePath()
 #ifdef Q_OS_WIN
         hashtype = QString("--hash-type=1000");
 #endif
-#ifdef Q_OS_MACX
+#ifdef Q_OS_OSX
         hashtype = QString("--hash-type=7100");
 #endif
 #ifdef Q_OS_LINUX

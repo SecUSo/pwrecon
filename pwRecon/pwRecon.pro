@@ -71,7 +71,8 @@ else:win32-g++: PRE_TARGETDEPS += $$PWD/opencl/lib/x86_64/libOpenCL.a
 macx{
     QMAKE_LFLAGS += -framework OpenCL
 }
-unix{
+
+linux{
 
 LIBS += -L$$PWD/opencl/lib/x86_64/ -lOpenCL
 

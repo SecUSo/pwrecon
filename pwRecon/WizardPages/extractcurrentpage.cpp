@@ -230,9 +230,8 @@ ExtractCurrentPage::~ExtractCurrentPage()
     workerThread.quit();
     workerThread.wait();
 }
-
-#elif Q_OS_MACX
-
+#endif //Q_OS_WIN
+#ifdef Q_OS_OSX
 void ExtractCurrentPage::startExtraction()
 {
     extractPushButton->setEnabled(false);
@@ -403,9 +402,9 @@ void ExtractCurrentPage::startExtraction()
         wizard()->next();
     }
 }
-#endif
+#endif // Q_MV_OSX
 
-#ifdef Q_OS_UNIX
+#ifdef Q_OS_LINUX
 void ExtractCurrentPage::startExtraction()
 {
 
