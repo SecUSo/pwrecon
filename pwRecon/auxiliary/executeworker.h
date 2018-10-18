@@ -3,6 +3,12 @@
 
 #include <QObject>
 #include <QString>
+/*
+ * Copyright (c) 2018 Christoph Wütschner <christoph-wuetschner@gmx.de>
+ *
+ * See LICENSE dist-file for details.
+ */
+
 #include <QProcess>
 #include <QDebug>
 

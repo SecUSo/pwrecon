@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Christoph Wütschner <christoph-wuetschner@gmx.de>
+ *
+ * See LICENSE dist-file for details.
+ */
+
 #include "WizardPages/resultspage.h"
 
 ResultsPage::ResultsPage(QWidget *parent)
@@ -51,7 +57,7 @@ void ResultsPage::setVisible(bool visible)
 void ResultsPage::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
-        setTitle(trUtf8("Ergebnise"));
+        setTitle(trUtf8("Ergebnisse"));
         setSubTitle(trUtf8("Das sind Ihre Resultate"));
 
     } else

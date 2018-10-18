@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Christoph Wütschner <christoph-wuetschner@gmx.de>
+ *
+ * See LICENSE dist-file for details.
+ */
+
 #include <QApplication>
 #include <QTranslator>
 #include <QLocale>

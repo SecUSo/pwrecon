@@ -287,6 +287,11 @@ QString AttackPage::passwordListToTmpFile(QStringList passwordList)
     file.close();
     return testpwdfilepath;
 }
+/*
+ * Copyright (c) 2018 Christoph Wütschner <christoph-wuetschner@gmx.de>
+ *
+ * See LICENSE dist-file for details.
+ */
 
 QStringList AttackPage::passwordListFromFile(QString passwordListFilePath)
 {

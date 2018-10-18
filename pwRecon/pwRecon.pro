@@ -14,7 +14,6 @@ HEADERS       = \
     WizardPages/attacksettingspage.h \
     auxiliary/recovery_worker.h \
     auxiliary/sam_dialog.h \
-    opencl/include/CL/cl.hpp \
     WizardPages/selectrecoverymodepage.h \
     WizardPages/selecttestmodepage.h \
     WizardPages/evaluationpage.h \

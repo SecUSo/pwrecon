@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Christoph Wütschner <christoph-wuetschner@gmx.de>
+ *
+ * See LICENSE dist-file for details.
+ */
+
 #include <QtWidgets>
 #if defined(QT_PRINTSUPPORT_LIB)
 #endif
@@ -192,6 +198,7 @@ IntroPage::IntroPage(QWidget *parent)
     QCoreApplication::sendEvent(this, &languageChangeEvent);
     registerField("EXPERTMODE", expertModeCheckBox);
     registerField("SHOWHIDEPASSWORD", showHidePasswordCheckBox);
+    showHidePasswordCheckBox->setChecked(true);
 
 }
 

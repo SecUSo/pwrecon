@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Christoph Wütschner <christoph-wuetschner@gmx.de>
+ *
+ * See LICENSE dist-file for details.
+ */
+
 #ifndef LICENSEWIZARD_H
 #define LICENSEWIZARD_H
 
@@ -5,7 +11,6 @@
 #include <QFileSystemWatcher>
 
 #include "pwrecon_global.h"
-#include "testpage.h"
 #include "WizardPages/attackpage.h"
 #include "WizardPages/enterhashpage.h"
 #include "WizardPages/enterpasswordpage.h"

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Mustafa Kargi <mustafa.kargi@arcor.de>
+ * Copyright (c) 2018 Mustafa Kargi <mustafa.kargi@arcor.de> and Christoph Wütschner <christoph-wuetschner@gmx.de>
  *
  * See LICENSE dist-file for details.
  */
@@ -25,7 +25,7 @@ SAMDialog::SAMDialog(QString filepath, QWidget *parent) :
 
     // TODO: Add Cancle button
     this->setWindowTitle(trUtf8("Passwörter auslesen"));
-    ui->infoLabel->setText(trUtf8("Diese Funktion wird die Passwörter dieses Computers auslesen, um sie wiederherzustellen.\n\nHINWEIS:\nZum Auslesen der Passwörter dieses Computers werden Administratorrechte benötigt.\nDiese Funktion könnte als Schadsoftware erkannt werden, weil ähnliche Funktionen in Schadsoftware verwendet werden. Antiviren-Programm können nicht zwischen gewollter und ungewollter Anwendung solcher Funktionen unterscheiden. Deswegen ist die Nutzung auf eigene Gefahr."));
+    ui->infoLabel->setText(trUtf8("Diese Funktion wird die Passwörter dieses Computers auslesen, um sie wiederherzustellen.\n\nHINWEIS:\nZum Auslesen der Passwörter dieses Computers werden Administratorrechte benötigt.\nDiese Funktion könnte als Schadsoftware erkannt werden, weil ähnliche Funktionen in Schadsoftware verwendet werden. Antiviren-Programme können nicht zwischen gewollter und ungewollter Anwendung solcher Funktionen unterscheiden. Deswegen ist die Nutzung auf eigene Gefahr."));
     ui->startButton->setText(trUtf8("Weiter"));
 }
 

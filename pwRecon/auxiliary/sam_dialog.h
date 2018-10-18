@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Mustafa Kargi <mustafa.kargi@arcor.de>
+ * Copyright (c) 2018 Mustafa Kargi <mustafa.kargi@arcor.de> and Christoph Wütschner <christoph-wuetschner@gmx.de>
  *
  * See LICENSE dist-file for details.
  */

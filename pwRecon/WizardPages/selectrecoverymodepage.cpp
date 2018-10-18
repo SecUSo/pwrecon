@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Christoph Wütschner <christoph-wuetschner@gmx.de>
+ *
+ * See LICENSE dist-file for details.
+ */
+
 #include "selectrecoverymodepage.h"
 
 SelectRecoveryModePage::SelectRecoveryModePage(QWidget *parent)
