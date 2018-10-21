@@ -14,6 +14,7 @@ HEADERS       = \
     WizardPages/attacksettingspage.h \
     auxiliary/recovery_worker.h \
     auxiliary/sam_dialog.h \
+    opencl/include/CL/cl.hpp \
     WizardPages/selectrecoverymodepage.h \
     WizardPages/selecttestmodepage.h \
     WizardPages/evaluationpage.h \
@@ -52,7 +53,7 @@ TRANSLATIONS += translate/pwRecon_en_US.ts
 win: contains(QMAKE_HOST.arch, x86_64) {
 LIBS += -L$$PWD/opencl/lib/x86_64/ -lOpenCL
 
-INCLUDEPATH += opencl/include \
+INCLUDEPATH = opencl/include \
              $$PWD/opencl/lib/x86_64
 DEPENDPATH += $$PWD/opencl/lib/x86_64
 

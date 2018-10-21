@@ -15,7 +15,7 @@
 #include <QCryptographicHash>
 // OpenCL
 
-    #include "opencl/include/CL/cl.hpp"
+    //#include "opencl/include/CL/cl.hpp"
 
 class AttackPage : public QWizardPage
 {
