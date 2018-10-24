@@ -1,30 +1,27 @@
 /*
- * Copyright (c) 2016 Mustafa Kargi <mustafa.kargi@arcor.de>
+ * Copyright (c) 2018 Christoph Wütschner <christoph-wuetschner@gmx.de>
  *
  * See LICENSE dist-file for details.
  */
-
-#include "mainwindow.h"
 
 #include <QApplication>
 #include <QTranslator>
 #include <QLocale>
 #include <QLibraryInfo>
 
+#include "pwRecon.h"
+
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    QApplication app(argc, argv);
 
-    QTranslator qtTranslator;
-    qtTranslator.load("qt_" + QLocale::system().name(),
-                      QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    a.installTranslator(&qtTranslator);
+    // This snipptet is needed to set the current path of the application which is important especially for mac
+    QString tmp = QCoreApplication::applicationFilePath();
+            tmp = tmp.mid(0, tmp.lastIndexOf(QDir::separator()));
+            qDebug() << "Current Path: " << tmp << endl;
+    QDir::setCurrent(tmp);
 
-    QTranslator myappTranslator;
-    myappTranslator.load("myapp_" + QLocale::system().name());
-    a.installTranslator(&myappTranslator);
-
-    return a.exec();
+    pwRecon wizard;
+    wizard.show();
+    return app.exec();
 }

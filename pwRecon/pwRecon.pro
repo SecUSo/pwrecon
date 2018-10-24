@@ -1,42 +1,79 @@
-QT       += core gui
+QT += widgets xml
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+HEADERS       = \
+    testpage.h \
+    WizardPages/enterpasswordpage.h \
+    WizardPages/enterhashpage.h \
+    WizardPages/extractcurrentpage.h \
+    WizardPages/attackpage.h \
+    WizardPages/resultspage.h \
+    auxiliary/sam_dialog.h \
+    WizardPages/selectmodepage.h \
+    pwrecon_global.h \
+    pwRecon.h \
+    WizardPages/attacksettingspage.h \
+    auxiliary/recovery_worker.h \
+    auxiliary/sam_dialog.h \
+    opencl/include/CL/cl.hpp \
+    WizardPages/selectrecoverymodepage.h \
+    WizardPages/selecttestmodepage.h \
+    WizardPages/evaluationpage.h \
+    auxiliary/executeworker.h
 
-TARGET = pwRecon
-TEMPLATE = app
+SOURCES       = \
+                main.cpp \
+    testpage.cpp \
+    WizardPages/enterpasswordpage.cpp \
+    WizardPages/enterhashpage.cpp \
+    WizardPages/extractcurrentpage.cpp \
+    WizardPages/attackpage.cpp \
+    WizardPages/resultspage.cpp \
+    auxiliary/sam_dialog.cpp \
+    WizardPages/selectmodepage.cpp \
+    pwRecon.cpp \
+    WizardPages/attacksettingspage.cpp \
+    auxiliary/recovery_worker.cpp \
+    WizardPages/selectrecoverymodepage.cpp \
+    WizardPages/selecttestmodepage.cpp \
+    WizardPages/evaluationpage.cpp \
+    auxiliary/executeworker.cpp
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    recovery_worker.cpp \
-    type_password_dialog.cpp \
-    sam_dialog.cpp \
-    question_dialog.cpp
+# install
+target.path = $$[QT_INSTALL_EXAMPLES]/widgets/dialogs/licensewizard
+INSTALLS += target
 
-HEADERS  += mainwindow.h \
-    recovery_worker.h \
-    type_password_dialog.h \
-    sam_dialog.h \
-    question_dialog.h
+FORMS += \
+    testpage.ui \
+    auxiliary/sam_dialog.ui
 
-FORMS    += mainwindow.ui \
-    type_password_dialog.ui \
-    sam_dialog.ui \
-    question_dialog.ui
-
-extra_files.path = $$OUT_PWD
-extra_files.files = external/*
-# Requires to invoke "make install" during build process.
-# Otherwise, the program will not work.
-INSTALLS += \
-    extra_files
-
-RESOURCES +=
-
-DISTFILES +=
+TRANSLATIONS += translate/pwRecon_en_US.ts
 
 # OpenCL libs only for Windows included yet
-win32: contains(QMAKE_HOST.arch, x86_64) {
+win: contains(QMAKE_HOST.arch, x86_64) {
+LIBS += -L$$PWD/opencl/lib/x86_64/ -lOpenCL
+
+INCLUDEPATH = opencl/include \
+             $$PWD/opencl/lib/x86_64
+DEPENDPATH += $$PWD/opencl/lib/x86_64
+
+opencl_dll.path = $$OUT_PWD
+opencl_dll.files = opencl/dll/x86_64/OpenCL.dll
+INSTALLS += \
+    opencl_dll
+
+}
+
+win{
+!win32-g++: PRE_TARGETDEPS += $$PWD/opencl/lib/x86_64/OpenCL.lib
+else:win32-g++: PRE_TARGETDEPS += $$PWD/opencl/lib/x86_64/libOpenCL.a
+}
+macx{
+    QMAKE_LFLAGS += -framework OpenCL
+}
+
+linux{
+
 LIBS += -L$$PWD/opencl/lib/x86_64/ -lOpenCL
 
 INCLUDEPATH += opencl/include \
@@ -47,24 +84,6 @@ opencl_dll.path = $$OUT_PWD
 opencl_dll.files = opencl/dll/x86_64/OpenCL.dll
 INSTALLS += \
     opencl_dll
-
-} else {
-LIBS += -L$$PWD/opencl/lib/x86/ -lOpenCL
-
-INCLUDEPATH += opencl/include \
-             $$PWD/opencl/lib/x86
-DEPENDPATH += $$PWD/opencl/lib/x86
-
-opencl_dll.path = $$OUT_PWD
-opencl_dll.files = opencl/dll/x86/OpenCL.dll
-INSTALLS += \
-    opencl_dll
-}
-
-win32: contains(QMAKE_HOST.arch, x86_64) {
-!win32-g++: PRE_TARGETDEPS += $$PWD/opencl/lib/x86_64/OpenCL.lib
-else:win32-g++: PRE_TARGETDEPS += $$PWD/opencl/lib/x86_64/libOpenCL.a
-} else {
-!win32-g++: PRE_TARGETDEPS += $$PWD/opencl/lib/x86/OpenCL.lib
-else:win32-g++: PRE_TARGETDEPS += $$PWD/opencl/lib/x86/libOpenCL.a
+    PRE_TARGETDEPS += $$PWD/opencl/lib/x86_64/OpenCL.lib
+    win32-g++: PRE_TARGETDEPS += $$PWD/opencl/lib/x86_64/libOpenCL.a
 }
